@@ -16,10 +16,10 @@ export const osmRaster = new TileLayer({
 export const clip = new VectorLayer({
   source: new VectorSource({wrapX: false}),
   style: (feature) => {
-    const sc = feature.get('cat') === 'overlap' ? [174, 45, 218, 0.9] : [21, 41, 180, 0.5];
-    console.log(feature);
+    const sc = feature.get('cat') === 'overlap' ? [194, 95, 238, 0.7] : [246, 245, 245, 1];
     return [new Style({ stroke: outline, fill: new Fill({ color: sc }) })];
-  }
+  },
+  zIndex: 2
 });
 
 export const grid = new VectorLayer({
@@ -31,11 +31,30 @@ export const grid = new VectorLayer({
     ),
   }),
   style: new Style({
-    fill: new Fill({
-      color: 'black',
-    }),
     stroke: new Stroke({
-      color: '#5B9',
+      color: [106, 184, 131, 1],
+      width: 2
     })
-  })
+  }),
+  zIndex: 3
 });
+export const grid2 = new VectorLayer({
+  source: new VectorSource({
+    format: new GeoJSON(),
+    features: new GeoJSON().readFeatures(
+      gridJson,
+      {featureProjection: osmSource.getProjection() || 'EPSG:4269'}
+    ),
+  }),
+  style: new Style({
+    stroke: new Stroke({
+      color: [216, 224, 231, 1],
+      width: 2
+    })
+  }),
+  zIndex: 1
+});
+
+//new CSS({ blend: 'hue' }).addToLayer(clip);
+//clip.on('precompose', (evt) => { evt.context.globalCompositeOperation = 'hue' });
+//clip.on('postcompose', (evt) => { evt.context.globalCompositeOperation = 'source-over' });

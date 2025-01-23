@@ -1,8 +1,9 @@
 import View from 'ol/View.js';
 import { fromLonLat } from 'ol/proj.js';
-import { Polygon } from 'ol/geom.js';
+import { Polygon, MultiPolygon } from 'ol/geom.js';
 import Feature from 'ol/Feature.js';
 import Map from 'ol/Map.js';
+import Crop from 'ol-ext/filter/Crop.js';
 // import { intersect } from "@turf/intersect";
 import 'assets/style.css';
 import * as layers from 'layers';
@@ -38,12 +39,10 @@ const drawDiamonds = (spacing: number, timePerStop: number, walkSpeed: number, t
       if (lng_a > lng_b) {
         const offset = (lng_a - lng_b) / 2;
         const center = lng_b + offset;
-        console.log({ dmds, lng_a, lng_b, offset, center });
         overlaps.push([[lng_b, 0], [center, offset], [lng_a, 0], [center, -offset]]);
         // There will be a mirror overlap
         overlaps.push([[-lng_b, 0], [-center, offset], [-lng_a, 0], [-center, -offset]]);
       } else {
-        console.log({ lng_a, lng_b, a: dmds[0], b: dmds[1] });
         checkOverlap = false;
       }
     }
@@ -71,15 +70,19 @@ const clip = () => {
         })
       );
     });
+    const crop = new Feature({ geometry: new MultiPolygon([...dmds.map(d => [d]), ...overlaps.map(d => [d])])});
+    layers.grid.addFilter(new Crop({feature: crop}));
+    layers.grid2.addFilter(new Crop({feature: crop, inner: true, wrapX: true}));
   }
 };
 
 const setupMap = (mapEl: HTMLElement): Map => {
   const map = new Map({
     layers: [
-      layers.grid,
       layers.clip,
-      layers.osmRaster,
+      layers.grid,
+      layers.grid2,
+      //layers.osmRaster,
     ],
     target: mapEl,
     view: new View({
@@ -87,16 +90,6 @@ const setupMap = (mapEl: HTMLElement): Map => {
       zoom: 14
     }),
   });
-  /*
-  layers.grid.getSource()?.on('change', function () {
-    if (layers.grid.getSource()?.getState() === 'ready') {
-      console.log(layers.grid.getSource()?.getFeatures());
-      const extent = layers.grid.getSource()?.getExtent();
-      console.log(extent);
-      extent && map.getView().fit(extent);
-    }
-  });
-  */
   const extent = layers.grid.getSource()?.getExtent();
   extent && map.getView().fit(extent);
   clip();
