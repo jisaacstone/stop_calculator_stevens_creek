@@ -1,12 +1,13 @@
 import View from 'ol/View.js';
 import { fromLonLat } from 'ol/proj.js';
-import { Polygon, MultiPolygon } from 'ol/geom.js';
+import { Polygon, MultiPolygon, Point } from 'ol/geom.js';
 import Feature from 'ol/Feature.js';
 import Map from 'ol/Map.js';
 import Crop from 'ol-ext/filter/Crop.js';
 // import { intersect } from "@turf/intersect";
 import 'assets/style.css';
 import * as layers from 'layers';
+import * as style from 'style';
 
 const GRID = 111.32;
 type Diamond = [[number, number], [number, number], [number, number], [number, number]];
@@ -22,7 +23,18 @@ const drawDiamond = (center: [number, number], time: number, walkSpeed: number):
   ];
 }
 
-const drawDiamonds = (spacing: number, timePerStop: number, walkSpeed: number, totalTime: number, numstops: number): [Diamond[], Diamond[]] => {
+const calcCentroids = (spacing: number, numstops: number): [number, number][] => {
+  const ctds: [number, number][] = [[0, 0]];
+  var offset = 0;
+  for (var i = 1; i<numstops/2; i++) {
+    offset += spacing;
+    ctds.push([offset, 0]);
+    ctds.push([-offset, 0]);
+  }
+  return ctds;
+};
+
+const calcDiamonds = (spacing: number, timePerStop: number, walkSpeed: number, totalTime: number, numstops: number): [Diamond[], Diamond[]] => {
   var lng = 0;
   var checkOverlap = true;
   const dmds: Diamond[] = [drawDiamond([0,0], totalTime, walkSpeed)];
@@ -51,9 +63,19 @@ const drawDiamonds = (spacing: number, timePerStop: number, walkSpeed: number, t
 }
 
 const clip = () => {
-  const src = layers.clip.getSource();
+  const src = layers.walk.getSource();
   if (src) {
-    const [dmds, overlaps] = drawDiamonds(GRID * 8, 90, 0.7, 60 * 15, 20);
+    const [dmds, overlaps] = calcDiamonds(GRID * 8, 90, 0.7, 60 * 15, 20);
+    const centroids = calcCentroids(GRID*8, 20);
+    centroids.forEach((c) => {
+      src.addFeature(
+        new Feature({
+          geometry: new Point(c),
+          cat: "station",
+          style: style.circle
+        })
+      );
+    });
     dmds.forEach((dmd) => {
       src.addFeature(
         new Feature({
@@ -62,6 +84,7 @@ const clip = () => {
         })
       );
     });
+    console.log(src.getFeatures());
     overlaps.forEach((dmd) => {
       src.addFeature(
         new Feature({
@@ -79,7 +102,7 @@ const clip = () => {
 const setupMap = (mapEl: HTMLElement): Map => {
   const map = new Map({
     layers: [
-      layers.clip,
+      layers.walk,
       layers.grid,
       layers.grid2,
       //layers.osmRaster,

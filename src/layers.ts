@@ -1,34 +1,38 @@
 import {OSM, Vector as VectorSource} from 'ol/source.js';
 import {Tile as TileLayer, Vector as VectorLayer} from 'ol/layer.js';
-import {Fill, Stroke, Style} from 'ol/style.js';
+import {Fill, Stroke, Style, Circle} from 'ol/style.js';
 import {GeoJSON} from 'ol/format.js';
 import gridJson from 'assets/00grid.json';
+import * as style from 'style';
 
 const osmSource = new OSM();
-const outline = new Stroke({ color: [45, 45, 45, 0.1] });
-console.log(gridJson);
+
+const gridFeatures = new GeoJSON().readFeatures(
+  gridJson,
+  {featureProjection: osmSource.getProjection() || 'EPSG:4269'}
+)
 
 export const osmRaster = new TileLayer({
   source: osmSource,
   opacity: 0.2,
 });
 
-export const clip = new VectorLayer({
+export const walk = new VectorLayer({
   source: new VectorSource({wrapX: false}),
   style: (feature) => {
-    const sc = feature.get('cat') === 'overlap' ? [194, 95, 238, 0.7] : [246, 245, 245, 1];
-    return [new Style({ stroke: outline, fill: new Fill({ color: sc }) })];
+    const cat = feature.get('cat');
+    if (cat === 'station') {
+      return style.circle;
+    }
+    const sc = cat === 'overlap' ? [194, 95, 238, 0.7] : [246, 245, 245, 0.3];
+    return [new Style({ stroke: style.outline, fill: new Fill({ color: sc }) })];
   },
-  zIndex: 2
 });
 
 export const grid = new VectorLayer({
   source: new VectorSource({
     format: new GeoJSON(),
-    features: new GeoJSON().readFeatures(
-      gridJson,
-      {featureProjection: osmSource.getProjection() || 'EPSG:4269'}
-    ),
+    features: gridFeatures,
   }),
   style: new Style({
     stroke: new Stroke({
@@ -36,15 +40,11 @@ export const grid = new VectorLayer({
       width: 2
     })
   }),
-  zIndex: 3
 });
 export const grid2 = new VectorLayer({
   source: new VectorSource({
     format: new GeoJSON(),
-    features: new GeoJSON().readFeatures(
-      gridJson,
-      {featureProjection: osmSource.getProjection() || 'EPSG:4269'}
-    ),
+    features: gridFeatures,
   }),
   style: new Style({
     stroke: new Stroke({
@@ -52,9 +52,4 @@ export const grid2 = new VectorLayer({
       width: 2
     })
   }),
-  zIndex: 1
 });
-
-//new CSS({ blend: 'hue' }).addToLayer(clip);
-//clip.on('precompose', (evt) => { evt.context.globalCompositeOperation = 'hue' });
-//clip.on('postcompose', (evt) => { evt.context.globalCompositeOperation = 'source-over' });
