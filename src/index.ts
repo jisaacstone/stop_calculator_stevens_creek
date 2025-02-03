@@ -4,13 +4,15 @@ import { Polygon, MultiPolygon, Point } from 'ol/geom.js';
 import Feature from 'ol/Feature.js';
 import Map from 'ol/Map.js';
 import Crop from 'ol-ext/filter/Crop.js';
-// import { intersect } from "@turf/intersect";
+import van from 'vanjs-core';
 import 'assets/style.css';
 import * as layers from 'layers';
 import * as style from 'style';
+import * as slider from 'slider';
 
 const GRID = 111.32;
 type Diamond = [[number, number], [number, number], [number, number], [number, number]];
+const distance = van.state(GRID * 3);
 
 const drawDiamond = (center: [number, number], time: number, walkSpeed: number): Diamond => {
   const [lng, lat] = center;
@@ -38,6 +40,7 @@ const calcDiamonds = (spacing: number, timePerStop: number, walkSpeed: number, t
   var lng = 0;
   var checkOverlap = true;
   const dmds: Diamond[] = [drawDiamond([0,0], totalTime, walkSpeed)];
+  console.log(dmds[0], totalTime, walkSpeed);
   const overlaps: Diamond[] = [];
   for (var i = 1; i<numstops/2; i++) {
     lng += spacing;
@@ -62,50 +65,62 @@ const calcDiamonds = (spacing: number, timePerStop: number, walkSpeed: number, t
   return [dmds, overlaps];
 }
 
-const clip = () => {
+const makeGrid = (() => {
   const src = layers.walk.getSource();
+  //const filters = {grid: null, grid2: null};
   if (src) {
-    const [dmds, overlaps] = calcDiamonds(GRID * 8, 90, 0.7, 60 * 15, 20);
-    const centroids = calcCentroids(GRID*8, 20);
-    centroids.forEach((c) => {
-      src.addFeature(
-        new Feature({
-          geometry: new Point(c),
-          cat: "station",
-          style: style.circle
-        })
-      );
-    });
-    dmds.forEach((dmd) => {
-      src.addFeature(
-        new Feature({
-          geometry: new Polygon([dmd]),
-          cat: "walk"
-        })
-      );
-    });
-    console.log(src.getFeatures());
-    overlaps.forEach((dmd) => {
-      src.addFeature(
-        new Feature({
-          geometry: new Polygon([dmd]),
-          cat: "overlap"
-        })
-      );
-    });
-    const crop = new Feature({ geometry: new MultiPolygon([...dmds.map(d => [d]), ...overlaps.map(d => [d])])});
-    layers.grid.addFilter(new Crop({feature: crop}));
-    layers.grid2.addFilter(new Crop({feature: crop, inner: true, wrapX: true}));
+    return (map: Map) => {
+      src.clear()
+      //layers.grid.removeFilter(filters.grid);
+      //layers.grid2.removeFilter(filters.grid2);
+
+      const [dmds, overlaps] = calcDiamonds(+distance.val, 90, 0.7, 60 * 15, 20);
+      console.log(distance.val, dmds)
+      const centroids = calcCentroids(distance.val, 20);
+      centroids.forEach((c) => {
+        src.addFeature(
+          new Feature({
+            geometry: new Point(c),
+            cat: "station",
+            style: style.circle
+          })
+        );
+      });
+      dmds.forEach((dmd) => {
+        src.addFeature(
+          new Feature({
+            geometry: new Polygon([dmd]),
+            cat: "walk"
+          })
+        );
+      });
+      overlaps.forEach((dmd) => {
+        src.addFeature(
+          new Feature({
+            geometry: new Polygon([dmd]),
+            cat: "overlap"
+          })
+        );
+      });
+      /*
+      const crop = new Feature({ geometry: new MultiPolygon([...dmds.map(d => [d]), ...overlaps.map(d => [d])])});
+      filters.grid = new Crop({feature: crop});
+      layers.grid.addFilter(filters.grid);
+      filters.grid2 = new Crop({feature: crop, inner: true, wrapX: true});
+      layers.grid2.addFilter(filters.grid2);
+      */
+      const extent = src.getExtent();
+      extent && map.getView().fit(extent);
+    };
   }
-};
+  return () => null;
+})();
 
 const setupMap = (mapEl: HTMLElement): Map => {
   const map = new Map({
     layers: [
-      layers.walk,
       layers.grid,
-      layers.grid2,
-      //layers.osmRaster,
+      layers.walk,
     ],
     target: mapEl,
     view: new View({
@@ -113,16 +128,30 @@ const setupMap = (mapEl: HTMLElement): Map => {
       zoom: 14
     }),
   });
-  const extent = layers.grid.getSource()?.getExtent();
-  extent && map.getView().fit(extent);
-  clip();
+  makeGrid(map);
   return map;
+};
+
+const setupInputs = (inputEl: HTMLElement, map: Map) => {
+  van.add(
+    inputEl,
+    slider.makeInput(
+      {name: 'distance', units: 'm'},
+      {min: GRID, max: GRID * 20, step: GRID},
+      distance,
+      () => makeGrid(map)
+    )
+  );
 };
 
 const main = () => {
   const mapEl = document.getElementById('map');
   if (mapEl !== null) {
-    setupMap(mapEl);
+    const map = setupMap(mapEl);
+    const inputEl = document.getElementById('input');
+    if (inputEl !== null) {
+      setupInputs(inputEl, map);
+    }
   }
 };
 
