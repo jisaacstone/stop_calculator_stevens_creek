@@ -1,11 +1,14 @@
 import View from 'ol/View.js';
 import { fromLonLat } from 'ol/proj.js';
-import { Polygon, MultiPolygon, Point } from 'ol/geom.js';
+import { Polygon, LineString, Point } from 'ol/geom.js';
+import {GeoJSON} from 'ol/format.js';
 import Feature from 'ol/Feature.js';
+import { createEmpty, getArea } from 'ol/extent.js';
 import Map from 'ol/Map.js';
-import Crop from 'ol-ext/filter/Crop.js';
+//import Crop from 'ol-ext/filter/Crop.js';
 import van from 'vanjs-core';
 import 'assets/style.css';
+import * as turf from '@turf/turf';
 import * as layers from 'layers';
 import * as style from 'style';
 import * as slider from 'slider';
@@ -86,13 +89,24 @@ const makeGrid = (() => {
           })
         );
       });
-      dmds.forEach((dmd) => {
-        src.addFeature(
-          new Feature({
-            geometry: new Polygon([dmd]),
-            cat: "walk"
-          })
-        );
+      const olPoly = new Feature({
+        geometry: new Polygon([...dmds]),
+        cat: "walk"
+      })
+      const diPoly = new GeoJSON().writeFeatureObject(olPoly);
+      src.addFeature(olPoly);
+      layers.grid.getSource()?.getFeatures().forEach((f) => {
+        const line = new GeoJSON().writeFeatureObject(f);
+        const intersects = turf.lineIntersect(line, diPoly);
+        for(let idx = 0; idx < intersects.features.length; idx += 2) {
+          const nxt = intersects.features[idx + 1];
+          if (nxt !== undefined) {
+            const line = new LineString([nxt.geometry.coordinates, intersects.features[idx].geometry.coordinates]);
+            src.addFeature(new Feature({geometry: line, cat: "road"}));
+          }
+        }
+        console.log({ intersects });
+        src.addFeatures(new GeoJSON().readFeatures(intersects));
       });
       overlaps.forEach((dmd) => {
         src.addFeature(
@@ -102,15 +116,19 @@ const makeGrid = (() => {
           })
         );
       });
+      const extent = src.getExtent() || createEmpty();
+      const gExtent = layers.grid.getSource()?.getExtent() || createEmpty();
+      map.getView().fit(
+        getArea(extent) > getArea(gExtent) ? gExtent : extent
+      );
       /*
-      const crop = new Feature({ geometry: new MultiPolygon([...dmds.map(d => [d]), ...overlaps.map(d => [d])])});
-      filters.grid = new Crop({feature: crop});
-      layers.grid.addFilter(filters.grid);
-      filters.grid2 = new Crop({feature: crop, inner: true, wrapX: true});
-      layers.grid2.addFilter(filters.grid2);
+      src.addFeature(
+        new Feature({
+          geometry: new MultiPolygon([[[[10000, 10000], [10000, -10000], [-10000, -10000], [-10000, 10000]], ...dmds]]),
+          cat: "exterior"
+        })
+      );
       */
-      const extent = src.getExtent();
-      extent && map.getView().fit(extent);
     };
   }
   return () => null;

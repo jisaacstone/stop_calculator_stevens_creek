@@ -1,6 +1,6 @@
 import {OSM, Vector as VectorSource} from 'ol/source.js';
 import {Tile as TileLayer, Vector as VectorLayer} from 'ol/layer.js';
-import {Fill, Stroke, Style, Circle} from 'ol/style.js';
+import {Fill, Stroke, Style} from 'ol/style.js';
 import {GeoJSON} from 'ol/format.js';
 import gridJson from 'assets/00grid.json';
 import * as style from 'style';
@@ -23,6 +23,9 @@ export const walk = new VectorLayer({
     const cat = feature.get('cat');
     if (cat === 'station') {
       return style.circle;
+    }
+    if (cat === 'road') {
+      return new Style({ stroke: new Stroke({ color: [20, 20, 20, 0.9] }) });
     }
     const sc = cat === 'overlap' ? [194, 95, 238, 0.7] : [246, 245, 245, 0.3];
     return [new Style({ stroke: style.outline, fill: new Fill({ color: sc }) })];
