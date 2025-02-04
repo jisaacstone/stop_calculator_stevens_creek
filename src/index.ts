@@ -1,11 +1,10 @@
 import View from 'ol/View.js';
 import { fromLonLat } from 'ol/proj.js';
-import { Polygon, LineString, Point } from 'ol/geom.js';
-import {GeoJSON} from 'ol/format.js';
+import { LineString, MultiLineString, Point } from 'ol/geom.js';
 import Feature from 'ol/Feature.js';
 import { createEmpty, getArea } from 'ol/extent.js';
+import {GeoJSON} from 'ol/format.js';
 import Map from 'ol/Map.js';
-//import Crop from 'ol-ext/filter/Crop.js';
 import van from 'vanjs-core';
 import 'assets/style.css';
 import * as turf from '@turf/turf';
@@ -16,6 +15,11 @@ import * as slider from 'slider';
 const GRID = 111.32;
 type Diamond = [[number, number], [number, number], [number, number], [number, number]];
 const distance = van.state(GRID * 3);
+const walkArea = van.state(0);
+const areaEl = van.tags.div(van.derive(
+  () => `${Math.round(distance.val / GRID)} blocks, ${Math.round(walkArea.val).toLocaleString()} m²`
+));
+const GeoJsonFormat = new GeoJSON();
 
 const drawDiamond = (center: [number, number], time: number, walkSpeed: number): Diamond => {
   const [lng, lat] = center;
@@ -48,6 +52,9 @@ const calcDiamonds = (spacing: number, timePerStop: number, walkSpeed: number, t
   for (var i = 1; i<numstops/2; i++) {
     lng += spacing;
     totalTime -= timePerStop;
+    if (totalTime < 0) {
+      break;
+    }
     // Push and unshift keep things in order for overlap check
     dmds.push(drawDiamond([lng, 0], totalTime, walkSpeed));
     dmds.unshift(drawDiamond([-lng, 0], totalTime, walkSpeed));
@@ -68,18 +75,33 @@ const calcDiamonds = (spacing: number, timePerStop: number, walkSpeed: number, t
   return [dmds, overlaps];
 }
 
+const drawRoads = (dmd: Diamond) => {
+  let [[lng,lat1],[lng1,lat],[,lat2],[lng2,]] = dmd;
+  const lines = [[[lng1,lat],[lng2,lat]], [[lng,lat1],[lng,lat2]]];
+  for (let dlat = GRID; dlat < Math.abs(lat1); dlat += GRID) {
+    lng1 += GRID;
+    lng2 -= GRID;
+    lines.push([[lng1,dlat], [lng2,dlat]]);
+    lines.push([[lng1,-dlat], [lng2,-dlat]]);
+  }
+  for (let dlng = GRID; dlng < Math.abs(lat1); dlng += GRID) {
+    lat1 += GRID;
+    lat2 -= GRID;
+    lines.push([[lng + dlng,lat1], [lng + dlng,lat2]]);
+    lines.push([[lng - dlng,lat1], [lng - dlng,lat2]]);
+  }
+  return lines;
+}
+
 const makeGrid = (() => {
   const src = layers.walk.getSource();
-  //const filters = {grid: null, grid2: null};
   if (src) {
     return (map: Map) => {
       src.clear()
-      //layers.grid.removeFilter(filters.grid);
-      //layers.grid2.removeFilter(filters.grid2);
-
-      const [dmds, overlaps] = calcDiamonds(+distance.val, 90, 0.7, 60 * 15, 20);
-      console.log(distance.val, dmds)
-      const centroids = calcCentroids(distance.val, 20);
+      const timeBetweenStops = 20 + 0.1*distance.val;
+      const [dmds, overlaps] = calcDiamonds(+distance.val, timeBetweenStops, 0.7, 60 * 15, 50);
+      let area = 0;
+      const centroids = calcCentroids(+distance.val, dmds.length);
       centroids.forEach((c) => {
         src.addFeature(
           new Feature({
@@ -89,46 +111,43 @@ const makeGrid = (() => {
           })
         );
       });
-      const olPoly = new Feature({
-        geometry: new Polygon([...dmds]),
-        cat: "walk"
-      })
-      const diPoly = new GeoJSON().writeFeatureObject(olPoly);
-      src.addFeature(olPoly);
-      layers.grid.getSource()?.getFeatures().forEach((f) => {
-        const line = new GeoJSON().writeFeatureObject(f);
-        const intersects = turf.lineIntersect(line, diPoly);
-        for(let idx = 0; idx < intersects.features.length; idx += 2) {
-          const nxt = intersects.features[idx + 1];
-          if (nxt !== undefined) {
-            const line = new LineString([nxt.geometry.coordinates, intersects.features[idx].geometry.coordinates]);
-            src.addFeature(new Feature({geometry: line, cat: "road"}));
-          }
-        }
-        console.log({ intersects });
-        src.addFeatures(new GeoJSON().readFeatures(intersects));
-      });
-      overlaps.forEach((dmd) => {
+      src.addFeature(
+        new Feature({
+          geometry: new LineString([centroids.pop(), centroids.pop()]),
+          cat: "main"
+        })
+      );
+
+      const _polys = turf.union(turf.featureCollection(
+        dmds.map(dmd => turf.polygon([[...dmd, dmd[0]]]))
+      ));
+      const polys = GeoJsonFormat.readFeatures(_polys)[0];
+      area = polys.getGeometry()?.getArea();
+      src.addFeature(polys);
+      if (overlaps.length > 1) {
+        const _overs = turf.union(turf.featureCollection(
+          overlaps.map(dmd => turf.polygon([[...dmd, dmd[0]]]))
+        ));
+        const overs = GeoJsonFormat.readFeatures(_overs)[0];
+        overs.setProperties({"cat": "overlap"});
+        area -= overs.getGeometry()?.getArea();
+        src.addFeature(overs);
+      }
+
+      dmds.forEach((dmd) => {
+        const roads = drawRoads(dmd);
         src.addFeature(
           new Feature({
-            geometry: new Polygon([dmd]),
-            cat: "overlap"
+            geometry: new MultiLineString(roads),
+            cat: "road"
           })
         );
       });
-      const extent = src.getExtent() || createEmpty();
-      const gExtent = layers.grid.getSource()?.getExtent() || createEmpty();
-      map.getView().fit(
-        getArea(extent) > getArea(gExtent) ? gExtent : extent
-      );
-      /*
-      src.addFeature(
-        new Feature({
-          geometry: new MultiPolygon([[[[10000, 10000], [10000, -10000], [-10000, -10000], [-10000, 10000]], ...dmds]]),
-          cat: "exterior"
-        })
-      );
-      */
+
+      //const extent = src.getExtent() || createEmpty();
+      //map.getView().fit(extent);
+
+      walkArea.val = area;
     };
   }
   return () => null;
@@ -137,7 +156,7 @@ const makeGrid = (() => {
 const setupMap = (mapEl: HTMLElement): Map => {
   const map = new Map({
     layers: [
-      layers.grid,
+      //layers.grid,
       layers.walk,
     ],
     target: mapEl,
@@ -147,6 +166,7 @@ const setupMap = (mapEl: HTMLElement): Map => {
     }),
   });
   makeGrid(map);
+  map.getView().fit([-7200, -630, 7200, 630]);
   return map;
 };
 
@@ -169,6 +189,7 @@ const main = () => {
     const inputEl = document.getElementById('input');
     if (inputEl !== null) {
       setupInputs(inputEl, map);
+      van.add(inputEl, areaEl);
     }
   }
 };
