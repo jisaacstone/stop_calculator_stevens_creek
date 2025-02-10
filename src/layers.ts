@@ -1,8 +1,10 @@
 import {OSM, Vector as VectorSource} from 'ol/source.js';
 import {Tile as TileLayer, Vector as VectorLayer} from 'ol/layer.js';
-import {Fill, Stroke, Style} from 'ol/style.js';
+import {Fill, Style} from 'ol/style.js';
 import {GeoJSON} from 'ol/format.js';
 import gridJson from 'assets/00grid.json';
+import scbJson from 'assets/scb.json';
+import scbGraphJson from 'assets/sc-graph.json';
 import * as style from 'style';
 
 const osmSource = new OSM();
@@ -10,7 +12,15 @@ const osmSource = new OSM();
 const gridFeatures = new GeoJSON().readFeatures(
   gridJson,
   {featureProjection: osmSource.getProjection() || 'EPSG:4269'}
-)
+);
+const scbFeatures = new GeoJSON().readFeatures(
+  scbJson,
+  {featureProjection: osmSource.getProjection() || 'EPSG:4269'}
+);
+const scbGraph = new GeoJSON().readFeatures(
+  scbGraphJson,
+  {featureProjection: osmSource.getProjection() || 'EPSG:4269'}
+);
 
 export const osmRaster = new TileLayer({
   source: osmSource,
@@ -30,7 +40,7 @@ export const walk = new VectorLayer({
     if (cat === 'road') {
       return style.road;
     }
-    const sc = cat === 'overlap' ? [194, 95, 238, 0.7] : [246, 245, 245, 0.3];
+    const sc = cat === 'overlap' ? [194, 95, 238, 0.3] : [246, 245, 245, 0.2];
     return [new Style({ stroke: style.outline, fill: new Fill({ color: sc }) })];
   },
 });
@@ -40,22 +50,46 @@ export const grid = new VectorLayer({
     format: new GeoJSON(),
     features: gridFeatures,
   }),
-  style: new Style({
-    stroke: new Stroke({
-      color: [106, 184, 131, 1],
-      width: 2
-    })
-  }),
+  style: style.gridRoad
 });
-export const grid2 = new VectorLayer({
+
+const mainRoads = ['West San Carlos Street', 'Stevens Creek Boulevard'];
+export const scbArea = new VectorLayer({
   source: new VectorSource({
     format: new GeoJSON(),
-    features: gridFeatures,
+    features: scbFeatures,
   }),
-  style: new Style({
-    stroke: new Stroke({
-      color: [216, 224, 231, 1],
-      width: 2
-    })
+  style: (feature) => {
+    const cat = feature.get('osm_type');
+    const name = feature.get('name') || '';
+    if (cat === 'ways_line') {
+      if (mainRoads.includes(name) ) {
+        return style.mainRoad;
+      }
+      return style.gridRoad;
+    } else if (cat === 'nodes') {
+      if (mainRoads.some((n) => name.startsWith(n))) {
+        return style.poi;
+      }
+      return style.circle;
+    }
+    return style.bldg;
+  },
+});
+
+export const scRoadGraph = new VectorLayer({
+  source: new VectorSource({
+    format: new GeoJSON(),
+    features: scbGraph,
   }),
+  style: (feature) => {
+    const tags = feature.get('tags') || {};
+    if (mainRoads.includes(tags['name']) ) {
+      return style.mainRoad;
+    }
+    if (tags['bus'] === 'yes') {
+      return style.poi;
+    }
+    return style.bldg;
+  },
 });

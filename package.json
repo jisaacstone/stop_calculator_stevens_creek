@@ -7,6 +7,7 @@
   "scripts": {
     "dev": "node_modules/vite/bin/vite.js",
     "build": "node_modules/vite/bin/vite.js build",
+    "build-graph": "node_modules/tsx/dist/cli.mjs scripts/build-graph.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -20,7 +21,11 @@
     "vanjs-core": "^1.5.2"
   },
   "devDependencies": {
-    "typescript": "^5.6.3",
+    "@types/node": "^22.13.1",
+    "graph-from-osm": "^1.0.0",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3",
     "vite": "^5.4.10",
     "vite-tsconfig-paths": "^5.0.1"
   }
