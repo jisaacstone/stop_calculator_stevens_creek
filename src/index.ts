@@ -63,7 +63,7 @@ const setupSCMap = (mapEl: HTMLElement): Map => {
     console.log(neighbors);
     layers.scRoadGraph.getSource()?.getFeatures().forEach((f) => {
       const fid = f.get('id');
-      if(neighbors.find((l) => l.osmid === fid)) {
+      if(neighbors.find((l) => l.id === fid)) {
         f.setStyle(style.selected);
       }
     });
@@ -71,7 +71,7 @@ const setupSCMap = (mapEl: HTMLElement): Map => {
   map.getView().fit(layers.scRoadGraph.getSource().getExtent());
 
   const busstop = 4168013077;
-  const walkshed = isochrone.calcIsochrone(busstop, 245);
+  const walkshed = isochrone.calcIsochrone(busstop, 300);
   console.log(walkshed);
   layers.scRoadGraph.getSource()?.getFeatures().forEach((f) => {
     if(walkshed.has(f.get('id'))) {

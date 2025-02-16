@@ -4,8 +4,10 @@ import {Fill, Style} from 'ol/style.js';
 import {GeoJSON} from 'ol/format.js';
 import gridJson from 'assets/00grid.json';
 import scbJson from 'assets/scb.json';
-import scbGraphJson from 'assets/sc-osm.json';
+import scbGraphJson from 'assets/sc-geojson.json';
 import * as style from 'style';
+
+console.log({ scbGraphJson });
 
 const osmSource = new OSM();
 

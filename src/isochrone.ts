@@ -11,7 +11,7 @@ const findEdges = (start: number, seen: Set<string>): link[] => {
     .filter((link: link) => link.s === start && !seen.has(link.id));
 }
 
-const traverse = (start: number, distance: number, found: Set<number>) => {
+const traverse = (start: number, distance: number, found: Set<string>) => {
   let stopafter = 1000;
   const seen: Set<string> = new Set();
   const queue: PriorityQueue<entry> = new PriorityQueue(
@@ -24,10 +24,10 @@ const traverse = (start: number, distance: number, found: Set<number>) => {
     if (nextEntry === null) {
       return;
     }
-    findEdges(nextEntry.nodeId, seen).forEach(({ id, osmid, t, l }) => {
-      console.log('edge', t, osmid, l);
+    findEdges(nextEntry.nodeId, seen).forEach(({ id, t, l }) => {
+      console.log('edge', t, l);
       if (l < nextEntry.remaining) {
-        found.add(osmid);
+        found.add(id);
         queue.enqueue({nodeId: t, remaining: nextEntry.remaining - l});
       }
       seen.add(id);
@@ -37,7 +37,7 @@ const traverse = (start: number, distance: number, found: Set<number>) => {
 };
 
 export const calcIsochrone = (start: number, distance: number) => {
-  const found: Set<number> = new Set();
+  const found: Set<string> = new Set();
   traverse(start, distance, found);
   return found;
 };
