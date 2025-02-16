@@ -13,6 +13,7 @@
   "author": "",
   "license": "AGPL-3.0-or-later",
   "dependencies": {
+    "@datastructures-js/priority-queue": "^6.3.2",
     "@turf/turf": "^7.2.0",
     "install": "^0.13.0",
     "npm": "^11.0.0",

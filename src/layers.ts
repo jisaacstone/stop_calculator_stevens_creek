@@ -4,7 +4,7 @@ import {Fill, Style} from 'ol/style.js';
 import {GeoJSON} from 'ol/format.js';
 import gridJson from 'assets/00grid.json';
 import scbJson from 'assets/scb.json';
-import scbGraphJson from 'assets/sc-graph.json';
+import scbGraphJson from 'assets/sc-osm.json';
 import * as style from 'style';
 
 const osmSource = new OSM();
@@ -85,7 +85,7 @@ export const scRoadGraph = new VectorLayer({
   style: (feature) => {
     const tags = feature.get('tags') || {};
     if (mainRoads.includes(tags['name']) ) {
-      return style.mainRoad;
+      return style.road;
     }
     if (tags['bus'] === 'yes') {
       return style.poi;

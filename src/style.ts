@@ -26,7 +26,7 @@ export const circle = new Style({
             color: 'rgba(175,255,210,0.8)'
         }),
     }),
-})
+});
 export const poi = new Style({
     image: new Circle({
         radius: 5,
@@ -34,8 +34,12 @@ export const poi = new Style({
             color: [145, 199, 100, 0.9]
         }),
     }),
-})
+});
 export const bldg = new Style({
   stroke: new Stroke({color: [200, 100, 150, 0.5]}),
   fill: new Fill({color: [100, 200, 150, 0.2]})
-})
+});
+export const selected = new Style({
+  stroke: new Stroke({color: [20, 220, 110, 0.5]}),
+  fill: new Fill({color: [10, 200, 150, 0.2]})
+});

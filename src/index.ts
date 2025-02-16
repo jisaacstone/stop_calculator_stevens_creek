@@ -51,19 +51,31 @@ const setupSCMap = (mapEl: HTMLElement): Map => {
   const featSelect = new Select({
     condition: click,
     layers: [ layers.scRoadGraph ],
-    style: () => style.road
+    style: () => style.selected
   });
   map.addInteraction(featSelect);
   featSelect.on("select", (evt: SelectEvent) => {
+    if (!evt.selected || evt.selected.length === 0) {
+      return;
+    }
     console.log(evt.selected[0]);
+    const neighbors = isochrone.neighbors(evt.selected[0].get('id'));
+    console.log(neighbors);
+    layers.scRoadGraph.getSource()?.getFeatures().forEach((f) => {
+      const fid = f.get('id');
+      if(neighbors.find((l) => l.osmid === fid)) {
+        f.setStyle(style.selected);
+      }
+    });
   });
   map.getView().fit(layers.scRoadGraph.getSource().getExtent());
 
   const busstop = 4168013077;
-  const walkshed = isochrone.calcIsochrone(busstop, 45);
+  const walkshed = isochrone.calcIsochrone(busstop, 245);
+  console.log(walkshed);
   layers.scRoadGraph.getSource()?.getFeatures().forEach((f) => {
-    if(walkshed.has(f.get('osmId'))) {
-      f.setStyle(style.road);
+    if(walkshed.has(f.get('id'))) {
+      f.setStyle(style.mainRoad);
     }
   });
 
