@@ -85,12 +85,8 @@ export const scRoadGraph = new VectorLayer({
     features: scbGraph,
   }),
   style: (feature) => {
-    const tags = feature.get('tags') || {};
-    if (mainRoads.includes(tags['name']) ) {
+    if (mainRoads.includes(feature.get('name')) ) {
       return style.road;
-    }
-    if (tags['bus'] === 'yes') {
-      return style.poi;
     }
     return style.bldg;
   },

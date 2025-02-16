@@ -17,35 +17,39 @@ const traverse = (start: number, distance: number, found: Set<string>) => {
   const queue: PriorityQueue<entry> = new PriorityQueue(
     (ea, eb) => eb.remaining - ea.remaining
   );
+  const incomplete: Set<string> = new Set();
   queue.enqueue({ nodeId: start, remaining: distance });
   while (stopafter > 0) {
     const nextEntry = queue.dequeue();
     console.log(nextEntry, stopafter);
     if (nextEntry === null) {
-      return;
+      return incomplete;
     }
     findEdges(nextEntry.nodeId, seen).forEach(({ id, t, l }) => {
       console.log('edge', t, l);
       if (l < nextEntry.remaining) {
         found.add(id);
         queue.enqueue({nodeId: t, remaining: nextEntry.remaining - l});
+      } else {
+        incomplete.add(id);
       }
       seen.add(id);
     });
     stopafter--;
   }
+  return incomplete;
 };
 
 export const calcIsochrone = (start: number, distance: number) => {
   const found: Set<string> = new Set();
-  traverse(start, distance, found);
-  return found;
+  const incomplete = traverse(start, distance, found);
+  return { found, incomplete };
 };
 
-export const neighbors = (osmid: number): link[] => {
+export const neighbors = (id: string): link[] => {
   return (
     nodes.links
-    .filter((l: link) => l.osmid === osmid)
+    .filter((l: link) => l.id === id)
     .reduce((found: link[], link: link) => {
       return found.concat(nodes.links.filter((l: link) => l.s === link.t || l.t === link.s));
     }, [])

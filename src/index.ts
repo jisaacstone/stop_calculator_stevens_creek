@@ -74,8 +74,10 @@ const setupSCMap = (mapEl: HTMLElement): Map => {
   const walkshed = isochrone.calcIsochrone(busstop, 300);
   console.log(walkshed);
   layers.scRoadGraph.getSource()?.getFeatures().forEach((f) => {
-    if(walkshed.has(f.get('id'))) {
-      f.setStyle(style.mainRoad);
+    if(walkshed.found.has(f.get('id'))) {
+      f.setStyle(style.walk);
+    } else if (walkshed.incomplete.has(f.get('id'))) {
+      f.setStyle(style.walkEdge);
     }
   });
 
