@@ -6,3 +6,6 @@ cache
 .venv
 *.bak
 *.sw?
+
+src/assets/nld.json
+src/assets/sc-geojson.json
