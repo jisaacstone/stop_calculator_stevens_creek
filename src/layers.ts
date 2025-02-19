@@ -3,7 +3,6 @@ import {Tile as TileLayer, Vector as VectorLayer} from 'ol/layer.js';
 import {Fill, Style} from 'ol/style.js';
 import {GeoJSON} from 'ol/format.js';
 import gridJson from 'assets/00grid.json';
-import scbJson from 'assets/scb.json';
 import scbGraphJson from 'assets/sc-geojson.json';
 import * as style from 'style';
 
@@ -13,10 +12,6 @@ const osmSource = new OSM();
 
 const gridFeatures = new GeoJSON().readFeatures(
   gridJson,
-  {featureProjection: osmSource.getProjection() || 'EPSG:4269'}
-);
-const scbFeatures = new GeoJSON().readFeatures(
-  scbJson,
   {featureProjection: osmSource.getProjection() || 'EPSG:4269'}
 );
 const scbGraph = new GeoJSON().readFeatures(
