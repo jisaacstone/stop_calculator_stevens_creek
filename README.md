@@ -17,7 +17,7 @@ python ./scripts/osmnx_dl.py
 
 # Project Setup Instructions (macOS)
 
-This guide provides step-by-step instructions to set up and run the project on macOS.
+This guide provides step-by-step instructions to set up and run the project on macOS. 
 
 ## Prerequisites
 
@@ -42,9 +42,10 @@ Navigate to the project directory and install dependencies:
 cd /path/to/your/project
 npm install
 
-To start the development server in the background:
+To start the development server in the background (install pm2 before: npm install -g pm2):
+pm2 start "npm run dev" --name myapp
 
-npm run dev &
+(Learn URL from, pm2 logs myapp)
 
 To build a static site:
 
