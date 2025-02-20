@@ -71,3 +71,8 @@ export const neighbors = (id: string): [[number, number], [number, number]][] =>
     .map((l: Link) => [getCoords(l.source), getCoords(l.target)])
   );
 };
+
+function sum(a, b) {
+  return a + b;
+}
+module.exports = sum;

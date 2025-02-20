@@ -8,7 +8,7 @@
     "dev": "node_modules/vite/bin/vite.js",
     "build": "node_modules/vite/bin/vite.js build",
     "build-graph": "node_modules/tsx/dist/cli.mjs scripts/build-graph.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "author": "",
   "license": "AGPL-3.0-or-later",
