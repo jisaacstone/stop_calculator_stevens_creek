@@ -51,6 +51,9 @@ To build a static site:
 
 npm run build
 
+To test (install jest and babel before: npm install --save-dev jest @types/jest ts-jest; npm install --save-dev @babel/preset-typescript):
+npm test
+
 ## 2. Pulling Data
 
 This step involves setting up a Python virtual environment, installing dependencies, and running a script to fetch data.

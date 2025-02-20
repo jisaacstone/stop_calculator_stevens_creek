@@ -4,8 +4,6 @@ import { PriorityQueue } from '@datastructures-js/priority-queue';
 type Link = { id: string, osmid: number, source: number, target: number, length: number };
 type Entry = { nodeId: number, remaining: number };
 
-//document.nodes = nodes;
-
 // Precomputed adjacency list for fast lookups
 const linkMap = new Map<number, Link[]>();
 nodes.links.forEach((link: Link) => {
@@ -15,12 +13,7 @@ nodes.links.forEach((link: Link) => {
   linkMap.get(link.source)!.push(link);
 });
 
-//const findEdges = (start: number, seen: Set<string>): link[] => {
-//  return nodes.links
-//    .filter((link: link) => link.s === start && !seen.has(link.id));
-//}
-
-const traverse = (start: number, distance: number) => {
+export const traverse = (start: number, distance: number) => {
   const seen: Set<string> = new Set();
   const queue: PriorityQueue<Entry> = new PriorityQueue(
     (ea, eb) => eb.remaining - ea.remaining
