@@ -13,10 +13,10 @@ export const road = new Style({
       width: 2,
   })
 });
-export const gridRoad = new Style({
+export const gridRoad = (meters: number, resolution: number) => new Style({
     stroke: new Stroke({
-    color: 'rgba(247,247,247, 0.5)',
-    width: 1,
+    color: 'rgba(166,219,160, 1)',
+    width: Math.max(meters / resolution, 2)
   })
 });
 export const circle = new Style({
