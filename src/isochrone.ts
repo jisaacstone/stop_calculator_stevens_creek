@@ -49,7 +49,7 @@ const traverse = (start: number, distance: number) => {
         incomplete.add(id);
       }
       seen.add(id);
-    } 
+    }
   }
   return { found, incomplete };
 };
@@ -58,11 +58,16 @@ export const calcIsochrone = (start: number, distance: number) => {
   return traverse(start, distance);
 };
 
-export const neighbors = (id: string): Link[] => {
-  const edge = nodes.links.find((l: Link) => l.id === id);
-  if (!edge) {
-    return [];
-  }
-  return linkMap.get(edge.source)?.concat(linkMap.get(edge.target) || []) || [];
+const getCoords = (nodeId: number): [number, number] => {
+   const n = nodes.nodes.filter(node => node.id === nodeId)[0];
+   return [n.x, n.y];
 };
 
+export const neighbors = (id: string): [[number, number], [number, number]][] => {
+  const selected: Link = nodes.links.filter((l: Link) => l.id === id)[0];
+  return (
+    nodes.links
+    .filter((l: Link) => l.source === selected.target || l.target === selected.source)
+    .map((l: Link) => [getCoords(l.source), getCoords(l.target)])
+  );
+};

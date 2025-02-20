@@ -6,8 +6,6 @@ import gridJson from 'assets/00grid.json';
 import scbGraphJson from 'assets/sc-geojson.json';
 import * as style from 'style';
 
-console.log({ scbGraphJson });
-
 const osmSource = new OSM();
 
 const gridFeatures = new GeoJSON().readFeatures(
@@ -47,32 +45,10 @@ export const grid = new VectorLayer({
     format: new GeoJSON(),
     features: gridFeatures,
   }),
-  style: style.gridRoad
+  style: (_, resolution) => style.gridRoad(50, resolution),
 });
 
 const mainRoads = ['West San Carlos Street', 'Stevens Creek Boulevard'];
-export const scbArea = new VectorLayer({
-  source: new VectorSource({
-    format: new GeoJSON(),
-    features: scbFeatures,
-  }),
-  style: (feature) => {
-    const cat = feature.get('osm_type');
-    const name = feature.get('name') || '';
-    if (cat === 'ways_line') {
-      if (mainRoads.includes(name) ) {
-        return style.mainRoad;
-      }
-      return style.gridRoad;
-    } else if (cat === 'nodes') {
-      if (mainRoads.some((n) => name.startsWith(n))) {
-        return style.poi;
-      }
-      return style.circle;
-    }
-    return style.bldg;
-  },
-});
 
 export const scRoadGraph = new VectorLayer({
   source: new VectorSource({

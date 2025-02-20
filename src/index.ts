@@ -11,6 +11,7 @@ import * as slider from 'slider';
 import * as walkgrid from 'walkgrid';
 import * as style from 'style';
 import * as isochrone from 'isochrone';
+import * as walkShed from 'walkShed';
 
 const distance = van.state(walkgrid.GRID * 3);
 const walkArea = van.state(0);
@@ -41,6 +42,7 @@ const setupSCMap = (mapEl: HTMLElement): Map => {
     layers: [
       layers.osmRaster,
       layers.scRoadGraph,
+      walkShed.walkShedLayer
     ],
     target: mapEl,
     view: new View({
@@ -58,15 +60,8 @@ const setupSCMap = (mapEl: HTMLElement): Map => {
     if (!evt.selected || evt.selected.length === 0) {
       return;
     }
-    console.log(evt.selected[0]);
     const neighbors = isochrone.neighbors(evt.selected[0].get('id'));
-    console.log(neighbors);
-    layers.scRoadGraph.getSource()?.getFeatures().forEach((f) => {
-      const fid = f.get('id');
-      if(neighbors.find((l) => l.id === fid)) {
-        f.setStyle(style.selected);
-      }
-    });
+    walkShed.setWalkShed(neighbors, 'neighbors');
   });
   map.getView().fit(layers.scRoadGraph.getSource().getExtent());
 
