@@ -6,6 +6,7 @@ cache
 .venv
 *.bak
 *.sw?
+*.DS_Store
 
-src/assets/nld.json
-src/assets/sc-geojson.json
+src/assets/nld.ts
+src/assets/sc-geojson.ts

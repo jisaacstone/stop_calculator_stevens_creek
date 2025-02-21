@@ -51,6 +51,10 @@ To build a static site:
 
 npm run build
 
+To test (install jest and jest globals: npm install --save-dev jest @types/jest ts-jest @jest/globals):
+(create a conf file and add `preset: "ts-jest"` in it: npx ts-jest config:init)
+npm test
+
 ## 2. Pulling Data
 
 This step involves setting up a Python virtual environment, installing dependencies, and running a script to fetch data.
