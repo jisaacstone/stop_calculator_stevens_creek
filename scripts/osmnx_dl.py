@@ -15,8 +15,9 @@ opn = list(ox._overpass._download_overpass_network(poly, network_type='walk', cu
 graph = ox.graph._create_graph([opn], True)
 nld = node_link_data(graph)
 nld['links'] = [{'osmid': l['osmid'], 'source': l['source'], 'target': l['target'], 'length': l['length'], 'id': id(l), 'name': l.get('name')} for l in nld['links']]
-with open('src/assets/nld.json', 'w') as fob:
-    json.dump(nld, fob)
+with open('src/assets/nld.ts', 'w') as fob:
+    nld_json = json.dumps(nld)
+    fob.write(f"const nld = {nld_json};\nexport default nld;")
 
 crs = nld['graph']['crs']  # 4326
 nodemap = {n['id']: [n['x'], n['y']] for n in nld['nodes']}
@@ -43,5 +44,7 @@ for link in nld['links']:
         if link['name']:
             feature['properties']['name'] = link['name']
         features.append(feature)
-with open('src/assets/sc-geojson.json', 'w') as fob:
-    json.dump(gj, fob)
+
+with open('src/assets/sc-geojson.ts', 'w') as fob:
+    gj_json = json.dumps(gj)
+    fob.write(f"const scGeojson = {gj_json};\nexport default scGeojson;")

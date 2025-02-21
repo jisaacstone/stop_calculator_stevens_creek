@@ -51,7 +51,8 @@ To build a static site:
 
 npm run build
 
-To test (install jest and babel before: npm install --save-dev jest @types/jest ts-jest; npm install --save-dev @babel/preset-typescript):
+To test (install jest and jest globals: npm install --save-dev jest @types/jest ts-jest @jest/globals):
+(create a conf file and add `preset: "ts-jest"` in it: npx ts-jest config:init)
 npm test
 
 ## 2. Pulling Data

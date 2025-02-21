@@ -1,19 +1,21 @@
-import nodes from 'assets/nld.json';
+import nld from './assets/nld.ts';
 import { PriorityQueue } from '@datastructures-js/priority-queue';
 
-type Link = { id: string, osmid: number, source: number, target: number, length: number };
+const nodes = nld;
+export type Link = { id: string, osmid: number, source: number, target: number, length: number };
 type Entry = { nodeId: number, remaining: number };
 
 // Precomputed adjacency list for fast lookups
-const linkMap = new Map<number, Link[]>();
+const _linkMap = new Map<number, Link[]>();
 nodes.links.forEach((link: Link) => {
-  if (!linkMap.has(link.source)) {
-    linkMap.set(link.source, []);
+  if (!_linkMap.has(link.source)) {
+    _linkMap.set(link.source, []);
   }
-  linkMap.get(link.source)!.push(link);
+  _linkMap.get(link.source)!.push(link);
 });
 
-export const traverse = (start: number, distance: number) => {
+export const traverse = (start: number, distance: number, linkMap?: Map<number, Link[]> ) => {
+  linkMap = linkMap || _linkMap;
   const seen: Set<string> = new Set();
   const queue: PriorityQueue<Entry> = new PriorityQueue(
     (ea, eb) => eb.remaining - ea.remaining
@@ -22,12 +24,9 @@ export const traverse = (start: number, distance: number) => {
   const incomplete: Set<string> = new Set();
 
   queue.enqueue({ nodeId: start, remaining: distance });
-  seen.add(start.toString());
   let nextEntry: Entry | null;
 
   while (nextEntry = queue.dequeue()) {
-    console.log(nextEntry);
-
     const edges = linkMap.get(nextEntry.nodeId) || [];
     for (const {id, target, length} of edges) {
       if (seen.has(id)) {
@@ -52,8 +51,8 @@ export const calcIsochrone = (start: number, distance: number) => {
 };
 
 const getCoords = (nodeId: number): [number, number] => {
-   const n = nodes.nodes.filter(node => node.id === nodeId)[0];
-   return [n.x, n.y];
+  const n = nodes.nodes.filter(node => node.id === nodeId)[0];
+  return [n.x, n.y];
 };
 
 export const neighbors = (id: string): [[number, number], [number, number]][] => {
@@ -64,8 +63,3 @@ export const neighbors = (id: string): [[number, number], [number, number]][] =>
     .map((l: Link) => [getCoords(l.source), getCoords(l.target)])
   );
 };
-
-function sum(a, b) {
-  return a + b;
-}
-module.exports = sum;
