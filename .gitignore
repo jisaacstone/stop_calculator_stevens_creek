@@ -8,5 +8,3 @@ cache
 *.sw?
 *.DS_Store
 
-src/assets/nld.ts
-src/assets/sc-geojson.ts

@@ -26,7 +26,7 @@ export const traverse = (start: number, distance: number, linkMap?: Map<number, 
   queue.enqueue({ nodeId: start, remaining: distance });
   let nextEntry: Entry | null;
 
-  while (nextEntry = queue.dequeue()) {
+  while ((nextEntry = queue.dequeue()) !== null ) {
     const edges = linkMap.get(nextEntry.nodeId) || [];
     for (const {id, target, length} of edges) {
       if (seen.has(id)) {

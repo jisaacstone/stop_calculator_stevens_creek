@@ -1,6 +1,5 @@
 import { LineString, MultiLineString, Point } from 'ol/geom.js';
 import { GeoJSON } from 'ol/format.js';
-import Map from 'ol/Map.js';
 import Feature from 'ol/Feature.js';
 import * as turf from '@turf/turf';
 import * as style from 'style';
@@ -23,8 +22,8 @@ const drawDiamond = (center: [number, number], time: number, walkSpeed: number):
 
 const calcCentroids = (spacing: number, numstops: number): [number, number][] => {
   const ctds: [number, number][] = [[0, 0]];
-  var offset = 0;
-  for (var i = 1; i<numstops/2; i++) {
+  let offset = 0;
+  for (let i = 1; i<numstops/2; i++) {
     offset += spacing;
     ctds.push([offset, 0]);
     ctds.push([-offset, 0]);
@@ -33,11 +32,11 @@ const calcCentroids = (spacing: number, numstops: number): [number, number][] =>
 };
 
 const calcDiamonds = (spacing: number, timePerStop: number, walkSpeed: number, totalTime: number, numstops: number): [Diamond[], Diamond[]] => {
-  var lng = 0;
-  var checkOverlap = true;
+  let lng = 0;
+  let checkOverlap = true;
   const dmds: Diamond[] = [drawDiamond([0,0], totalTime, walkSpeed)];
   const overlaps: Diamond[] = [];
-  for (var i = 1; i<numstops/2; i++) {
+  for (let i = 1; i<numstops/2; i++) {
     lng += spacing;
     totalTime -= timePerStop;
     if (totalTime < 0) {
@@ -64,6 +63,7 @@ const calcDiamonds = (spacing: number, timePerStop: number, walkSpeed: number, t
 }
 
 const drawRoads = (dmd: Diamond) => {
+  // eslint-disable-next-line prefer-const
   let [[lng,lat1],[lng1,lat],[,lat2],[lng2,]] = dmd;
   const lines = [[[lng1,lat],[lng2,lat]], [[lng,lat1],[lng,lat2]]];
   for (let dlat = GRID; dlat < Math.abs(lat1); dlat += GRID) {
@@ -82,7 +82,7 @@ const drawRoads = (dmd: Diamond) => {
 }
 
 export const makeGrid = ((src, distanceState, areaState) => {
-  return (map: Map) => {
+  return () => {
     src.clear()
     const timeBetweenStops = 20 + 0.1*distanceState.val;
     const [dmds, overlaps] = calcDiamonds(+distanceState.val, timeBetweenStops, 0.7, 60 * 15, 50);
