@@ -6,7 +6,6 @@ export const makeInput = (
   display: {name: string, units: string},
   range: {min: number, max: number, step: number},
   stateVar: State<number>,
-  callback: () => any,
   classArgs: object = {}
 ) => {
   return div(
@@ -20,7 +19,6 @@ export const makeInput = (
       value: stateVar.val,
       oninput: e => {
         stateVar.val = e.target.value;
-        callback();
       },
     }),
     div(

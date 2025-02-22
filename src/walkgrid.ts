@@ -23,8 +23,8 @@ const drawDiamond = (center: [number, number], time: number, walkSpeed: number):
 
 const calcCentroids = (spacing: number, numstops: number): [number, number][] => {
   const ctds: [number, number][] = [[0, 0]];
-  var offset = 0;
-  for (var i = 1; i<numstops/2; i++) {
+  let offset = 0;
+  for (let i = 1; i<numstops/2; i++) {
     offset += spacing;
     ctds.push([offset, 0]);
     ctds.push([-offset, 0]);
@@ -33,11 +33,11 @@ const calcCentroids = (spacing: number, numstops: number): [number, number][] =>
 };
 
 const calcDiamonds = (spacing: number, timePerStop: number, walkSpeed: number, totalTime: number, numstops: number): [Diamond[], Diamond[]] => {
-  var lng = 0;
-  var checkOverlap = true;
+  let lng = 0;
+  let checkOverlap = true;
   const dmds: Diamond[] = [drawDiamond([0,0], totalTime, walkSpeed)];
   const overlaps: Diamond[] = [];
-  for (var i = 1; i<numstops/2; i++) {
+  for (let i = 1; i<numstops/2; i++) {
     lng += spacing;
     totalTime -= timePerStop;
     if (totalTime < 0) {
