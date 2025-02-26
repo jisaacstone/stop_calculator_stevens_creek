@@ -3,17 +3,12 @@ import {Tile as TileLayer, Vector as VectorLayer} from 'ol/layer.js';
 import {Fill, Style} from 'ol/style.js';
 import {GeoJSON} from 'ol/format.js';
 import gridJson from 'assets/00grid.json';
-import scGeojson from 'assets/sc-geojson.ts';
 import * as style from 'style';
 
 const osmSource = new OSM();
 
 const gridFeatures = new GeoJSON().readFeatures(
   gridJson,
-  {featureProjection: osmSource.getProjection() || 'EPSG:4269'}
-);
-const scbGraph = new GeoJSON().readFeatures(
-  scGeojson,
   {featureProjection: osmSource.getProjection() || 'EPSG:4269'}
 );
 
@@ -46,19 +41,4 @@ export const grid = new VectorLayer({
     features: gridFeatures,
   }),
   style: (_, resolution) => style.gridRoad(50, resolution),
-});
-
-const mainRoads = ['West San Carlos Street', 'Stevens Creek Boulevard'];
-
-export const scRoadGraph = new VectorLayer({
-  source: new VectorSource({
-    format: new GeoJSON(),
-    features: scbGraph,
-  }),
-  style: (feature) => {
-    if (mainRoads.includes(feature.get('name')) ) {
-      return style.road;
-    }
-    return style.bldg;
-  },
 });

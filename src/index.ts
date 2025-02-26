@@ -7,6 +7,7 @@ import Map from 'ol/Map.js';
 import van from 'vanjs-core';
 import 'assets/style.css';
 import * as layers from 'layers';
+import * as roads from 'roads';
 import * as slider from 'slider';
 import * as walkgrid from 'walkgrid';
 import * as style from 'style';
@@ -42,7 +43,7 @@ const setupSCMap = (mapEl: HTMLElement): Map => {
   const map = new Map({
     layers: [
       layers.osmRaster,
-      layers.scRoadGraph,
+      roads.scRoadGraph,
       busstops.layer,
       walkShed.walkShedLayer
     ],
@@ -54,7 +55,7 @@ const setupSCMap = (mapEl: HTMLElement): Map => {
   });
   const featSelect = new Select({
     condition: click,
-    layers: [ layers.scRoadGraph ],
+    layers: [ roads.scRoadGraph ],
     style: () => style.selected
   });
   map.addInteraction(featSelect);
@@ -65,12 +66,12 @@ const setupSCMap = (mapEl: HTMLElement): Map => {
     const neighbors = isochrone.neighbors(evt.selected[0].get('id'));
     walkShed.setWalkShed(neighbors, 'neighbors');
   });
-  map.getView().fit(layers.scRoadGraph.getSource().getExtent());
+  map.getView().fit(roads.scRoadGraph.getSource().getExtent());
 
   const busstop = 4168013077;
   const walkshed = isochrone.calcIsochrone(busstop, 300);
   console.log(walkshed);
-  layers.scRoadGraph.getSource()?.getFeatures().forEach((f) => {
+  roads.scRoadGraph.getSource()?.getFeatures().forEach((f) => {
     if(walkshed.found.has(f.get('id'))) {
       f.setStyle(style.walk);
     } else if (walkshed.incomplete.has(f.get('id'))) {
