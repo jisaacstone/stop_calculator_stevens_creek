@@ -4,5 +4,7 @@ export default {
   transform: {
     "^.+.tsx?$": ['@swc/jest'],
   },
+  modulePaths: ['src'],
+  extensionsToTreatAsEsm: ['.ts', '.tsx'],
   preset: "ts-jest"
 };
