@@ -12,6 +12,7 @@ import * as walkgrid from 'walkgrid';
 import * as style from 'style';
 import * as isochrone from 'isochrone';
 import * as walkShed from 'walkShed';
+import * as busstops from 'busstops';
 
 const distance = van.state(walkgrid.GRID * 3);
 const walkArea = van.state(0);
@@ -42,6 +43,7 @@ const setupSCMap = (mapEl: HTMLElement): Map => {
     layers: [
       layers.osmRaster,
       layers.scRoadGraph,
+      busstops.layer,
       walkShed.walkShedLayer
     ],
     target: mapEl,
