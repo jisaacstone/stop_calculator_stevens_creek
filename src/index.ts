@@ -9,35 +9,12 @@ import 'assets/style.css';
 import * as layers from 'layers';
 import * as roads from 'roads';
 import * as slider from 'slider';
-import * as walkgrid from 'walkgrid';
 import * as style from 'style';
 import * as isochrone from 'isochrone';
 import * as walkShed from 'walkShed';
 import * as busstops from 'busstops';
 
-const distance = van.state(walkgrid.GRID * 3);
-const walkArea = van.state(0);
-const areaEl = van.tags.div(van.derive(
-  () => `${Math.round(distance.val / walkgrid.GRID)} blocks, ${Math.round(walkArea.val).toLocaleString()} m²`
-));
-const makeGridFn = walkgrid.makeGrid(layers.grid.getSource(), distance, walkArea);
-
-const setupGridMap = (mapEl: HTMLElement): Map => {
-  const map = new Map({
-    layers: [
-      layers.grid,
-      layers.walk,
-    ],
-    target: mapEl,
-    view: new View({
-      center: fromLonLat([0,0]),
-      zoom: 14
-    }),
-  });
-  makeGridFn(map);
-  map.getView().fit(walkgrid.EXTENT);
-  return map;
-};
+const distance = van.state(2);
 
 const setupSCMap = (mapEl: HTMLElement): Map => {
   const map = new Map({
@@ -70,7 +47,6 @@ const setupSCMap = (mapEl: HTMLElement): Map => {
 
   const busstop = 4168013077;
   const walkshed = isochrone.calcIsochrone(busstop, 300);
-  console.log(walkshed);
   roads.scRoadGraph.getSource()?.getFeatures().forEach((f) => {
     if(walkshed.found.has(f.get('id'))) {
       f.setStyle(style.walk);
@@ -82,29 +58,23 @@ const setupSCMap = (mapEl: HTMLElement): Map => {
   return map;
 };
 
-const setupInputs = (inputEl: HTMLElement, map: Map) => {
+const setupInputs = (inputEl: HTMLElement) => {
   const slide = slider.makeInput(
     {name: 'distance', units: 'm'},
-    {min: walkgrid.GRID, max: walkgrid.GRID * 20, step: walkgrid.GRID},
+    {min: 1, max: 20, step: 2},
     distance,
-    () => makeGridFn(map)
   );
-  van.add(slide, areaEl);
   van.add(inputEl, slide);
 };
 
 const main = () => {
-  const mapEl = document.getElementById('map');
+  const mapEl = document.getElementById('stevenscreek');
   if (mapEl !== null) {
-    const map = setupGridMap(mapEl);
-    const inputEl = document.getElementById('input');
-    if (inputEl !== null) {
-      setupInputs(inputEl, map);
-    }
+    setupSCMap(mapEl);
   }
-  const map2 = document.getElementById('stevenscreek');
-  if (map2 !== null) {
-    setupSCMap(map2);
+  const inputEl = document.getElementById('input');
+  if (inputEl !== null) {
+    setupInputs(inputEl);
   }
 };
 
