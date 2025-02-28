@@ -55,6 +55,8 @@ To test (install jest and jest globals: npm install --save-dev jest @types/jest 
 (create a conf file and add `preset: "ts-jest"` in it: npx ts-jest config:init)
 npm test
 
+To lint (install: npm install --save-dev eslint; generate config file using npx eslint --init; also add in the package config scripts section: "lint": "eslint ."  )
+
 ## 2. Pulling Data
 
 This step involves setting up a Python virtual environment, installing dependencies, and running a script to fetch data.

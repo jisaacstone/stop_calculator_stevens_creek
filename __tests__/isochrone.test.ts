@@ -1,5 +1,5 @@
 import {describe, expect, test} from '@jest/globals';
-import { traverse, Link } from '../src/isochrone'; // Adjust the import path
+import { traverse, Link, neighbors } from '../src/isochrone'; // Adjust the import path
 
 // Mock nodes data
 const mockNodes = new Map<number, Link[]>([
@@ -7,6 +7,28 @@ const mockNodes = new Map<number, Link[]>([
     [2, [{ id: "2", osmid: 1002, source: 2, target: 3, length: 10 }]],
     [3, [{ id: "3", osmid: 1003, source: 3, target: 4, length: 15 }]]
   ]);
+
+type Edge = [number, number, number]; // [source, target, length]
+
+const mockEdges = (graph: Map<number, Link[]>): Edge[] => {
+  const edges: Edge[] = [];
+  
+  graph.forEach((links) => {
+    links.forEach(({ source, target, length }) => {
+      edges.push([source, target, length]);
+    });
+  });
+  
+  return edges;
+};
+
+describe("neigbour function", () => {
+  test("should return correct coords", () => {
+    const result = neighbors("2ebbd7899-2ebbd789b");
+    expect(result).toEqual([[][]]);
+  });
+
+});
 
 describe("traverse function", () => {
   test("should return correct found and incomplete sets", () => {
