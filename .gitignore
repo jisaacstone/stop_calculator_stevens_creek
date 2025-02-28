@@ -2,6 +2,7 @@ node_modules
 dist
 dist-ssr
 cache
+stop_calculator_stevens_creek.code-workspace
 
 .venv
 *.bak
