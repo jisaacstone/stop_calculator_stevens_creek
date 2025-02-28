@@ -8,7 +8,7 @@ def id(link):
     return f"{inorder[0]:x}-{inorder[1]:x}"
 
 
-# Manually dentified from OpenStreetMaps
+# Manually identified from OpenStreetMaps
 bb = [-122.05, 37.315, -121.9, 37.33]
 poly = ox.utils_geo.bbox_to_poly(bb)
 
