@@ -30,6 +30,7 @@ const setupSCMap = (mapEl: HTMLElement): Map => {
       zoom: 14
     }),
   });
+  busstops.addSelectEvent(map);
   const featSelect = new Select({
     condition: click,
     layers: [ roads.scRoadGraph ],

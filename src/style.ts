@@ -42,9 +42,14 @@ export const bldg = new Style({
 });
 
 export const selected = new Style({
-    stroke: new Stroke({color: 'rgba(20, 220, 110, 0.5)'}),
-    fill: new Fill({color: 'rgba(10, 200, 150, 1)'
-  })
+    stroke: new Stroke({color: 'rgba(20, 220, 110, 0.5)', width: 3}),
+    fill: new Fill({color: 'rgba(10, 200, 150, 1)'}),
+    image: new Circle({
+        radius: 5,
+        fill: new Fill({
+            color: 'rgba(0,136,55, 0.5)'
+        }),
+    }),
 });
 
 export const walk = new Style({
