@@ -55,6 +55,5 @@ export const addSelectEvent = (map: Map) => {
     const collection = roadSelect.getFeatures();
     collection.clear();
     collection.push(feature);
-    roadSelect.changed();
   });
 }
