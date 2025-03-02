@@ -1,5 +1,5 @@
 import VectorSource from 'ol/source/Vector.js';
-import { MultiPoint } from 'ol/geom.js';
+import { MultiPoint, LineString } from 'ol/geom.js';
 import Select from 'ol/interaction/Select.js';
 import { click } from 'ol/events/condition.js';
 import EsriJSON from 'ol/format/EsriJSON.js';
@@ -10,7 +10,8 @@ import { all as allStrategy } from 'ol/loadingstrategy.js';
 import * as style from 'style';
 import * as roads from 'roads';
 
-type StopInfo = { feature: Feature, next: number, opposite: number | null };
+type StopLink = { distance: number, id: number };
+type StopInfo = { feature: Feature, next: StopLink, prev: StopLink, opposite: number | null };
 
 /** this one has line information
  * FID - object id
@@ -81,6 +82,16 @@ export const addSelectEvent = (map: OlMap) => {
   });
 }
 
+// calculate distance by drawing a line and measuring it's length
+const dist = (f1: Feature<MultiPoint>, f2: Feature<MultiPoint>): number => {
+  const p1 = f1.getGeometry()?.getFirstCoordinate();
+  const p2 = f2.getGeometry()?.getFirstCoordinate();
+  if (p1 && p2) {
+    return new LineString([p1, p2]).getLength();
+  }
+  throw "no point";
+};
+
 export const lineInfo = (() => {
   // cache the result here so we only calculate once
   const infoMap = new Map<number, StopInfo>();
@@ -89,28 +100,35 @@ export const lineInfo = (() => {
   let calculated = false;
 
   const calculat = (): boolean => {
-    // check stop opposite by stop name.
-    // this is imperfect as they do not always match.
-    // perhaps checking cloastest by distance is better?
     const opposing = new Map<string, number>();
-    const sorted: Feature[] = (
-      busStopSource.getFeatures()
+    const sorted: Feature<MultiPoint>[] = (
+      (busStopSource.getFeatures() as Feature<MultiPoint>[])
       .filter((feature: Feature) => feature.get('Routes')?.match(busNum))
       .sort((f1: Feature, f2: Feature) => f1.get('RTID') - f2.get('RTID'))
     );
-    let feature = sorted[sorted.length - 1];
+    let current = sorted[sorted.length - 1];
+    let prev = sorted[sorted.length - 2];
     for (const next of sorted) {
-      const id = feature.get('FID');
-      const stop = feature.get('StopName');
-      const info: StopInfo = { feature, next: next.get('FID'), opposite: null };
-      if (stop && opposing.has(stop)) {
-        info.opposite = opposing.get(stop);
-        infoMap.get(opposing.get(stop)).opposite = id;
+      const id = current.get('FID');
+      const stopName = current.get('StopName');
+      const info: StopInfo = {
+        feature: current,
+        next: { id: next.get('FID'), distance: dist(current, next) },
+        prev: { id: prev.get('FID'), distance: dist(prev, current) },
+        opposite: null
+      };
+      // check stop opposite by stop name.
+      // this is imperfect as they do not always match.
+      // perhaps checking cloastest by distance is better?
+      if (stopName && opposing.has(stopName)) {
+        info.opposite = opposing.get(stopName);
+        infoMap.get(opposing.get(stopName)).opposite = id;
       } else {
-        opposing.set(stop, id);
+        opposing.set(stopName, id);
       }
       infoMap.set(id, info);
-      feature = next;
+      prev = current;
+      current = next;
     }
     return true;
   };
