@@ -37,7 +37,7 @@ const setupSCMap = (mapEl: HTMLElement): Map => {
     style: () => style.selected
   });
   map.addInteraction(featSelect);
-  featSelect.on("select", (evt: SelectEvent) => {
+  featSelect.on(["select"], (evt: SelectEvent) => {
     if (!evt.selected || evt.selected.length === 0) {
       return;
     }
