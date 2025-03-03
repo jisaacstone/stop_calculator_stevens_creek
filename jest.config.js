@@ -5,6 +5,7 @@ export default {
     "^.+.tsx?$": ['@swc/jest'],
   },
   modulePaths: ['src'],
+  testPathIgnorePatterns: ["./__tests__/data/"],
   extensionsToTreatAsEsm: ['.ts', '.tsx'],
   preset: "ts-jest"
 };

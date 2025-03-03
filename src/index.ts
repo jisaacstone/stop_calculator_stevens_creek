@@ -13,6 +13,7 @@ import * as style from 'style';
 import * as isochrone from 'isochrone';
 import * as walkShed from 'walkShed';
 import * as busstops from 'busstops';
+import { LineString } from 'ol/geom';
 
 const distance = van.state(2);
 
@@ -48,13 +49,7 @@ const setupSCMap = (mapEl: HTMLElement): Map => {
 
   const busstop = 4168013077;
   const walkshed = isochrone.calcIsochrone(busstop, 300);
-  roads.scRoadGraph.getSource()?.getFeatures().forEach((f) => {
-    if(walkshed.found.has(f.get('id'))) {
-      f.setStyle(style.walk);
-    } else if (walkshed.incomplete.has(f.get('id'))) {
-      f.setStyle(style.walkEdge);
-    }
-  });
+  walkShed.setWalkShed(Array.from(walkshed), 'walkshed');
 
   return map;
 };

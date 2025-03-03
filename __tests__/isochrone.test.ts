@@ -1,33 +1,55 @@
 import {describe, expect, test} from '@jest/globals';
-import { traverse, Link, neighbors } from '../src/isochrone'; // Adjust the import path
-
-// Mock nodes data
-const mockNodes = new Map<number, Link[]>([
-    [1, [{ id: "1", osmid: 1001, source: 1, target: 2, length: 5 }, { id: "4", osmid: 1004, source: 1, target: 3, length: 8 }]],
-    [2, [{ id: "2", osmid: 1002, source: 2, target: 3, length: 10 }]],
-    [3, [{ id: "3", osmid: 1003, source: 3, target: 4, length: 15 }]]
-  ]);
-
-type Edge = [number, number, number]; // [source, target, length]
-
-const mockEdges = (graph: Map<number, Link[]>): Edge[] => {
-  const edges: Edge[] = [];
-  
-  graph.forEach((links) => {
-    links.forEach(({ source, target, length }) => {
-      edges.push([source, target, length]);
-    });
-  });
-  
-  return edges;
-};
+import { neighbors, calcIsochrone } from '../src/isochrone'; // Adjust the import path
+import nld from './data/nld_test'; // Adjust the import path
+import * as turf from '@turf/turf';
 
 describe("neigbour function", () => {
   test("should return correct coords", () => {
-    const result = neighbors("2ebbd7899-2ebbd789b");
-    expect(result).toEqual([[][]]);
+    const result = neighbors("bec017c-bec0188", nld);
+    expect(result).toContainEqual([[-122.0872979, 37.3861776], [-122.0874014, 37.3861189]]);
+    expect(result).toContainEqual([[-122.0872166, 37.3858327], [-122.0871511, 37.385643]]);
   });
 
+});
+
+describe("calcIsochrone function", () => {
+  test("should return empty set for found and edge ids for incomplete", () => {
+    const result = calcIsochrone(200016264, 12, nld);
+    const precision = 10;
+
+    // backup: expect(result.found).toContainEqual([[-122.0874014, 37.3861189], [-122.0872979, 37.3861776]]);
+    expect(result.size).toBe(4);
+    const resultArray = Array.from(result);
+    const distanceArray = resultArray.map(([c1, c2]) => turf.distance(turf.point(c1), turf.point(c2), {units: 'meters'}));
+    expect (distanceArray).toContainEqual(expect.closeTo(12, precision / 2));
+    console.log(distanceArray)
+    expect(resultArray).toContainEqual([
+      [ expect.closeTo(-122.0874014, precision), expect.closeTo(37.3861189, precision) ],
+      [ expect.closeTo(-122.0872979, precision), expect.closeTo(37.3861776, precision) ]
+    ]);
+    expect(resultArray).toContainEqual([
+      [expect.closeTo(-122.0872979, precision), expect.closeTo(37.3861776, precision)], 
+      [expect.closeTo(-122.08729077741405, precision), expect.closeTo(37.38618151350876, precision)]
+    ]);
+/*
+[[[-122.0874014, 37.3861189], [-122.0872979, 37.3861776]], 
+ [[-122.0874014, 37.3861189], [-122.08733940049618, 37.38602288128789]], 
+ [[-122.0872979, 37.3861776], [-122.08729077741405, 37.38618151350876]], 
+ [[-122.0872979, 37.3861776], [-122.08729359486672, 37.38617162987453]]]
+*/
+  });
+});
+
+
+
+/*
+describe("deprecated: calcIsochrone function", () => {
+  test("should return empty set for found and edge ids for incomplete", () => {
+    const result = calcIsochrone(200016264, 10, nld);
+    expect(result.found.size).toBe(0);
+    expect(result.incomplete).toContain("3e7acab-bec0188");
+    expect(result.incomplete).toContain("bec017c-bec0188");
+  });
 });
 
 describe("traverse function", () => {
@@ -44,3 +66,4 @@ describe("traverse function", () => {
     expect(result.incomplete.size).toBe(0);
   });
 });
+*/
