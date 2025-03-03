@@ -17,6 +17,17 @@ transit lane - 29.3 minutes
 center-running BRT - 27 minutes
 grade separated - 20 minutes
 
+# 523 stops and speed
+
+https://www.vta.org/sites/default/files/route_schedule_pdfs/current/route_523/route_523_schedule.pdf
+
+SC & Barack Obama
+SC & Bascom
+SC & Winchester
+SC & Kiely
+SC & Miller
+SC & Stelling
+
 # Other notes
 
 1857

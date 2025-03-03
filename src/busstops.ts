@@ -5,14 +5,17 @@ import { click } from 'ol/events/condition.js';
 import EsriJSON from 'ol/format/EsriJSON.js';
 import { default as OlMap } from 'ol/Map.js';
 import Feature from 'ol/Feature.js';
+import { GeoJSON } from 'ol/format.js';
 import { Vector as VectorLayer} from 'ol/layer.js';
 import { all as allStrategy } from 'ol/loadingstrategy.js';
 import { Text } from 'ol/style.js';
+import { StyleFunction } from 'ol/style/Style.js';
+import AmPeak from 'assets/AM_PEAK.json';
 import * as style from 'style';
 import * as roads from 'roads';
 
 type StopLink = { distance: number, id: number };
-type StopInfo = { feature: Feature, next: StopLink, prev: StopLink, opposite: number | null };
+type StopInfo = { feature: Feature, next: StopLink, prev: StopLink, opposite: number | undefined };
 
 /** this one has line information
  * FID - object id
@@ -23,8 +26,20 @@ type StopInfo = { feature: Feature, next: StopLink, prev: StopLink, opposite: nu
  * Routes - Comma seperated list of route names (eg "23, 523")
  * */
 const altUrl = 'https://gis.vta.org/gis/rest/services/Transit/BusRoutes_StopsJanuary2020_ODP/MapServer/0'
-// const URLBase = 'https://gis.vta.org/gis/rest/services/Transit/Stops_Stations02242021/MapServer/1';
 const rapidBusNum = /\b523\b/;
+const GeoJsonFormat = new GeoJSON();
+
+const speedLayer = (arg: object) => new VectorLayer({
+  source: new VectorSource({
+    format: GeoJsonFormat,
+    features: GeoJsonFormat.readFeatures(
+      arg,
+      {featureProjection: 'EPSG:3857'}
+    )
+  })
+});
+
+export const AMPeakLayer = speedLayer(AmPeak);
 
 const busStopSource = new VectorSource({
   format: new EsriJSON(),
@@ -53,12 +68,11 @@ export const layer = new VectorLayer({
   }
 })
 
-const selected = (f: Feature) => {
+const selected: StyleFunction = ((f: Feature) => {
   const ss = style.selected.clone();
   ss.setText(new Text({text: f.get('StopName'), font: '12px Calibri,sans-serif'}));
   return ss;
-}
-
+}) as StyleFunction;
 const busSelect = new Select({
   condition: click,
   layers: [ layer ],
@@ -111,14 +125,13 @@ export const lineInfo = (() => {
   // cache the result here so we only calculate once
   const infoMap = new Map<number, StopInfo>();
   // regex hard-coded for line 23
-  const busNum = /\b23\b/;
   let calculated = false;
 
   const calculat = (): boolean => {
     const opposing = new Map<string, number>();
     const sorted: Feature<MultiPoint>[] = (
       (busStopSource.getFeatures() as Feature<MultiPoint>[])
-      .filter((feature: Feature) => feature.get('Routes')?.match(busNum))
+      .filter((feature: Feature) => feature.get('Routes')?.match(rapidBusNum))
       .sort((f1: Feature, f2: Feature) => f1.get('RTID') - f2.get('RTID'))
     );
     let current = sorted[sorted.length - 1];
@@ -130,14 +143,17 @@ export const lineInfo = (() => {
         feature: current,
         next: { id: next.get('FID'), distance: dist(current, next) },
         prev: { id: prev.get('FID'), distance: dist(prev, current) },
-        opposite: null
+        opposite: undefined
       };
       // check stop opposite by stop name.
       // this is imperfect as they do not always match.
       // perhaps checking cloastest by distance is better?
       if (stopName && opposing.has(stopName)) {
         info.opposite = opposing.get(stopName);
-        infoMap.get(opposing.get(stopName)).opposite = id;
+        const o = infoMap.get(opposing.get(stopName) || 0)
+        if (o) {
+          o.opposite = id;
+        }
       } else {
         opposing.set(stopName, id);
       }
