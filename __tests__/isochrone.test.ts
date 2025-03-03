@@ -17,7 +17,6 @@ describe("calcIsochrone function", () => {
     const result = calcIsochrone(200016264, 12, nld);
     const precision = 10;
 
-    // backup: expect(result.found).toContainEqual([[-122.0874014, 37.3861189], [-122.0872979, 37.3861776]]);
     expect(result.size).toBe(4);
     const resultArray = Array.from(result);
     const distanceArray = resultArray.map(([c1, c2]) => turf.distance(turf.point(c1), turf.point(c2), {units: 'meters'}));
@@ -40,30 +39,3 @@ describe("calcIsochrone function", () => {
   });
 });
 
-
-
-/*
-describe("deprecated: calcIsochrone function", () => {
-  test("should return empty set for found and edge ids for incomplete", () => {
-    const result = calcIsochrone(200016264, 10, nld);
-    expect(result.found.size).toBe(0);
-    expect(result.incomplete).toContain("3e7acab-bec0188");
-    expect(result.incomplete).toContain("bec017c-bec0188");
-  });
-});
-
-describe("traverse function", () => {
-  test("should return correct found and incomplete sets", () => {
-    const result = traverse(1, 20, mockNodes);
-    expect(result.found).toContain("1");
-    expect(result.found).toContain("4");
-    expect(result.incomplete).toContain("3"); // Edge 3 exceeds distance
-  });
-
-  test("should return empty sets for an isolated node", () => {
-    const result = traverse(99, 10, mockNodes); // Node 99 doesn't exist in mock data
-    expect(result.found.size).toBe(0);
-    expect(result.incomplete.size).toBe(0);
-  });
-});
-*/
