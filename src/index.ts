@@ -13,7 +13,6 @@ import * as style from 'style';
 import * as isochrone from 'isochrone';
 import * as walkShed from 'walkShed';
 import * as busstops from 'busstops';
-import { LineString } from 'ol/geom';
 
 const distance = van.state(2);
 
