@@ -7,6 +7,7 @@ import { default as OlMap } from 'ol/Map.js';
 import Feature from 'ol/Feature.js';
 import { Vector as VectorLayer} from 'ol/layer.js';
 import { all as allStrategy } from 'ol/loadingstrategy.js';
+import { Text } from 'ol/style.js';
 import * as style from 'style';
 import * as roads from 'roads';
 
@@ -23,6 +24,7 @@ type StopInfo = { feature: Feature, next: StopLink, prev: StopLink, opposite: nu
  * */
 const altUrl = 'https://gis.vta.org/gis/rest/services/Transit/BusRoutes_StopsJanuary2020_ODP/MapServer/0'
 // const URLBase = 'https://gis.vta.org/gis/rest/services/Transit/Stops_Stations02242021/MapServer/1';
+const rapidBusNum = /\b523\b/;
 
 const busStopSource = new VectorSource({
   format: new EsriJSON(),
@@ -42,17 +44,30 @@ const busStopSource = new VectorSource({
 
 export const layer = new VectorLayer({
   source: busStopSource,
+  style: (f, res) => {
+    const stl = f.get('Routes').match(rapidBusNum) ? style.poi : style.circle;
+    if (res < 1) {
+      stl.setText(new Text({text: f.get('StopName'), font: '12px Calibri,sans-serif'}));
+    }
+    return stl;
+  }
 })
+
+const selected = (f: Feature) => {
+  const ss = style.selected.clone();
+  ss.setText(new Text({text: f.get('StopName'), font: '12px Calibri,sans-serif'}));
+  return ss;
+}
 
 const busSelect = new Select({
   condition: click,
   layers: [ layer ],
-  style: () => style.selected
+  style: selected
 });
 const roadSelect = new Select({
   condition: click,
   layers: [ roads.scRoadGraph ],
-  style: () => style.selected
+  style: selected
 });
 
 export const addSelectEvent = (map: OlMap) => {

@@ -23,7 +23,7 @@ export const circle = new Style({
     image: new Circle({
         radius: 3,
         fill: new Fill({
-          color: 'rgba(166,219,160, 0.5)'
+          color: 'rgba(166,219,160, 0.9)'
         }),
     }),
 });
@@ -31,7 +31,7 @@ export const poi = new Style({
     image: new Circle({
         radius: 5,
         fill: new Fill({
-            color: 'rgba(0,136,55, 0.5)'
+            color: 'rgba(0,136,55, 0.7)'
         }),
     }),
 });
