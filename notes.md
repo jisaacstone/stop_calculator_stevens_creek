@@ -20,12 +20,20 @@ grade separated - 20 minutes
 # 523 stops and speed
 
 https://www.vta.org/sites/default/files/route_schedule_pdfs/current/route_523/route_523_schedule.pdf
+[real time data](https://rt--cal-itp-data-analyses.netlify.app/district_04-oakland/21__01_new_speedmaps__district_04-oakland__organization_source_record_id_recc5ct95eufmqcxr)
 
+Convention Center
 SC & Barack Obama
+Race/Meridian
 SC & Bascom
+Santana Row
 SC & Winchester
+Cypress
 SC & Kiely
-SC & Miller
+Lawrance
+Stern
+SC & Miller(Wolf)
+De Anza
 SC & Stelling
 
 # Other notes

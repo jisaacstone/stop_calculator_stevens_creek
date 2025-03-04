@@ -5,12 +5,10 @@ import { click } from 'ol/events/condition.js';
 import EsriJSON from 'ol/format/EsriJSON.js';
 import { default as OlMap } from 'ol/Map.js';
 import Feature from 'ol/Feature.js';
-import { GeoJSON } from 'ol/format.js';
 import { Vector as VectorLayer} from 'ol/layer.js';
 import { all as allStrategy } from 'ol/loadingstrategy.js';
 import { Text } from 'ol/style.js';
 import { StyleFunction } from 'ol/style/Style.js';
-import AmPeak from 'assets/AM_PEAK.json';
 import * as style from 'style';
 import * as roads from 'roads';
 
@@ -27,19 +25,6 @@ type StopInfo = { feature: Feature, next: StopLink, prev: StopLink, opposite: nu
  * */
 const altUrl = 'https://gis.vta.org/gis/rest/services/Transit/BusRoutes_StopsJanuary2020_ODP/MapServer/0'
 const rapidBusNum = /\b523\b/;
-const GeoJsonFormat = new GeoJSON();
-
-const speedLayer = (arg: object) => new VectorLayer({
-  source: new VectorSource({
-    format: GeoJsonFormat,
-    features: GeoJsonFormat.readFeatures(
-      arg,
-      {featureProjection: 'EPSG:3857'}
-    )
-  })
-});
-
-export const AMPeakLayer = speedLayer(AmPeak);
 
 const busStopSource = new VectorSource({
   format: new EsriJSON(),
