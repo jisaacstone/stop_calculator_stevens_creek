@@ -48,13 +48,7 @@ const setupSCMap = (mapEl: HTMLElement): Map => {
 
   const busstop = 4168013077;
   const walkshed = isochrone.calcIsochrone(busstop, 300);
-  roads.scRoadGraph.getSource()?.getFeatures().forEach((f) => {
-    if(walkshed.found.has(f.get('id'))) {
-      f.setStyle(style.walk);
-    } else if (walkshed.incomplete.has(f.get('id'))) {
-      f.setStyle(style.walkEdge);
-    }
-  });
+  walkShed.setWalkShed(Array.from(walkshed), 'walkshed');
 
   return map;
 };

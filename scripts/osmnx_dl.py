@@ -8,8 +8,17 @@ def id(link):
     return f"{inorder[0]:x}-{inorder[1]:x}"
 
 
-# Manually identified from OpenStreetMaps
-bb = [-122.05, 37.315, -121.9, 37.33]
+test = False  # Set to True to generate tests
+bb = [-122.05, 37.315, -121.9, 37.33] # Manually identified from OpenStreetMaps
+
+if test:
+    bb = [-122.08741, 37.39, -122.08715, 37.385]
+    nld_file = '__tests__/data/nld_test.ts' 
+    gj_file = '__tests__/data/sc-geojson_test.ts'
+else:
+    nld_file = 'src/assets/nld.ts' 
+    gj_file = 'src/assets/sc-geojson.ts'
+
 poly = ox.utils_geo.bbox_to_poly(bb)
 
 # Download street network for pedestrians (walk network)
@@ -22,8 +31,8 @@ for link in nld['links']:
     link['id'] = id(link)
 
 #Every json file is a subset of ts
-with open('src/assets/nld.ts', 'w') as fob:
-    nld_json = json.dumps(nld)
+with open(nld_file, 'w') as fob:
+    nld_json = json.dumps(nld, indent=2) 
     fob.write(f"const nld = {nld_json};\nexport default nld;")
 
 nodemap = {n['id']: [n['x'], n['y']] for n in nld['nodes']}
@@ -53,6 +62,6 @@ for link in nld['links']:
             feature['properties']['name'] = link['name']
         features.append(feature)
 
-with open('src/assets/sc-geojson.ts', 'w') as fob:
-    gj_json = json.dumps(gj)
+with open(gj_file, 'w') as fob:
+    gj_json = json.dumps(gj, indent=2)
     fob.write(f"const scGeojson = {gj_json};\nexport default scGeojson;")

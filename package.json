@@ -9,7 +9,7 @@
     "build": "node_modules/vite/bin/vite.js build",
     "build-graph": "node_modules/tsx/dist/cli.mjs scripts/build-graph.ts",
     "test": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js",
-    "lint": "eslint --ext .ts src __tests__",
+    "lint": "eslint --ext .ts src __tests__ --ignore-pattern src/assets __tests__/data",
     "lintwfix": "eslint --ext .ts src __tests__ --fix"
   },
   "author": "",
