@@ -1,8 +1,8 @@
 import VectorSource from 'ol/source/Vector.js';
 import { MultiPoint, LineString } from 'ol/geom.js';
-import Select from 'ol/interaction/Select.js';
+import { default as Select } from 'ol/interaction/Select.js';
 import { click } from 'ol/events/condition.js';
-import EsriJSON from 'ol/format/EsriJSON.js';
+import OSMXML from 'ol/format/OSMXML.js';
 import { default as OlMap } from 'ol/Map.js';
 import Feature from 'ol/Feature.js';
 import { Vector as VectorLayer} from 'ol/layer.js';
@@ -15,6 +15,7 @@ import * as roads from 'roads';
 type StopLink = { distance: number, id: number };
 type StopInfo = { feature: Feature, next: StopLink, prev: StopLink, opposite: number | undefined };
 
+
 /** this one has line information
  * FID - object id
  * Shape - geometry (MultiPoint)
@@ -23,31 +24,59 @@ type StopInfo = { feature: Feature, next: StopLink, prev: StopLink, opposite: nu
  * RTID - A number which increments in the direction of the line
  * Routes - Comma seperated list of route names (eg "23, 523")
  * */
-const altUrl = 'https://gis.vta.org/gis/rest/services/Transit/BusRoutes_StopsJanuary2020_ODP/MapServer/0'
 const rapidBusNum = /\b523\b/;
+/*
+const stopTiming = {
+  stops: [
+    {name: 'Stelling',  slowest: 0,  fastest: 0},  // 0
+    {name: 'De Anza',   slowest: 2,  fastest: 1},  // 1
+    {name: 'Wolf',      slowest: 5,  fastest: 3},  // 2
+    {name: 'Stern',     slowest: 8,  fastest: 4},  // 3
+    {name: 'Lawrence',  slowest: 11, fastest: 6},  // 4
+    {name: 'Kiely',     slowest: 15, fastest: 9},  // 5
+    {name: 'Cypress',   slowest: 18, fastest: 11}, // 6
+    {name: 'Bascom',    slowest: 18, fastest: 11}, // 7
+    {name: 'Bascom',    slowest: 18, fastest: 11}, // 7
+    {name: 'Bascom',    slowest: 18, fastest: 11}, // 7
+  ],
+  ids: {
+    447: 0, 357: 0,
+    445: 1, 356: 1,
+    441: 2, 360: 2,
+    438: 3, 363: 3,
+    437: 4, 365: 4,
+    432: 5, 371: 5,
+    429: 6, 375: 6,
+    421: 7, 382: 7,
+  }
+};
+*/
 
+const osmFormat = new OSMXML();
+// const bb = [-122.05, 37.315, -121.9, 37.33];
+const query = '(node[highway=bus_stop][network=VTA](37.315,-122.05,37.33,-121.9););out body;';
 const busStopSource = new VectorSource({
-  format: new EsriJSON(),
-  url: function (_extent, _resolution, projection) {
-    // ArcGIS Server only wants the numeric portion of the projection ID.
-    const srid = projection
-      .getCode()
-      .split(/:(?=\d+$)/)
-      .pop();
-    // TODO: filter based on _extent
-    // https://developers.arcgis.com/rest/services-reference/enterprise/query-feature-service-layer/
-    const url = `${altUrl}/query?where=1%3D1&outFields=*&outSR=${srid}&f=json`;
-    return url;
-  },
+  format: osmFormat,
   strategy: allStrategy,
+  loader: (_extent, _resolution, projection, success, failure) => {
+    return fetch(
+      'https://overpass-api.de/api/interpreter',
+      { method: 'POST', body: query }
+    ).then((response) => response.text())
+    .then((text) => {
+      const features = osmFormat.readFeatures(text, { featureProjection: projection });
+      busStopSource.addFeatures(features);
+      (success || console.log)(features);
+    }).catch(() => failure && failure());
+  }
 });
 
 export const layer = new VectorLayer({
   source: busStopSource,
   style: (f, res) => {
-    const stl = f.get('Routes').match(rapidBusNum) ? style.poi : style.circle;
+    const stl = f.get('route_ref')?.match(rapidBusNum) ? style.poi : style.circle;
     if (res < 1) {
-      stl.setText(new Text({text: f.get('StopName'), font: '12px Calibri,sans-serif'}));
+      stl.setText(new Text({text: f.get('name'), font: '12px Calibri,sans-serif'}));
     }
     return stl;
   }
@@ -55,7 +84,7 @@ export const layer = new VectorLayer({
 
 const selected: StyleFunction = ((f: Feature) => {
   const ss = style.selected.clone();
-  ss.setText(new Text({text: f.get('StopName'), font: '12px Calibri,sans-serif'}));
+  ss.setText(new Text({text: f.get('name'), font: '12px Calibri,sans-serif'}));
   return ss;
 }) as StyleFunction;
 const busSelect = new Select({
@@ -76,7 +105,8 @@ export const addSelectEvent = (map: OlMap) => {
     if (!selected || selected.length === 0) {
       return;
     }
-    console.log(`${selected[0].get('Routes')}|${selected[0].get('RTID')}|${selected[0].get('LineDirId')}|${selected[0].get('FID')}`);
+    console.log(selected[0]);
+    /*
     const info = lineInfo().get(selected[0].get('FID'));
     if (info) {
       const collection = roadSelect.getFeatures();
@@ -92,7 +122,7 @@ export const addSelectEvent = (map: OlMap) => {
           collection.push(feature);
         }
       });
-    }
+    }*/
   });
 }
 

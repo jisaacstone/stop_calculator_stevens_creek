@@ -22,7 +22,6 @@ const setupSCMap = (mapEl: HTMLElement): Map => {
       layers.osmRaster,
       roads.scRoadGraph,
       busstops.layer,
-      busstops.AMPeakLayer,
       walkShed.walkShedLayer
     ],
     target: mapEl,

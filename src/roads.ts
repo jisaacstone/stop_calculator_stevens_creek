@@ -10,13 +10,13 @@ import scGeojson from 'assets/sc-geojson.ts';
 import * as style from 'style';
 
 const mainRoads = ['West San Carlos Street', 'Stevens Creek Boulevard'];
-const format = new GeoJSON();
+const format = new GeoJSON<Feature<LineString>>();
 
-const features = format.readFeatures(
+const features: Feature<LineString>[] = format.readFeatures(
   scGeojson,
   {featureProjection: 'EPSG:3857'}
-);
-const source = new VectorSource({ format, features });
+) as Feature<LineString>[];
+const source = new VectorSource<Feature<LineString>>({ format, features });
 
 export const scRoadGraph = new VectorLayer({
   source,
@@ -29,7 +29,7 @@ export const scRoadGraph = new VectorLayer({
 });
 
 export const closestPoint = (coord: Coordinate): { feature: Feature, point: Coordinate } => {
-  const found: Feature<LineString> = source.getClosestFeatureToCoordinate(coord) as Feature<LineString>;
+  const found: Feature<LineString> = source.getClosestFeatureToCoordinate(coord);
   // geojson.writefeatureobject is not working so I do it manually
   const turfFound = {
     type: 'Feature',
