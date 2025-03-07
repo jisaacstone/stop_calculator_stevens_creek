@@ -1,3 +1,43 @@
+# Study
+
+[Draft Study](https://www.cupertino.gov/files/assets/city/v/2/departments/documents/public-works/transportation/new-folder/draft-stevens-creek-boulevard-corridor-vision-and-implementation-plan-121224.pdf)
+
+* Transit Signal Priority
+
+- reduced travel time by 14% on 523 and 12% on 23/51
+
+* Dedicated transit lane
+
+[line 523](https://www.vta.org/sites/default/files/images/2024-10/Line523_102824.jpg)
+
+13 stops on the corridor
+
+Existing Conditions - 39.4 minutes
+transit lane - 29.3 minutes
+center-running BRT - 27 minutes
+grade separated - 20 minutes
+
+# 523 stops and speed
+
+https://www.vta.org/sites/default/files/route_schedule_pdfs/current/route_523/route_523_schedule.pdf
+[real time data](https://rt--cal-itp-data-analyses.netlify.app/district_04-oakland/21__01_new_speedmaps__district_04-oakland__organization_source_record_id_recc5ct95eufmqcxr)
+
+Convention Center
+SC & Barack Obama
+Race/Meridian
+SC & Bascom
+Santana Row
+SC & Winchester
+Cypress
+SC & Kiely
+Lawrance
+Stern
+SC & Miller(Wolf)
+De Anza
+SC & Stelling
+
+# Other notes
+
 1857
 371.4 feet, 113.2m
 
