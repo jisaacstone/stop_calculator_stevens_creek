@@ -15,43 +15,7 @@ import * as roads from 'roads';
 type StopLink = { distance: number, id: number };
 type StopInfo = { feature: Feature, next: StopLink, prev: StopLink, opposite: number | undefined };
 
-
-/** this one has line information
- * FID - object id
- * Shape - geometry (MultiPoint)
- * LineDirId - not sure
- * Stop Name - name of stop in plane text (eg "California/Showers")
- * RTID - A number which increments in the direction of the line
- * Routes - Comma seperated list of route names (eg "23, 523")
- * */
 const rapidBusNum = /\b523\b/;
-/*
-const stopTiming = {
-  stops: [
-    {name: 'Stelling',  slowest: 0,  fastest: 0},  // 0
-    {name: 'De Anza',   slowest: 2,  fastest: 1},  // 1
-    {name: 'Wolf',      slowest: 5,  fastest: 3},  // 2
-    {name: 'Stern',     slowest: 8,  fastest: 4},  // 3
-    {name: 'Lawrence',  slowest: 11, fastest: 6},  // 4
-    {name: 'Kiely',     slowest: 15, fastest: 9},  // 5
-    {name: 'Cypress',   slowest: 18, fastest: 11}, // 6
-    {name: 'Bascom',    slowest: 18, fastest: 11}, // 7
-    {name: 'Bascom',    slowest: 18, fastest: 11}, // 7
-    {name: 'Bascom',    slowest: 18, fastest: 11}, // 7
-  ],
-  ids: {
-    447: 0, 357: 0,
-    445: 1, 356: 1,
-    441: 2, 360: 2,
-    438: 3, 363: 3,
-    437: 4, 365: 4,
-    432: 5, 371: 5,
-    429: 6, 375: 6,
-    421: 7, 382: 7,
-  }
-};
-*/
-
 const osmFormat = new OSMXML();
 // const bb = [-122.05, 37.315, -121.9, 37.33];
 const bb = '(37.315,-122.05,37.33,-121.9)';
