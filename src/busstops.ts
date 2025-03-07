@@ -54,18 +54,23 @@ const stopTiming = {
 
 const osmFormat = new OSMXML();
 // const bb = [-122.05, 37.315, -121.9, 37.33];
-const query = '(node[highway=bus_stop][network=VTA](37.315,-122.05,37.33,-121.9););out body;';
+const bb = '(37.315,-122.05,37.33,-121.9)';
+const query = `(rel[route=bus][network=VTA]${bb};node(r)${bb}[public_transport=stop_position];);out body;`;
 const busStopSource = new VectorSource({
   format: osmFormat,
   strategy: allStrategy,
   loader: (_extent, _resolution, projection, success, failure) => {
+    console.log('loading from overpass');
     return fetch(
       'https://overpass-api.de/api/interpreter',
       { method: 'POST', body: query }
     ).then((response) => response.text())
     .then((text) => {
+      console.log(text);
       const features = osmFormat.readFeatures(text, { featureProjection: projection });
+      console.log(features);
       busStopSource.addFeatures(features);
+      // TODO: read relation metadata
       (success || console.log)(features);
     }).catch(() => failure && failure());
   }
@@ -74,7 +79,7 @@ const busStopSource = new VectorSource({
 export const layer = new VectorLayer({
   source: busStopSource,
   style: (f, res) => {
-    const stl = f.get('route_ref')?.match(rapidBusNum) ? style.poi : style.circle;
+    const stl = style.circle(15, res);
     if (res < 1) {
       stl.setText(new Text({text: f.get('name'), font: '12px Calibri,sans-serif'}));
     }
@@ -106,23 +111,6 @@ export const addSelectEvent = (map: OlMap) => {
       return;
     }
     console.log(selected[0]);
-    /*
-    const info = lineInfo().get(selected[0].get('FID'));
-    if (info) {
-      const collection = roadSelect.getFeatures();
-      collection.clear();
-      [
-        selected[0],
-        lineInfo().get(info.next)?.feature,
-        lineInfo().get(info.opposite)?.feature
-      ].forEach(f => {
-        if (f) {
-          const point: MultiPoint = f.getGeometry() as MultiPoint;
-          const { feature } = roads.closestPoint(point.getCoordinates()[0]);
-          collection.push(feature);
-        }
-      });
-    }*/
   });
 }
 
@@ -136,6 +124,7 @@ const dist = (f1: Feature<MultiPoint>, f2: Feature<MultiPoint>): number => {
   throw "no point";
 };
 
+// TODO: rewrite after getting relation information from the overpass call
 export const lineInfo = (() => {
   // cache the result here so we only calculate once
   const infoMap = new Map<number, StopInfo>();

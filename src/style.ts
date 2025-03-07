@@ -19,17 +19,17 @@ export const gridRoad = (meters: number, resolution: number) => new Style({
     width: Math.max(meters / resolution, 2)
   })
 });
-export const circle = new Style({
+export const circle = (meters: number, resolution: number) => new Style({
     image: new Circle({
-        radius: 3,
+        radius: Math.max(meters/resolution, 3),
         fill: new Fill({
           color: 'rgba(166,219,160, 0.9)'
         }),
     }),
 });
-export const poi = new Style({
+export const poi = (meters: number, resolution: number) => new Style({
     image: new Circle({
-        radius: 5,
+        radius: Math.max(meters/resolution, 5),
         fill: new Fill({
             color: 'rgba(0,136,55, 0.7)'
         }),
