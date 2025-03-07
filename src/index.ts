@@ -47,6 +47,7 @@ const setupSCMap = (mapEl: HTMLElement): Map => {
   map.getView().fit(roads.scRoadGraph.getSource().getExtent());
 
   const busstop = 4168013077;
+  isochrone.loadNLD();
   const walkshed = isochrone.calcIsochrone(busstop, 300);
   walkShed.setWalkShed(Array.from(walkshed), 'walkshed');
 

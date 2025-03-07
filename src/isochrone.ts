@@ -1,26 +1,33 @@
-import nld from './assets/nld.ts';
 import { PriorityQueue } from '@datastructures-js/priority-queue';
 
-type Link = { id: string, osmid: number, source: number, target: number, length: number };
-type Node = { id: string, x: number, y: number };
-type NLD = { nodes: Node[], links: Link[] };
+import nld from './assets/nld.ts';
+/* TODO
+// Lazy loading in case the file is too big 
+async function fetchNLD() {
+  const response = await import('./assets/nld.ts');
+  return response.nld;
+}
+const nld = fetchNLD();
+*/
 
-export type Segment = [[number, number], [number, number]]; 
+type Link = { id: string, osmid: number, source: number, target: number, length: number };
+
+type Segment = [[number, number], [number, number]]; 
 type Entry = { nodeId: number, remaining: number };
 
 // Precomputed adjacency list for fast lookups
-const _linkMap = new Map<number, Link[]>();
-nld.links.forEach((link: Link) => {
-  if (!_linkMap.has(link.source)) {
-    _linkMap.set(link.source, []);
-  }
-  _linkMap.get(link.source)!.push(link);
-});
+const linkMap = new Map<number, Link[]>();
+export function loadNLD() {
+  nld.links.forEach((link: Link) => {
+    if (!linkMap.has(link.source)) {
+      linkMap.set(link.source, []);
+    }
+    linkMap.get(link.source)!.push(link);
+  });
+};
 
-const traverse = (start: number, distance: number, linkMap?: Map<number, Link[]>, _nld?: NLD ) => {
-  linkMap = linkMap || _linkMap;
-  _nld = _nld || nld;
 
+const traverse = (start: number, distance: number) => {
   const seen: Set<string> = new Set();
   const queue: PriorityQueue<Entry> = new PriorityQueue(
     (ea, eb) => eb.remaining - ea.remaining
@@ -39,14 +46,14 @@ const traverse = (start: number, distance: number, linkMap?: Map<number, Link[]>
 
       if (length <= nextEntry.remaining) {
         //full segment
-        found.add([getCoords(source, _nld), getCoords(target, _nld)]);
+        found.add([getCoords(source), getCoords(target)]);
         queue.enqueue({ nodeId: target, remaining: nextEntry.remaining - length });
       }
       else {
         //incomplete segment
         const frac = nextEntry.remaining / length;
-        const segment_start: [number, number] = getCoords(source, _nld);
-        const segment_end: [number, number] = getCoords(target, _nld, frac, segment_start[0], segment_start[1]);
+        const segment_start: [number, number] = getCoords(source);
+        const segment_end: [number, number] = getCoords(target, frac, segment_start[0], segment_start[1]);
         found.add([segment_start, segment_end])
       }
       seen.add(id);
@@ -55,44 +62,29 @@ const traverse = (start: number, distance: number, linkMap?: Map<number, Link[]>
   return found;
 };
 
-export const calcIsochrone = (start: number, distance: number, _nld?: NLD) => {
-
-  // the following if statement is added for testing but the design is not optimal 
-  // TODO move linkMap calculation to the osmnx_dl.py for both actual and test data
-  if (_nld) {
-    const _linkMap = new Map<number, Link[]>();
-    _nld.links.forEach((link: Link) => {
-      if (!_linkMap.has(link.source)) {
-        _linkMap.set(link.source, []);
-      }
-      _linkMap.get(link.source)!.push(link
-      );
-    });
-    return traverse(start, distance, _linkMap, _nld);
-  } 
+export const calcIsochrone = (start: number, distance: number) => {
 
   return traverse(start, distance);
 };
 
-const getCoords = (nodeId: number, _nld: NLD, fraction: number = 1, x: number = 0, y: number = 0): [number, number] => {
-  const n = _nld.nodes.find(node => node.id === nodeId);
+const getCoords = (nodeId: number, fraction: number = 1, x: number = 0, y: number = 0): [number, number] => {
+  const n = nld.nodes.find(node => node.id === nodeId);
 
   if (!n) throw new Error(`Node with ID ${nodeId} not found`);
 
   return [x + fraction * (n.x - x), y + fraction * (n.y - y)]
 };
 
-export const neighbors = (edgeId: string, _nld?: NLD): Segment[] => {
-  _nld = _nld || nld;
-  const selected: Link | undefined = _nld.links.find((l: Link) => l.id === edgeId);
+export const neighbors = (edgeId: string): Segment[] => {
+  const selected: Link | undefined = nld.links.find((l: Link) => l.id === edgeId);
   
   if (!selected) {
     return [];
   }
 
   return (
-    _nld.links
+    nld.links
     .filter((l: Link) => l.source === selected.target || l.target === selected.source)
-    .map((l: Link) => [getCoords(l.source, _nld), getCoords(l.target, _nld)])
+    .map((l: Link) => [getCoords(l.source), getCoords(l.target)])
   );
 };

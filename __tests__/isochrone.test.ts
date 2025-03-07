@@ -1,27 +1,37 @@
 import {describe, expect, test} from '@jest/globals';
-import { neighbors, calcIsochrone } from '../src/isochrone'; // Adjust the import path
-import nld from './data/nld_test'; // Adjust the import path
 import * as turf from '@turf/turf';
+
+import { default as testData } from './data/nld_test';
+import { default as nld } from '../src/assets/nld';
+import { neighbors, calcIsochrone, loadNLD } from '../src/isochrone';
+
+// Hack for jest.mock, which didn't work somehow
+nld.nodes = testData.nodes;
+nld.links = testData.links;
+
+test('should fetch mocked nld', () => {
+  expect(nld.nodes.length).toBe(6); // Should now use test data
+});
 
 describe("neigbour function", () => {
   test("should return correct coords", () => {
-    const result = neighbors("bec017c-bec0188", nld);
+    const result = neighbors("bec017c-bec0188");
     expect(result).toContainEqual([[-122.0872979, 37.3861776], [-122.0874014, 37.3861189]]);
     expect(result).toContainEqual([[-122.0872166, 37.3858327], [-122.0871511, 37.385643]]);
   });
-
 });
 
 describe("calcIsochrone function", () => {
-  test("should return empty set for found and edge ids for incomplete", () => {
-    const result = calcIsochrone(200016264, 12, nld);
+  test("should return full and partial line segments list", () => {
+    loadNLD();
+    const result = calcIsochrone(200016264, 12);
     const precision = 10;
 
     expect(result.size).toBe(4);
     const resultArray = Array.from(result);
     const distanceArray = resultArray.map(([c1, c2]) => turf.distance(turf.point(c1), turf.point(c2), {units: 'meters'}));
     expect (distanceArray).toContainEqual(expect.closeTo(12, precision / 2));
-    console.log(distanceArray)
+    //console.log(distanceArray)
     expect(resultArray).toContainEqual([
       [ expect.closeTo(-122.0874014, precision), expect.closeTo(37.3861189, precision) ],
       [ expect.closeTo(-122.0872979, precision), expect.closeTo(37.3861776, precision) ]
