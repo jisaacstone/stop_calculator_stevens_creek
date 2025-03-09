@@ -2,7 +2,6 @@ import View from 'ol/View.js';
 import SelectEvent from 'ol/MapEvent.js';
 import Select from 'ol/interaction/Select.js';
 import { click } from 'ol/events/condition.js';
-import { fromLonLat } from 'ol/proj.js';
 import Map from 'ol/Map.js';
 import van from 'vanjs-core';
 import 'assets/style.css';
@@ -21,12 +20,13 @@ const setupSCMap = (mapEl: HTMLElement): Map => {
     layers: [
       layers.osmRaster,
       roads.scRoadGraph,
-      busstops.layer,
+      //busstops.layer,
       walkShed.walkShedLayer
     ],
     target: mapEl,
     view: new View({
-      center: fromLonLat([37.323,-121.5]),
+      center: [37.323,-121.5],
+      projection: 'EPSG:4326',
       zoom: 14
     }),
   });

@@ -1,4 +1,7 @@
 import {Fill, Stroke, Style, Circle} from 'ol/style.js';
+import { METERS_PER_UNIT } from 'ol/proj/epsg4326.js'
+
+
 
 export const outline = new Stroke({ color: 'rgba(45, 45, 45, 0.1)' });
 export const mainRoad = new Style({
@@ -13,27 +16,24 @@ export const road = new Style({
       width: 2,
   })
 });
-export const gridRoad = (meters: number, resolution: number) => new Style({
+export const gridRoad = (meters: number, resolution: number) => {
+  const meters_per_pixel = resolution * METERS_PER_UNIT;
+  const pixel_meters = meters / meters_per_pixel;
+  return new Style({
     stroke: new Stroke({
-    color: 'rgba(166,219,160, 1)',
-    width: Math.max(meters / resolution, 2)
-  })
-});
+      color: 'rgba(166,219,160, 1)',
+      width: Math.max(pixel_meters, 2)
+    })
+  });
+};
 export const circle = (meters: number, resolution: number) => new Style({
-    image: new Circle({
-        radius: Math.max(meters/resolution, 3),
-        fill: new Fill({
-          color: 'rgba(166,219,160, 0.9)'
-        }),
-    }),
-});
-export const poi = (meters: number, resolution: number) => new Style({
-    image: new Circle({
-        radius: Math.max(meters/resolution, 5),
-        fill: new Fill({
-            color: 'rgba(0,136,55, 0.7)'
-        }),
-    }),
+  // TODO: convert resolution to meters more reliably
+  image: new Circle({
+      radius: Math.min(meters/resolution, 3),
+      fill: new Fill({
+        color: 'rgba(166,219,160, 0.9)'
+      }),
+  }),
 });
 export const bldg = new Style({
     stroke: new Stroke({color: 'rgba(200, 100, 150, 0.5)'}),
