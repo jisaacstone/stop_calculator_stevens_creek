@@ -2,7 +2,7 @@ import { PriorityQueue } from '@datastructures-js/priority-queue';
 
 import nld from './assets/nld.ts';
 /* TODO
-// Lazy loading in case the file is too big 
+// Lazy loading in case the file is too big
 async function fetchNLD() {
   const response = await import('./assets/nld.ts');
   return response.nld;
@@ -12,7 +12,7 @@ const nld = fetchNLD();
 
 type Link = { id: string, osmid: number, source: number, target: number, length: number };
 
-type Segment = [[number, number], [number, number]]; 
+type Segment = [[number, number], [number, number]];
 type Entry = { nodeId: number, remaining: number };
 
 // Precomputed adjacency list for fast lookups
@@ -63,7 +63,6 @@ const traverse = (start: number, distance: number) => {
 };
 
 export const calcIsochrone = (start: number, distance: number) => {
-
   return traverse(start, distance);
 };
 
@@ -77,7 +76,7 @@ const getCoords = (nodeId: number, fraction: number = 1, x: number = 0, y: numbe
 
 export const neighbors = (edgeId: string): Segment[] => {
   const selected: Link | undefined = nld.links.find((l: Link) => l.id === edgeId);
-  
+
   if (!selected) {
     return [];
   }

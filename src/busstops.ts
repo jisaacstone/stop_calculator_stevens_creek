@@ -24,15 +24,13 @@ const busStopSource = new VectorSource({
   format: osmFormat,
   strategy: allStrategy,
   loader: (_extent, _resolution, projection, success, failure) => {
-    console.log('loading from overpass');
+    console.log('loading from overpass', projection);
     return fetch(
       'https://overpass-api.de/api/interpreter',
       { method: 'POST', body: query }
     ).then((response) => response.text())
     .then((text) => {
-      console.log(text);
       const features = osmFormat.readFeatures(text, { featureProjection: projection });
-      console.log(features);
       busStopSource.addFeatures(features);
       // TODO: read relation metadata
       (success || console.log)(features);
@@ -44,7 +42,7 @@ export const layer = new VectorLayer({
   source: busStopSource,
   style: (f, res) => {
     const stl = style.circle(15, res);
-    if (res < 1) {
+    if (res < .00001) {
       stl.setText(new Text({text: f.get('name'), font: '12px Calibri,sans-serif'}));
     }
     return stl;

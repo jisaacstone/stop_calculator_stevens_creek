@@ -14,8 +14,8 @@ const format = new GeoJSON<Feature<LineString>>();
 
 const features: Feature<LineString>[] = format.readFeatures(
   scGeojson,
-  {featureProjection: 'EPSG:3857'}
-) as Feature<LineString>[];
+  {featureProjection: 'EPSG:4326'}
+);
 const source = new VectorSource<Feature<LineString>>({ format, features });
 
 export const scRoadGraph = new VectorLayer({
@@ -35,7 +35,7 @@ export const closestPoint = (coord: Coordinate): { feature: Feature, point: Coor
     type: 'Feature',
     geometry: {
       type: 'LineString',
-      coordinates: found.getGeometry()?.getCoordinates().map((c) => toLonLat(c))
+      coordinates: found.getGeometry()?.getCoordinates()
     },
     properties: {}
   };
