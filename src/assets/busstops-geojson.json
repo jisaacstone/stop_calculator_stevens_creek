@@ -1,0 +1,3179 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "node/2619144349",
+      "properties": {
+        "bus": "yes",
+        "name": "Montgomery Street & Park Avenue",
+        "network": "VTA;SCMTD",
+        "public_transport": "stop_position",
+        "id": "node/2619144349",
+        "route": [
+          "64A"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.900861,
+          37.3259223
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/3700772452",
+      "properties": {
+        "bus": "yes",
+        "name": "Valley Fair Transit Center",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/3700772452",
+        "route": [
+          "60"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9480048,
+          37.3266749
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/3700772453",
+      "properties": {
+        "bus": "yes",
+        "name": "Valley Fair Transit Center",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/3700772453",
+        "route": [
+          "59"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9477259,
+          37.3266694
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/4167770029",
+      "properties": {
+        "bus": "yes",
+        "name": "Meridian Avenue & Parkmoor Avenue",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/4167770029",
+        "route": [
+          "64B"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9141385,
+          37.3173113
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/4168013077",
+      "properties": {
+        "bus": "yes",
+        "name": "Stevens Creek Boulevard & Casa View Drive",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/4168013077",
+        "route": [
+          "23"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9892022,
+          37.3230843
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/4176813478",
+      "properties": {
+        "bus": "yes",
+        "name": "North Winchester Boulevard & Dorcich Street",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/4176813478",
+        "route": [
+          "60"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9502317,
+          37.3252412
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/4901680192",
+      "properties": {
+        "bus": "yes",
+        "name": "Bird Avenue & West San Carlos Street",
+        "network": "VTA;SCMTD",
+        "public_transport": "stop_position",
+        "id": "node/4901680192",
+        "route": [
+          "64A"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9001819,
+          37.3241959
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/4901680208",
+      "properties": {
+        "bus": "yes",
+        "name": "South Autumn Street & Park Avenue",
+        "network": "VTA;SCMTD",
+        "public_transport": "stop_position",
+        "route_ref": "64;65;17",
+        "id": "node/4901680208",
+        "route": [
+          "64A"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9006098,
+          37.3269843
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/4901680209",
+      "properties": {
+        "bus": "yes",
+        "name": "Montgomery Street & West San Carlos Street",
+        "network": "VTA;SCMTD",
+        "operator": "Santa Clara Valley Transportation Authority",
+        "public_transport": "stop_position",
+        "id": "node/4901680209",
+        "route": [
+          "64A"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9006363,
+          37.3252088
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6695970727",
+      "properties": {
+        "bus": "yes",
+        "name": "Valley Fair Transit Center",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6695970727",
+        "route": [
+          "60"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9478529,
+          37.3268251
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6710495366",
+      "properties": {
+        "bus": "yes",
+        "name": "North Stelling Road & Stevens Creek Boulevard",
+        "network": "VTA",
+        "operator": "Santa Clara Valley Transportation Authority",
+        "public_transport": "stop_position",
+        "id": "node/6710495366",
+        "route": [
+          "523"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.0414413,
+          37.3238969
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6710495367",
+      "properties": {
+        "bus": "yes",
+        "name": "South Stelling Road & Stevens Creek Boulevard",
+        "network": "VTA",
+        "operator": "Santa Clara Valley Transportation Authority",
+        "public_transport": "stop_position",
+        "id": "node/6710495367",
+        "route": [
+          "25",
+          "55"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.041555,
+          37.3216382
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6712917175",
+      "properties": {
+        "bus": "yes",
+        "name": "Stevens Creek Boulevard & North Stelling Road",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6712917175",
+        "route": [
+          "51",
+          "23"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.0422445,
+          37.3229666
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6712917176",
+      "properties": {
+        "bus": "yes",
+        "name": "Stevens Creek Boulevard & North Tantau Avenue",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6712917176",
+        "route": [
+          "23"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.0070077,
+          37.3230985
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6712917177",
+      "properties": {
+        "bus": "yes",
+        "name": "Stevens Creek Boulevard & Boynton Avenue",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6712917177",
+        "route": [
+          "23"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9658666,
+          37.3231688
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6712917178",
+      "properties": {
+        "bus": "yes",
+        "name": "Stevens Creek Boulevard & Harold Avenue",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6712917178",
+        "route": [
+          "23",
+          "523"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9631083,
+          37.3231834
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6712917179",
+      "properties": {
+        "bus": "yes",
+        "name": "Forest Avenue & North Monroe Street",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6712917179",
+        "route": [
+          "59"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9436426,
+          37.3270022
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6712917180",
+      "properties": {
+        "bus": "yes",
+        "name": "Stevens Creek Boulevard & Bradley Avenue",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6712917180",
+        "route": [
+          "23"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9341259,
+          37.3234344
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6712917181",
+      "properties": {
+        "bus": "yes",
+        "name": "West San Carlos Street & South Bascom Avenue",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6712917181",
+        "route": [
+          "23",
+          "523"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9311951,
+          37.3233348
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6712917182",
+      "properties": {
+        "bus": "yes",
+        "name": "West San Carlos Street & North Bascom Avenue",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6712917182",
+        "route": [
+          "523",
+          "23"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9311548,
+          37.3234597
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6712917183",
+      "properties": {
+        "bus": "yes",
+        "name": "West San Carlos Street & Arleta Avenue",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6712917183",
+        "route": [
+          "23"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9295843,
+          37.3233443
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6712917184",
+      "properties": {
+        "bus": "yes",
+        "name": "West San Carlos Street & Wabash Avenue",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6712917184",
+        "route": [
+          "23"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.927113,
+          37.3234833
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6712922775",
+      "properties": {
+        "bus": "yes",
+        "name": "West San Carlos Street & Meridian Avenue",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6712922775",
+        "route": [
+          "523",
+          "23"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9133546,
+          37.3235658
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6712922776",
+      "properties": {
+        "bus": "yes",
+        "name": "West San Carlos Street & Lincoln Avenue",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6712922776",
+        "route": [
+          "23"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9083203,
+          37.3235778
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6712922777",
+      "properties": {
+        "bus": "yes",
+        "name": "West San Carlos Street & Lincoln Avenue",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6712922777",
+        "route": [
+          "23"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9089839,
+          37.3236596
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6712922778",
+      "properties": {
+        "bus": "yes",
+        "name": "West San Carlos Street & Sunol Street",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6712922778",
+        "route": [
+          "23"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9058592,
+          37.3236855
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6712927085",
+      "properties": {
+        "bus": "yes",
+        "name": "West San Carlos Street & Leland Avenue",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6712927085",
+        "route": [
+          "23"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9263469,
+          37.3233642
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6712927086",
+      "properties": {
+        "bus": "yes",
+        "name": "West San Carlos Street & Leigh Avenue",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6712927086",
+        "route": [
+          "23"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9231465,
+          37.3233841
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6712927087",
+      "properties": {
+        "bus": "yes",
+        "name": "West San Carlos Street & Shasta Avenue",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6712927087",
+        "route": [
+          "23"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9241547,
+          37.323499
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6712927088",
+      "properties": {
+        "bus": "yes",
+        "name": "West San Carlos Street & Menker Avenue",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6712927088",
+        "route": [
+          "23"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9219233,
+          37.3235019
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6712927089",
+      "properties": {
+        "bus": "yes",
+        "name": "West San Carlos Street & South Buena Vista Avenue",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6712927089",
+        "route": [
+          "23"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9192828,
+          37.3234017
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6712927090",
+      "properties": {
+        "bus": "yes",
+        "name": "West San Carlos Street & Buena Vista Avenue",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6712927090",
+        "route": [
+          "23"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9187901,
+          37.3235143
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6712927091",
+      "properties": {
+        "bus": "yes",
+        "name": "West San Carlos Street & South Willard Avenue",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6712927091",
+        "route": [
+          "23"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9169407,
+          37.3234159
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6712927092",
+      "properties": {
+        "bus": "yes",
+        "name": "1445 West San Carlos Street",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6712927092",
+        "route": [
+          "23"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9149628,
+          37.3235464
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6712927093",
+      "properties": {
+        "bus": "yes",
+        "name": "West San Carlos Street & Grand Avenue",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6712927093",
+        "route": [
+          "23",
+          "523"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9126627,
+          37.3234448
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6712927214",
+      "properties": {
+        "bus": "yes",
+        "name": "De Anza College Transit Center",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6712927214",
+        "route": [
+          "23"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.0443569,
+          37.3225387
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6732665922",
+      "properties": {
+        "bus": "yes",
+        "name": "Stevens Creek Boulevard & Junipero Serra Freeway",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6732665922",
+        "route": [
+          "23"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.0019781,
+          37.3230864
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6732665924",
+      "properties": {
+        "bus": "yes",
+        "name": "Stevens Creek Boulevard & Stern Avenue",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6732665924",
+        "route": [
+          "23",
+          "523"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.0029975,
+          37.322932
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6737741107",
+      "properties": {
+        "bus": "yes",
+        "name": "Vallco Mall",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6737741107",
+        "route": [
+          "56"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.0142346,
+          37.3272575
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6739935090",
+      "properties": {
+        "bus": "yes",
+        "name": "Stevens Creek Boulevard & South Stelling Road",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6739935090",
+        "route": [
+          "23",
+          "523",
+          "51"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.0409585,
+          37.3228309
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6739935094",
+      "properties": {
+        "bus": "yes",
+        "name": "West San Carlos Street & Montgomery Street",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6739935094",
+        "route": [
+          "523",
+          "23"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.900116,
+          37.3248941
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6739935096",
+      "properties": {
+        "bus": "yes",
+        "name": "Stevens Creek Boulevard & Santana Row",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6739935096",
+        "route": [
+          "523",
+          "23"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9485823,
+          37.3234471
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6739935098",
+      "properties": {
+        "bus": "yes",
+        "name": "Stevens Creek Boulevard & Santana Row",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6739935098",
+        "route": [
+          "23",
+          "523"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9472385,
+          37.3232848
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6739935100",
+      "properties": {
+        "bus": "yes",
+        "name": "Stevens Creek Boulevard & San Tomas Expressway",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6739935100",
+        "route": [
+          "523",
+          "23"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9654067,
+          37.3232998
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6739935102",
+      "properties": {
+        "bus": "yes",
+        "name": "Stevens Creek Boulevard & Kiely Boulevard",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6739935102",
+        "route": [
+          "523",
+          "23"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9762685,
+          37.323228
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6739935104",
+      "properties": {
+        "bus": "yes",
+        "name": "Stevens Creek Boulevard & Kiely Boulevard",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6739935104",
+        "route": [
+          "23",
+          "523"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9743503,
+          37.3231748
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6739935106",
+      "properties": {
+        "bus": "yes",
+        "name": "Stevens Creek Boulevard & Loma Linda Drive",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6739935106",
+        "route": [
+          "23",
+          "523"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.992774,
+          37.3229865
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6739935108",
+      "properties": {
+        "bus": "yes",
+        "name": "Stevens Creek Boulevard & Cabot Avenue",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6739935108",
+        "route": [
+          "523",
+          "23"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9930567,
+          37.3231125
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6739935110",
+      "properties": {
+        "bus": "yes",
+        "name": "Stevens Creek Boulevard & Miller Avenue",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6739935110",
+        "route": [
+          "23",
+          "523"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.013712,
+          37.3228916
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6739935112",
+      "properties": {
+        "bus": "yes",
+        "name": "Stevens Creek Boulevard & Wolfe Road",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6739935112",
+        "route": [
+          "523",
+          "23"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.0150872,
+          37.3230329
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6739935114",
+      "properties": {
+        "bus": "yes",
+        "name": "Stevens Creek Boulevard & South De Anza Boulevard",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6739935114",
+        "route": [
+          "23",
+          "523"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.0314798,
+          37.3228282
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6739935116",
+      "properties": {
+        "bus": "yes",
+        "name": "Stevens Creek Boulevard & North De Anza Boulevard",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6739935116",
+        "route": [
+          "523",
+          "51",
+          "55",
+          "23",
+          "25"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.0332121,
+          37.3229854
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6770473851",
+      "properties": {
+        "bus": "yes",
+        "name": "Stevens Creek Boulevard & Bandley Drive",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6770473851",
+        "route": [
+          "23",
+          "51"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.0342553,
+          37.3228271
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6770473853",
+      "properties": {
+        "bus": "yes",
+        "name": "Stevens Creek Boulevard & Saich Way",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6770473853",
+        "route": [
+          "51",
+          "55",
+          "23",
+          "25"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.0363572,
+          37.322974
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6770473856",
+      "properties": {
+        "bus": "yes",
+        "name": "O'Connor Hospital",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6770473856",
+        "route": [
+          "59"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9380713,
+          37.3270578
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6770473858",
+      "properties": {
+        "bus": "yes",
+        "name": "Forest Avenue & Di Salvo Avenue",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6770473858",
+        "route": [
+          "59"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9367276,
+          37.3270776
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6770473860",
+      "properties": {
+        "bus": "yes",
+        "name": "Forest Avenue & North Monroe Street",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6770473860",
+        "route": [
+          "59"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9435759,
+          37.3270121
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6770473866",
+      "properties": {
+        "bus": "yes",
+        "name": "Stevens Creek Boulevard & Bradley Avenue",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6770473866",
+        "route": [
+          "23"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9336277,
+          37.3233269
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6770473868",
+      "properties": {
+        "bus": "yes",
+        "name": "West San Carlos Street & Brooklyn Avenue",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6770473868",
+        "route": [
+          "23"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9290113,
+          37.3234688
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6770473871",
+      "properties": {
+        "bus": "yes",
+        "name": "West San Carlos Street & Sunol Street",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6770473871",
+        "route": [
+          "23"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9059431,
+          37.3237827
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6770488000",
+      "properties": {
+        "bus": "yes",
+        "name": "Stevens Creek Boulevard & North Winchester Boulevard",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6770488000",
+        "route": [
+          "23"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.95189,
+          37.3233191
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6770488001",
+      "properties": {
+        "bus": "yes",
+        "name": "Stevens Creek Boulevard & Maplewood Avenue",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6770488001",
+        "route": [
+          "23"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.953123,
+          37.3233128
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6770488004",
+      "properties": {
+        "bus": "yes",
+        "name": "Stevens Creek Boulevard & South Cypress Avenue",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6770488004",
+        "route": [
+          "23"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9593797,
+          37.3232135
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6770488005",
+      "properties": {
+        "bus": "yes",
+        "name": "Stevens Creek Boulevard & Cypress Avenue",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6770488005",
+        "route": [
+          "23"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9602412,
+          37.3233478
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6770488006",
+      "properties": {
+        "bus": "yes",
+        "name": "Stevens Creek Boulevard & Saratoga Avenue",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6770488006",
+        "route": [
+          "23"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9689825,
+          37.3231474
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6770488007",
+      "properties": {
+        "bus": "yes",
+        "name": "Stevens Creek Boulevard & Saratoga Avenue",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6770488007",
+        "route": [
+          "23"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9704069,
+          37.3232709
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6770488008",
+      "properties": {
+        "bus": "yes",
+        "name": "Stevens Creek Boulevard & Lopina Way",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6770488008",
+        "route": [
+          "23"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9791136,
+          37.3231427
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6770488009",
+      "properties": {
+        "bus": "yes",
+        "name": "Stevens Creek Boulevard & Lopina Way",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6770488009",
+        "route": [
+          "23"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9792571,
+          37.3231417
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6770488010",
+      "properties": {
+        "bus": "yes",
+        "name": "Stevens Creek Boulevard & Woodhams Road",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6770488010",
+        "route": [
+          "23"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9827409,
+          37.32319
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6770488012",
+      "properties": {
+        "bus": "yes",
+        "name": "Stevens Creek Boulevard & Palace Drive",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6770488012",
+        "route": [
+          "23"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9813528,
+          37.3231292
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6770488014",
+      "properties": {
+        "bus": "yes",
+        "name": "Stevens Creek Boulevard & Richfield Drive",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6770488014",
+        "route": [
+          "23"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9840988,
+          37.323126
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6770488015",
+      "properties": {
+        "bus": "yes",
+        "name": "Stevens Creek Boulevard & Albany Drive",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6770488015",
+        "route": [
+          "23"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9870434,
+          37.323049
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6770488016",
+      "properties": {
+        "bus": "yes",
+        "name": "Stevens Creek Boulevard & Cronin Drive",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6770488016",
+        "route": [
+          "23"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9870981,
+          37.3231645
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6770488017",
+      "properties": {
+        "bus": "yes",
+        "name": "Stevens Creek Boulevard & Rodonovan Drive",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6770488017",
+        "route": [
+          "23"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9907188,
+          37.3230694
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6770488018",
+      "properties": {
+        "bus": "yes",
+        "name": "Stevens Creek Boulevard & Junipero Serra Freeway",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6770488018",
+        "route": [
+          "23"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.997446,
+          37.3229426
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6770488019",
+      "properties": {
+        "bus": "yes",
+        "name": "Stevens Creek Boulevard & South Tantau Avenue",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6770488019",
+        "route": [
+          "23"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.005994,
+          37.3229716
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6770488020",
+      "properties": {
+        "bus": "yes",
+        "name": "Stevens Creek Boulevard & Finch Avenue",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6770488020",
+        "route": [
+          "23"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.0096575,
+          37.3229151
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6770488021",
+      "properties": {
+        "bus": "yes",
+        "name": "Stevens Creek Boulevard & Finch Avenue",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6770488021",
+        "route": [
+          "23"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.011122,
+          37.3230424
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6770488022",
+      "properties": {
+        "bus": "yes",
+        "name": "Stevens Creek Boulevard & North Portal Avenue",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6770488022",
+        "route": [
+          "23"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.0200291,
+          37.3230185
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6770488023",
+      "properties": {
+        "bus": "yes",
+        "name": "Stevens Creek Boulevard & South Portal Avenue",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6770488023",
+        "route": [
+          "23"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.0191851,
+          37.3228745
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6770488024",
+      "properties": {
+        "bus": "yes",
+        "name": "Stevens Creek Boulevard & South Blaney Avenue",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6770488024",
+        "route": [
+          "23"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.0224211,
+          37.3228704
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6770488025",
+      "properties": {
+        "bus": "yes",
+        "name": "Stevens Creek Boulevard & North Blaney Avenue",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6770488025",
+        "route": [
+          "23"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.0236141,
+          37.3230074
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6770488026",
+      "properties": {
+        "bus": "yes",
+        "name": "Stevens Creek Boulevard & Torre Avenue",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6770488026",
+        "route": [
+          "23"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.0269353,
+          37.3228575
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6770488027",
+      "properties": {
+        "bus": "yes",
+        "name": "Stevens Creek Boulevard & Vista Drive",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6770488027",
+        "route": [
+          "23"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.028058,
+          37.3229878
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6773300869",
+      "properties": {
+        "bus": "yes",
+        "name": "Kiely Boulevard & Pruneridge Avenue",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6773300869",
+        "route": [
+          "57"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9748125,
+          37.3294385
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6773300870",
+      "properties": {
+        "bus": "yes",
+        "name": "Kiely Boulevard & Mauricia Avenue",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6773300870",
+        "route": [
+          "57"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9747892,
+          37.3270492
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6773300871",
+      "properties": {
+        "bus": "yes",
+        "name": "Kiely Boulevard & Mauricia Avenue",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6773300871",
+        "route": [
+          "57"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9747879,
+          37.3268994
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6773300872",
+      "properties": {
+        "bus": "yes",
+        "name": "Kiely Boulevard & Stevens Creek Boulevard",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6773300872",
+        "route": [
+          "57"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9752788,
+          37.3236962
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6773300873",
+      "properties": {
+        "bus": "yes",
+        "name": "Kiely Boulevard & Stevens Creek Boulevard",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6773300873",
+        "route": [
+          "57"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9755701,
+          37.3226333
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6773300874",
+      "properties": {
+        "bus": "yes",
+        "name": "Kiely Boulevard & Saratoga Avenue",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6773300874",
+        "route": [
+          "57"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9730192,
+          37.3201444
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6773300875",
+      "properties": {
+        "bus": "yes",
+        "name": "Saratoga Avenue & Kiely Boulevard",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6773300875",
+        "route": [
+          "57"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9730631,
+          37.3195522
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6773300876",
+      "properties": {
+        "bus": "yes",
+        "name": "Saratoga Avenue & Moorpark Avenue",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6773300876",
+        "route": [
+          "57"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9763653,
+          37.3153854
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6786752541",
+      "properties": {
+        "bus": "yes",
+        "name": "South Bascom Avenue & Moorpark Avenue",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6786752541",
+        "route": [
+          "25",
+          "61"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9319522,
+          37.315678
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6788704629",
+      "properties": {
+        "bus": "yes",
+        "name": "Moorpark Avenue & Thornton Way",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6788704629",
+        "route": [
+          "25"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9392131,
+          37.3160911
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6788704630",
+      "properties": {
+        "bus": "yes",
+        "name": "Moorpark Avenue & South Monroe Street",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6788704630",
+        "route": [
+          "25"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9424631,
+          37.3160832
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6788704631",
+      "properties": {
+        "bus": "yes",
+        "name": "Moorpark Avenue & South Monroe Street",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6788704631",
+        "route": [
+          "25"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.942982,
+          37.3160786
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6788704632",
+      "properties": {
+        "bus": "yes",
+        "name": "Moorpark Avenue & South Winchester Boulevard",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6788704632",
+        "route": [
+          "25"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9493795,
+          37.3160026
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6788704633",
+      "properties": {
+        "bus": "yes",
+        "name": "McClellan Road & Felton Way",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6788704633",
+        "route": [
+          "25",
+          "55"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.0337307,
+          37.3156084
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6788704635",
+      "properties": {
+        "bus": "yes",
+        "name": "McClellan Road & South Stelling Road",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6788704635",
+        "route": [
+          "25",
+          "55"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.0394058,
+          37.3155921
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6788704637",
+      "properties": {
+        "bus": "yes",
+        "name": "South Stelling Road & Pepper Tree Lane",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6788704637",
+        "route": [
+          "25",
+          "55"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.0415345,
+          37.3191652
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6788704643",
+      "properties": {
+        "bus": "yes",
+        "name": "South Winchester Boulevard & Moorpark Avenue",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6788704643",
+        "route": [
+          "60",
+          "25"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9502167,
+          37.3156072
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6793785892",
+      "properties": {
+        "bus": "yes",
+        "name": "Race Street & Yosemite Avenue",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6793785892",
+        "route": [
+          "64B"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.911853,
+          37.3295418
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6793785893",
+      "properties": {
+        "bus": "yes",
+        "name": "Race Street & Yosemite Avenue",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6793785893",
+        "route": [
+          "64B"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9118177,
+          37.3290692
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6793785894",
+      "properties": {
+        "bus": "yes",
+        "name": "Race Street & Park Avenue",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6793785894",
+        "route": [
+          "64B"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9116142,
+          37.3263741
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6793785895",
+      "properties": {
+        "bus": "yes",
+        "name": "Race Street & Park Avenue",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6793785895",
+        "route": [
+          "64B"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9116078,
+          37.3262761
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6793785896",
+      "properties": {
+        "bus": "yes",
+        "name": "Race Street & West San Carlos Street",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6793785896",
+        "route": [
+          "64B"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9114378,
+          37.3238599
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6793785897",
+      "properties": {
+        "bus": "yes",
+        "name": "Race Street & West San Carlos Street",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6793785897",
+        "route": [
+          "64B"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9113721,
+          37.3228187
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6793785898",
+      "properties": {
+        "bus": "yes",
+        "name": "Race Street & Auzerais Avenue",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6793785898",
+        "route": [
+          "64B"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9112023,
+          37.3205722
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6793785899",
+      "properties": {
+        "bus": "yes",
+        "name": "Saddle Rack Street & Meridian Avenue",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6793785899",
+        "route": [
+          "64B"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9129819,
+          37.3196299
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6793785900",
+      "properties": {
+        "bus": "yes",
+        "name": "Meridian Avenue & Harmon Avenue",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6793785900",
+        "route": [
+          "64B"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9137362,
+          37.3186159
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6806175105",
+      "properties": {
+        "bus": "yes",
+        "name": "South Winchester Boulevard & Stevens Creek Boulevard",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6806175105",
+        "route": [
+          "60"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9502169,
+          37.3223597
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6806175106",
+      "properties": {
+        "bus": "yes",
+        "name": "South Winchester Boulevard & Olin Avenue",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6806175106",
+        "route": [
+          "60"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.950083,
+          37.3209889
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6806175107",
+      "properties": {
+        "bus": "yes",
+        "name": "South Winchester Boulevard & Olsen Drive",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6806175107",
+        "route": [
+          "60"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9502385,
+          37.3188477
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6806175108",
+      "properties": {
+        "bus": "yes",
+        "name": "South Winchester Boulevard & Olsen Drive",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6806175108",
+        "route": [
+          "60"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9500601,
+          37.3187861
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6806175109",
+      "properties": {
+        "bus": "yes",
+        "name": "South Winchester Boulevard & Moorpark Avenue",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6806175109",
+        "route": [
+          "60"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9500384,
+          37.3156802
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6806175120",
+      "properties": {
+        "bus": "yes",
+        "name": "North Winchester Boulevard & Forest Avenue",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6806175120",
+        "route": [
+          "60"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9502091,
+          37.3273397
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6806175121",
+      "properties": {
+        "bus": "yes",
+        "name": "North Winchester Boulevard & Pruneridge Avenue",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6806175121",
+        "route": [
+          "60"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9502212,
+          37.3294928
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6820738053",
+      "properties": {
+        "bus": "yes",
+        "name": "Miller Avenue & Phil Lane",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6820738053",
+        "route": [
+          "56"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.0133393,
+          37.3159904
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6820738054",
+      "properties": {
+        "bus": "yes",
+        "name": "Miller Avenue & Phil Lane",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6820738054",
+        "route": [
+          "56"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.0133403,
+          37.3159712
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6820738055",
+      "properties": {
+        "bus": "yes",
+        "name": "Miller Avenue & Greenwood Court",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6820738055",
+        "route": [
+          "56"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.0134133,
+          37.3183989
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6820738056",
+      "properties": {
+        "bus": "yes",
+        "name": "Miller Avenue & Greenwood Drive",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6820738056",
+        "route": [
+          "56"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.0135305,
+          37.318908
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6820738057",
+      "properties": {
+        "bus": "yes",
+        "name": "Miller Avenue & Richwood Court",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6820738057",
+        "route": [
+          "56"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.0141422,
+          37.3219378
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6820738058",
+      "properties": {
+        "bus": "yes",
+        "name": "Miller Avenue & Richwood Drive",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6820738058",
+        "route": [
+          "56"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.0142787,
+          37.3220925
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6820738059",
+      "properties": {
+        "bus": "yes",
+        "name": "Wolfe Road & Stevens Creek Boulevard",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6820738059",
+        "route": [
+          "56"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.0141749,
+          37.3237889
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6821836949",
+      "properties": {
+        "bus": "yes",
+        "name": "South De Anza Boulevard & Pacifica Drive",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6821836949",
+        "route": [
+          "51",
+          "25",
+          "55"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.0322026,
+          37.3166616
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6821836950",
+      "properties": {
+        "bus": "yes",
+        "name": "South De Anza Boulevard & Sunrise Drive",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6821836950",
+        "route": [
+          "25",
+          "55"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.0322077,
+          37.3201082
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6821836951",
+      "properties": {
+        "bus": "yes",
+        "name": "North De Anza Boulevard & Stevens Creek Boulevard",
+        "network": "VTA",
+        "network:wikidata": "Q1456861",
+        "public_transport": "stop_position",
+        "id": "node/6821836951",
+        "route": [
+          "55"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.032185,
+          37.3239662
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6821836952",
+      "properties": {
+        "bus": "yes",
+        "name": "North De Anza Boulevard & Lazaneo Drive",
+        "network": "VTA",
+        "network:wikidata": "Q1456861",
+        "public_transport": "stop_position",
+        "id": "node/6821836952",
+        "route": [
+          "55"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.0324106,
+          37.3262657
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6821836953",
+      "properties": {
+        "bus": "yes",
+        "name": "North De Anza Boulevard & Lazaneo Drive",
+        "network": "VTA",
+        "network:wikidata": "Q1456861",
+        "public_transport": "stop_position",
+        "id": "node/6821836953",
+        "route": [
+          "55"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.0322095,
+          37.3271072
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6821836954",
+      "properties": {
+        "bus": "yes",
+        "name": "North De Anza Boulevard & Mariani Avenue",
+        "network": "VTA",
+        "network:wikidata": "Q1456861",
+        "public_transport": "stop_position",
+        "id": "node/6821836954",
+        "route": [
+          "55"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.0324257,
+          37.329682
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6831245926",
+      "properties": {
+        "bus": "yes",
+        "name": "Stevens Creek Boulevard & Mary Avenue",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6831245926",
+        "route": [
+          "51"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.0454622,
+          37.3228118
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6831245927",
+      "properties": {
+        "bus": "yes",
+        "name": "Stevens Creek Boulevard & Mary Avenue",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6831245927",
+        "route": [
+          "51"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.0457058,
+          37.3229323
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6833463783",
+      "properties": {
+        "bus": "yes",
+        "name": "South De Anza Boulevard & McClellan Road",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6833463783",
+        "route": [
+          "51"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.0323859,
+          37.3150522
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6836128023",
+      "properties": {
+        "bus": "yes",
+        "name": "South Bascom Avenue & Renova Drive",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6836128023",
+        "route": [
+          "61"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9317723,
+          37.3152262
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6836128055",
+      "properties": {
+        "bus": "yes",
+        "name": "Naglee Avenue & North Bascom Avenue",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6836128055",
+        "route": [
+          "61"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9312762,
+          37.3283824
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6836128056",
+      "properties": {
+        "bus": "yes",
+        "name": "North Bascom Avenue & West San Carlos Street",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6836128056",
+        "route": [
+          "61"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9318878,
+          37.3237866
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6836128057",
+      "properties": {
+        "bus": "yes",
+        "name": "North Bascom Avenue & Naglee Avenue",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6836128057",
+        "route": [
+          "61"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.932098,
+          37.327353
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6836128058",
+      "properties": {
+        "bus": "yes",
+        "name": "North Bascom Avenue & Forest Avenue",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6836128058",
+        "route": [
+          "61"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9319738,
+          37.32714
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6836128059",
+      "properties": {
+        "bus": "yes",
+        "name": "North Bascom Avenue & Olive Avenue",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6836128059",
+        "route": [
+          "61"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.932038,
+          37.3254361
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6836128060",
+      "properties": {
+        "bus": "yes",
+        "name": "North Bascom Avenue & Olive Avenue",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6836128060",
+        "route": [
+          "61"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9319155,
+          37.3255702
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6836128063",
+      "properties": {
+        "bus": "yes",
+        "name": "South Bascom Avenue & West San Carlos Street",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6836128063",
+        "route": [
+          "61"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9320039,
+          37.3229538
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6836128064",
+      "properties": {
+        "bus": "yes",
+        "name": "South Bascom Avenue & Elliott Street",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6836128064",
+        "route": [
+          "61"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9318085,
+          37.3219292
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6836128065",
+      "properties": {
+        "bus": "yes",
+        "name": "South Bascom Avenue & Elliott Street",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6836128065",
+        "route": [
+          "61"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9319761,
+          37.3214543
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6836128066",
+      "properties": {
+        "bus": "yes",
+        "name": "South Bascom Avenue & Scott Street",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6836128066",
+        "route": [
+          "61"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9317955,
+          37.3202948
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6836128067",
+      "properties": {
+        "bus": "yes",
+        "name": "South Bascom Avenue & Scott Street",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6836128067",
+        "route": [
+          "61"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9319669,
+          37.3197265
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/6836128068",
+      "properties": {
+        "bus": "yes",
+        "name": "South Bascom Avenue & Basile Avenue",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/6836128068",
+        "route": [
+          "61"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9317724,
+          37.3182484
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/7386680293",
+      "properties": {
+        "bus": "yes",
+        "name": "Naglee Avenue & North Bascom Avenue",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/7386680293",
+        "route": [
+          "59"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.93254,
+          37.3276733
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/11502432976",
+      "properties": {
+        "bus": "yes",
+        "name": "Stevens Creek Boulevard & North Henry Avenue",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/11502432976",
+        "route": [
+          "23"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9556692,
+          37.3233629
+        ]
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "node/11502432977",
+      "properties": {
+        "bus": "yes",
+        "name": "Stevens Creek Boulevard & South Henry Avenue",
+        "network": "VTA",
+        "public_transport": "stop_position",
+        "id": "node/11502432977",
+        "route": [
+          "23"
+        ]
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -121.9552265,
+          37.3232353
+        ]
+      }
+    }
+  ]
+}

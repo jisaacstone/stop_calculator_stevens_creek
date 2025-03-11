@@ -2,11 +2,11 @@ import VectorSource from 'ol/source/Vector.js';
 import { MultiPoint, LineString } from 'ol/geom.js';
 import { default as Select } from 'ol/interaction/Select.js';
 import { click } from 'ol/events/condition.js';
-import OSMXML from 'ol/format/OSMXML.js';
+import { GeoJSON } from 'ol/format.js';
 import { default as OlMap } from 'ol/Map.js';
 import Feature from 'ol/Feature.js';
 import { Vector as VectorLayer} from 'ol/layer.js';
-import { all as allStrategy } from 'ol/loadingstrategy.js';
+import busStopSource from 'assets/busstops-geojson.json';
 import { Text } from 'ol/style.js';
 import { StyleFunction } from 'ol/style/Style.js';
 import * as style from 'style';
@@ -16,6 +16,7 @@ type StopLink = { distance: number, id: number };
 type StopInfo = { feature: Feature, next: StopLink, prev: StopLink, opposite: number | undefined };
 
 const rapidBusNum = /\b523\b/;
+/*
 const osmFormat = new OSMXML();
 // const bb = [-122.05, 37.315, -121.9, 37.33];
 const bb = '(37.315,-122.05,37.33,-121.9)';
@@ -48,6 +49,24 @@ export const layer = new VectorLayer({
     return stl;
   }
 })
+*/
+
+const GeoJsonFormat = new GeoJSON();
+export const layer = new VectorLayer({
+  source: new VectorSource({
+    format: GeoJsonFormat,
+    features: GeoJsonFormat.readFeatures(
+      busStopSource
+    )
+  }),
+  style: (f, res) => {
+    const stl = style.circle(15, res);
+    if (res < .00001) {
+      stl.setText(new Text({text: f.get('name'), font: '12px Calibri,sans-serif'}));
+    }
+    return stl;
+  }
+});
 
 const selected: StyleFunction = ((f: Feature) => {
   const ss = style.selected.clone();

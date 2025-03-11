@@ -26,15 +26,21 @@ export const gridRoad = (meters: number, resolution: number) => {
     })
   });
 };
-export const circle = (meters: number, resolution: number) => new Style({
-  // TODO: convert resolution to meters more reliably
-  image: new Circle({
-      radius: Math.min(meters/resolution, 3),
-      fill: new Fill({
-        color: 'rgba(166,219,160, 0.9)'
-      }),
-  }),
-});
+
+export const circle = (meters: number, resolution: number) => {
+  const meters_per_pixel = resolution * METERS_PER_UNIT;
+  const pixel_meters = meters / meters_per_pixel;
+  return new Style({
+    image: new Circle({
+        //radius: Math.min(meters/resolution, 3),
+        radius: Math.max(pixel_meters, 3),
+        fill: new Fill({
+          color: 'rgba(166,219,160, 0.9)'
+        }),
+    }),
+  });
+};
+
 export const bldg = new Style({
     stroke: new Stroke({color: 'rgba(200, 100, 150, 0.5)'}),
     fill: new Fill({color: 'rgb(100, 200, 150)'

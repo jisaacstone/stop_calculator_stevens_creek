@@ -20,7 +20,7 @@ const setupSCMap = (mapEl: HTMLElement): Map => {
     layers: [
       layers.osmRaster,
       roads.scRoadGraph,
-      //busstops.layer,
+      busstops.layer,
       walkShed.walkShedLayer
     ],
     target: mapEl,
@@ -44,7 +44,8 @@ const setupSCMap = (mapEl: HTMLElement): Map => {
     const neighbors = isochrone.neighbors(evt.selected[0].get('id'));
     walkShed.setWalkShed(neighbors, 'neighbors');
   });
-  map.getView().fit(roads.scRoadGraph.getSource().getExtent());
+  //map.getView().fit(roads.scRoadGraph.getSource().getExtent());
+  map.getView().fit(busstops.layer.getSource().getExtent());
 
   const busstop = 4168013077;
   isochrone.loadNLD();
