@@ -8,7 +8,6 @@ import 'assets/style.css';
 import * as layers from 'layers';
 import * as roads from 'roads';
 import * as slider from 'slider';
-import * as style from 'style';
 import * as isochrone from 'isochrone';
 import * as walkShed from 'walkShed';
 import * as busstops from 'busstops';
@@ -20,8 +19,8 @@ const setupSCMap = (mapEl: HTMLElement): Map => {
     layers: [
       layers.osmRaster,
       roads.scRoadGraph,
+      walkShed.walkShedLayer,
       busstops.layer,
-      walkShed.walkShedLayer
     ],
     target: mapEl,
     view: new View({
@@ -30,35 +29,16 @@ const setupSCMap = (mapEl: HTMLElement): Map => {
       zoom: 14
     }),
   });
-  busstops.addSelectEvent(map);
-  const featSelect = new Select({
-    condition: click,
-    layers: [ roads.scRoadGraph ],
-    style: () => style.selected
-  });
-  map.addInteraction(featSelect);
-  featSelect.on(["select"], (evt: SelectEvent) => {
-    if (!evt.selected || evt.selected.length === 0) {
-      return;
-    }
-    const neighbors = isochrone.neighbors(evt.selected[0].get('id'));
-    walkShed.setWalkShed(neighbors, 'neighbors');
-  });
-  //map.getView().fit(roads.scRoadGraph.getSource().getExtent());
-  map.getView().fit(busstops.layer.getSource().getExtent());
 
-  const busstop = 4168013077;
-  isochrone.loadNLD();
-  const walkshed = isochrone.calcIsochrone(busstop, 300);
-  walkShed.setWalkShed(Array.from(walkshed), 'walkshed');
+  map.getView().fit(busstops.layer.getSource().getExtent());
 
   return map;
 };
 
 const setupInputs = (inputEl: HTMLElement) => {
   const slide = slider.makeInput(
-    {name: 'distance', units: 'm'},
-    {min: 1, max: 20, step: 2},
+    { name: 'distance', units: 'm' },
+    { min: 1, max: 20, step: 2 },
     distance,
   );
   van.add(inputEl, slide);
@@ -67,7 +47,9 @@ const setupInputs = (inputEl: HTMLElement) => {
 const main = () => {
   const mapEl = document.getElementById('stevenscreek');
   if (mapEl !== null) {
-    setupSCMap(mapEl);
+    const map = setupSCMap(mapEl);
+    isochrone.loadNLD();
+    busstops.addSelectEvent(map);
   }
   const inputEl = document.getElementById('input');
   if (inputEl !== null) {
@@ -75,9 +57,7 @@ const main = () => {
   }
 };
 
-// see if DOM is already available
 if (document.readyState === "complete" || document.readyState === "interactive") {
-  // call on next available tick
   setTimeout(main, 1);
 } else {
   document.addEventListener("DOMContentLoaded", main);

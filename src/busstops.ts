@@ -1,5 +1,5 @@
 import VectorSource from 'ol/source/Vector.js';
-import { MultiPoint, LineString } from 'ol/geom.js';
+import { MultiPoint, LineString, Point } from 'ol/geom.js';
 import { default as Select } from 'ol/interaction/Select.js';
 import { click } from 'ol/events/condition.js';
 import { GeoJSON } from 'ol/format.js';
@@ -11,47 +11,14 @@ import { Text } from 'ol/style.js';
 import { StyleFunction } from 'ol/style/Style.js';
 import * as style from 'style';
 import * as roads from 'roads';
+import * as isochrone from 'isochrone';
+import * as walkShed from 'walkShed';
 
 type StopLink = { distance: number, id: number };
 type StopInfo = { feature: Feature, next: StopLink, prev: StopLink, opposite: number | undefined };
 
 const rapidBusNum = /\b523\b/;
-/*
-const osmFormat = new OSMXML();
-// const bb = [-122.05, 37.315, -121.9, 37.33];
-const bb = '(37.315,-122.05,37.33,-121.9)';
-const query = `(rel[route=bus][network=VTA]${bb};node(r)${bb}[public_transport=stop_position];);out body;`;
-const busStopSource = new VectorSource({
-  format: osmFormat,
-  strategy: allStrategy,
-  loader: (_extent, _resolution, projection, success, failure) => {
-    console.log('loading from overpass', projection);
-    return fetch(
-      'https://overpass-api.de/api/interpreter',
-      { method: 'POST', body: query }
-    ).then((response) => response.text())
-    .then((text) => {
-      const features = osmFormat.readFeatures(text, { featureProjection: projection });
-      busStopSource.addFeatures(features);
-      // TODO: read relation metadata
-      (success || console.log)(features);
-    }).catch(() => failure && failure());
-  }
-});
-
-export const layer = new VectorLayer({
-  source: busStopSource,
-  style: (f, res) => {
-    const stl = style.circle(15, res);
-    if (res < .00001) {
-      stl.setText(new Text({text: f.get('name'), font: '12px Calibri,sans-serif'}));
-    }
-    return stl;
-  }
-})
-*/
-
-const GeoJsonFormat = new GeoJSON();
+const GeoJsonFormat = new GeoJSON<Feature<Point>>();
 export const layer = new VectorLayer({
   source: new VectorSource({
     format: GeoJsonFormat,
@@ -87,9 +54,15 @@ const roadSelect = new Select({
 export const addSelectEvent = (map: OlMap) => {
   map.addInteraction(busSelect);
   map.addInteraction(roadSelect);
-  busSelect.on(["select"], ({ selected }) => {
-    if (!selected || selected.length === 0) {
+  busSelect.on(["select"], (event) => {
+    if (!event.selected || event.selected.length === 0) {
       return;
+    }
+    const selected = event.selected[0] as Feature<Point>;
+    const geometry = selected.getGeometry();
+    if (geometry) {
+      const walkshed = isochrone.calcIsochrone(geometry.getFirstCoordinate(), 300);
+      walkShed.setWalkShed(Array.from(walkshed), 'walkshed');
     }
     console.log(selected[0]);
   });

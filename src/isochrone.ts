@@ -1,6 +1,9 @@
 import { PriorityQueue } from '@datastructures-js/priority-queue';
 
 import nld from './assets/nld.ts';
+import { Coordinate } from 'ol/coordinate';
+import { closestPoint } from 'roads';
+import * as turf from '@turf/turf';
 /* TODO
 // Lazy loading in case the file is too big
 async function fetchNLD() {
@@ -10,7 +13,7 @@ async function fetchNLD() {
 const nld = fetchNLD();
 */
 
-type Link = { id: string, osmid: number, source: number, target: number, length: number };
+type Link = { id: string, source: number, target: number, length: number };
 
 type Segment = [[number, number], [number, number]];
 type Entry = { nodeId: number, remaining: number };
@@ -25,7 +28,6 @@ export function loadNLD() {
     linkMap.get(link.source)!.push(link);
   });
 };
-
 
 const traverse = (start: number, distance: number) => {
   const seen: Set<string> = new Set();
@@ -62,7 +64,43 @@ const traverse = (start: number, distance: number) => {
   return found;
 };
 
-export const calcIsochrone = (start: number, distance: number) => {
+export const addPseudoNode = (coords: Coordinate) => {
+  // add an pseudo node if the start is of type Coordinate
+  const pseudoNode = nld.nodes.length;
+  // @ts-ignore
+  nld.nodes.push({ id: pseudoNode, x: coords[0], y: coords[1] });
+
+  const { feature, point } = closestPoint(coords);
+
+  const link = nld.links.find((l: Link) => l.id === feature.get('id'));
+  if (!link) {
+    throw 'Link not found';
+  }
+  const lengths = turf.distance(turf.point(point), turf.point(getCoords(link.source)));
+  const lengtht = turf.distance(turf.point(getCoords(link.target)), turf.point(point));
+  const pseudoLinks = [
+    {
+      id: `pseudo_${pseudoNode}_${link.source}`,
+      source: pseudoNode,
+      target: link.source,
+      length: lengths
+    },
+    {
+      id: `pseudo_${pseudoNode}_${link.target}`,
+      source: pseudoNode,
+      target: link.target,
+      length: lengtht
+    },
+  ];
+
+  linkMap.set(pseudoNode, pseudoLinks);
+  return pseudoNode;
+};
+
+export const calcIsochrone = (start: number | Coordinate, distance: number) => {
+  if (Array.isArray(start)) {
+    start = addPseudoNode(start);
+  }
   return traverse(start, distance);
 };
 
