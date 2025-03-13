@@ -36,6 +36,37 @@ SC & Miller(Wolf)
 De Anza
 SC & Stelling
 
+nodes:
+    <member type="node" ref="7387164538" role="stop"/>
+    <member type="node" ref="1115349352" role="stop"/>
+    <member type="node" ref="6712927199" role="stop"/>
+    <member type="node" ref="6703688695" role="stop"/>
+    <member type="node" ref="6703688696" role="stop"/>
+    <member type="node" ref="6703688699" role="stop"/>
+    <member type="node" ref="6692646100" role="stop"/>
+    <member type="node" ref="6692646102" role="stop"/>
+    <member type="node" ref="6697914451" role="stop"/>
+    <member type="node" ref="6739935094" role="stop"/>
+    <member type="node" ref="6712922775" role="stop"/>
+    <member type="node" ref="6712917182" role="stop"/>
+    <member type="node" ref="6739935096" role="stop"/>
+    <member type="node" ref="6739935100" role="stop"/>
+    <member type="node" ref="6739935102" role="stop"/>
+    <member type="node" ref="6739935108" role="stop"/>
+    <member type="node" ref="6739935112" role="stop"/>
+    <member type="node" ref="6739935116" role="stop"/>
+    <member type="node" ref="6710495366" role="stop"/>
+    <member type="node" ref="6831091493" role="stop"/>
+    <member type="node" ref="6821811984" role="stop"/>
+    <member type="node" ref="6708876873" role="stop"/>
+    <member type="node" ref="6828431491" role="stop"/>
+    <member type="node" ref="6841902116" role="stop"/>
+    <member type="node" ref="6841902115" role="stop"/>
+    <member type="node" ref="11113389737" role="stop"/>
+    <member type="node" ref="6841902108" role="stop"/>
+    <member type="node" ref="6695684854" role="stop"/>
+    <member type="node" ref="10268977662" role="stop"/>
+
 # Other notes
 
 1857
