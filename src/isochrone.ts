@@ -18,6 +18,8 @@ type Link = { id: string, source: number, target: number, length: number };
 type Segment = [[number, number], [number, number]];
 type Entry = { nodeId: number, remaining: number };
 
+export const WALKING_SPEED_MS = 1.33; // (m/s) = 5.8 km/h 
+
 // Precomputed adjacency list for fast lookups
 const linkMap = new Map<number, Link[]>();
 export function loadNLD() {
@@ -29,14 +31,14 @@ export function loadNLD() {
   });
 };
 
-const traverse = (start: number, distance: number) => {
+const traverse = (start: number, time: number) => {
   const seen: Set<string> = new Set();
   const queue: PriorityQueue<Entry> = new PriorityQueue(
     (ea, eb) => eb.remaining - ea.remaining
   );
   const found: Set<Segment> = new Set();
 
-  queue.enqueue({ nodeId: start, remaining: distance });
+  queue.enqueue({ nodeId: start, remaining: time });
   let nextEntry: Entry | null;
 
   while ((nextEntry = queue.dequeue()) !== null ) {
@@ -46,14 +48,14 @@ const traverse = (start: number, distance: number) => {
         continue;
       }
 
-      if (length <= nextEntry.remaining) {
+      if (length / WALKING_SPEED_MS <= nextEntry.remaining) {
         //full segment
         found.add([getCoords(source), getCoords(target)]);
-        queue.enqueue({ nodeId: target, remaining: nextEntry.remaining - length });
+        queue.enqueue({ nodeId: target, remaining: nextEntry.remaining - length / WALKING_SPEED_MS });
       }
       else {
         //incomplete segment
-        const frac = nextEntry.remaining / length;
+        const frac = nextEntry.remaining * WALKING_SPEED_MS / length;
         const segment_start: [number, number] = getCoords(source);
         const segment_end: [number, number] = getCoords(target, frac, segment_start[0], segment_start[1]);
         found.add([segment_start, segment_end])
@@ -67,7 +69,7 @@ const traverse = (start: number, distance: number) => {
 export const addPseudoNode = (coords: Coordinate) => {
   // add an pseudo node if the start is of type Coordinate
   const pseudoNode = nld.nodes.length;
-  // @ts-ignore
+  // @ts-expect-error
   nld.nodes.push({ id: pseudoNode, x: coords[0], y: coords[1] });
 
   const { feature, point } = closestPoint(coords);
@@ -97,11 +99,11 @@ export const addPseudoNode = (coords: Coordinate) => {
   return pseudoNode;
 };
 
-export const calcIsochrone = (start: number | Coordinate, distance: number) => {
+export const calcIsochrone = (start: number | Coordinate, time: number) => {
   if (Array.isArray(start)) {
     start = addPseudoNode(start);
   }
-  return traverse(start, distance);
+  return traverse(start, time);
 };
 
 const getCoords = (nodeId: number, fraction: number = 1, x: number = 0, y: number = 0): [number, number] => {

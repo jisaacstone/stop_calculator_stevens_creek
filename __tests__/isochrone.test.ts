@@ -3,7 +3,7 @@ import * as turf from '@turf/turf';
 
 import { default as testData } from './data/nld_test';
 import { default as nld } from '../src/assets/nld';
-import { neighbors, calcIsochrone, loadNLD } from '../src/isochrone';
+import { neighbors, calcIsochrone, loadNLD, WALKING_SPEED_MS } from '../src/isochrone';
 
 // Hack for jest.mock, which didn't work somehow
 nld.nodes = testData.nodes;
@@ -24,7 +24,7 @@ describe("neigbour function", () => {
 describe("calcIsochrone function", () => {
   test("should return full and partial line segments list", () => {
     loadNLD();
-    const result = calcIsochrone(200016264, 12);
+    const result = calcIsochrone(200016264, 12 / WALKING_SPEED_MS);
     const precision = 10;
 
     expect(result.size).toBe(4);

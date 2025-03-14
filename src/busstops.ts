@@ -17,8 +17,11 @@ import * as walkShed from 'walkShed';
 type StopLink = { distance: number, id: number };
 type StopInfo = { feature: Feature, next: StopLink, prev: StopLink, opposite: number | undefined };
 
+const SECONDS_PER_MINUTE = 60;
+const ISOCHRONE_TIME_SECONDS = 45 * SECONDS_PER_MINUTE;  // 300 metres was set before
 const rapidBusNum = /\b523\b/;
 const GeoJsonFormat = new GeoJSON<Feature<Point>>();
+
 export const layer = new VectorLayer({
   source: new VectorSource({
     format: GeoJsonFormat,
@@ -61,7 +64,7 @@ export const addSelectEvent = (map: OlMap) => {
     const selected = event.selected[0] as Feature<Point>;
     const geometry = selected.getGeometry();
     if (geometry) {
-      const walkshed = isochrone.calcIsochrone(geometry.getFirstCoordinate(), 300);
+      const walkshed = isochrone.calcIsochrone(geometry.getFirstCoordinate(), ISOCHRONE_TIME_SECONDS);
       walkShed.setWalkShed(Array.from(walkshed), 'walkshed');
     }
     console.log(selected[0]);

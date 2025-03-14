@@ -1,7 +1,4 @@
 import View from 'ol/View.js';
-import SelectEvent from 'ol/MapEvent.js';
-import Select from 'ol/interaction/Select.js';
-import { click } from 'ol/events/condition.js';
 import Map from 'ol/Map.js';
 import van from 'vanjs-core';
 import 'assets/style.css';
