@@ -1,5 +1,5 @@
 import {describe, expect, test} from '@jest/globals';
-import { closestPoint, scRoadGraph } from '../src/roads'; // Adjust the import path
+import { closestPoint, getLayer } from '../src/roads'; // Adjust the import path
 import Feature from 'ol/Feature.js';
 import {LineString} from 'ol/geom.js';
 import {GeoJSON} from 'ol/format.js';
@@ -10,8 +10,9 @@ const testFeatures = new GeoJSON<Feature<LineString>>().readFeatures(
   testGeoJson,
   {featureProjection: 'EPSG:4326'}
 );
-scRoadGraph.getSource()?.clear();
-scRoadGraph.getSource()?.addFeatures(testFeatures);
+const { source } = getLayer();
+source.clear();
+source.addFeatures(testFeatures);
 
 describe("closest point", () => {
   test("it works", () => {
