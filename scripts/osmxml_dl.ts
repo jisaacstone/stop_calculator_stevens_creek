@@ -75,6 +75,6 @@ const linkStopsToRoutes = (geojson: FeatureCollection<Geometry, GeoJsonPropertie
   });
 };
 
-const bb = '(37.315,-122.05,37.33,-121.9)';
+const bb = '(37.31,-122.06,37.335,-121.85)';
 const query = `(rel[route=bus][network=VTA]${bb};node(r)${bb}[public_transport=stop_position];);out body;`;
 fetchOSMData(query);

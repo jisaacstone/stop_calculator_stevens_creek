@@ -12,23 +12,40 @@ import * as style from 'style';
 const mainRoads = ['West San Carlos Street', 'Stevens Creek Boulevard'];
 const format = new GeoJSON<Feature<LineString>>();
 
-const features: Feature<LineString>[] = format.readFeatures(
-  scGeojson,
-  {featureProjection: 'EPSG:4326'}
-);
-const source = new VectorSource<Feature<LineString>>({ format, features });
+const getLayer = (() => {
+  const cache: { setup: false } | { setup: true, source: VectorSource<Feature<LineString>>, layer: VectorLayer<Feature<LineString>>} = { setup: false };
+  const setup = () => {
+    const features: Feature<LineString>[] = format.readFeatures(
+      scGeojson,
+      {featureProjection: 'EPSG:4326'}
+    );
+    const source = new VectorSource<Feature<LineString>>({ format, features });
 
-export const scRoadGraph = new VectorLayer({
-  source,
-  style: (feature) => {
-    if (mainRoads.includes(feature.get('name')) ) {
-      return style.road;
+    const scRoadGraph = new VectorLayer({
+      source,
+      style: (feature) => {
+        if (mainRoads.includes(feature.get('name')) ) {
+          return style.road;
+        }
+        return style.bldg;
+      },
+    });
+    cache.setup = true;
+    cache.source = source;
+    cache.layer = scRoadGraph;
+  };
+  return () => {
+    if (! cache.setup) {
+      setup();
     }
-    return style.bldg;
-  },
-});
+    if (cache.setup) {
+      return { source: cache.source, layer: cache.layer };
+    }
+  }
+})();
 
 export const closestPoint = (coord: Coordinate): { feature: Feature, point: Coordinate } => {
+  const { source } = getLayer();
   const found: Feature<LineString> = source.getClosestFeatureToCoordinate(coord);
   // geojson.writefeatureobject is not working so I do it manually
   const turfFound = {

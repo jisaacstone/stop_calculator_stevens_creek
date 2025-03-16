@@ -1,12 +1,9 @@
 import View from 'ol/View.js';
-import SelectEvent from 'ol/MapEvent.js';
-import Select from 'ol/interaction/Select.js';
-import { click } from 'ol/events/condition.js';
 import Map from 'ol/Map.js';
 import van from 'vanjs-core';
 import 'assets/style.css';
 import * as layers from 'layers';
-import * as roads from 'roads';
+// import * as roads from 'roads';
 import * as slider from 'slider';
 import * as isochrone from 'isochrone';
 import * as walkShed from 'walkShed';
@@ -18,7 +15,7 @@ const setupSCMap = (mapEl: HTMLElement): Map => {
   const map = new Map({
     layers: [
       layers.osmRaster,
-      roads.scRoadGraph,
+      //roads.getLayer().layer,
       walkShed.walkShedLayer,
       busstops.layer,
     ],
