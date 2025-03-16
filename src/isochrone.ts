@@ -69,7 +69,7 @@ const traverse = (start: number, time: number) => {
 export const addPseudoNode = (coords: Coordinate) => {
   // add an pseudo node if the start is of type Coordinate
   const pseudoNode = nld.nodes.length;
-  // @ts-expect-error
+  // @ts-expect-error type error
   nld.nodes.push({ id: pseudoNode, x: coords[0], y: coords[1] });
 
   const { feature, point } = closestPoint(coords);
