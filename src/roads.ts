@@ -12,36 +12,32 @@ import * as style from 'style';
 const mainRoads = ['West San Carlos Street', 'Stevens Creek Boulevard'];
 const format = new GeoJSON<Feature<LineString>>();
 
-const getLayer = (() => {
-  const cache: { setup: false } | { setup: true, source: VectorSource<Feature<LineString>>, layer: VectorLayer<Feature<LineString>>} = { setup: false };
-  const setup = () => {
-    const features: Feature<LineString>[] = format.readFeatures(
-      scGeojson,
-      {featureProjection: 'EPSG:4326'}
-    );
-    const source = new VectorSource<Feature<LineString>>({ format, features });
+export const getLayer = (() => {
+  const cache: { setup: false } | { setup: true, source: VectorSource<Feature<LineString>>, layer: VectorLayer} = { setup: false };
+  const setup = (): { source: VectorSource<Feature<LineString>>, layer: VectorLayer } => {
+    if (!cache.setup) {
+      const features: Feature<LineString>[] = format.readFeatures(
+        scGeojson,
+        {featureProjection: 'EPSG:4326'}
+      );
+      const source = new VectorSource<Feature<LineString>>({ format, features });
 
-    const scRoadGraph = new VectorLayer({
-      source,
-      style: (feature) => {
-        if (mainRoads.includes(feature.get('name')) ) {
-          return style.road;
-        }
-        return style.bldg;
-      },
-    });
-    cache.setup = true;
-    cache.source = source;
-    cache.layer = scRoadGraph;
+      const layer = new VectorLayer({
+        source,
+        style: (feature) => {
+          if (mainRoads.includes(feature.get('name')) ) {
+            return style.road;
+          }
+          return style.bldg;
+        },
+      });
+      Object.assign(cache, { setup: true, source, layer });
+      return { source, layer };
+    } else {
+      return { source: cache['source'], layer: cache['layer'] };
+    }
   };
-  return () => {
-    if (! cache.setup) {
-      setup();
-    }
-    if (cache.setup) {
-      return { source: cache.source, layer: cache.layer };
-    }
-  }
+  return setup;
 })();
 
 export const closestPoint = (coord: Coordinate): { feature: Feature, point: Coordinate } => {
