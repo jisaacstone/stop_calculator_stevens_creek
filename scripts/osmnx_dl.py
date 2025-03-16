@@ -9,7 +9,7 @@ def id(link):
 
 
 test = False  # Set to True to generate tests
-bb = [-122.05, 37.315, -121.9, 37.33] # Manually identified from OpenStreetMaps
+bb = [-122.06, 37.29, -121.86, 37.35] # Manually identified from OpenStreetMaps
 
 if test:
     bb = [-122.08741, 37.39, -122.08715, 37.385]

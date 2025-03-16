@@ -1,4 +1,5 @@
 /*
+1 "name": "West San Carlos Street & Bird Avenue","id": "node/6739935092",
 1 "name": "West San Carlos Street & Montgomery Street","id": "node/6739935094",
 2 "name": "West San Carlos Street & Grand Avenue","id": "node/6712927093",
 2 "name": "West San Carlos Street & Meridian Avenue","id": "node/6712922775",
@@ -31,7 +32,7 @@ const toCross = 1;  // how long does it take to cross Stevens Creek Blvd?
 
 const earlyBus: Map<string, Edge[]> = new Map([
   // WB
-  ['node/6739935094', [{id: 'node/??????????', cost: toCross}, {id: 'node/6712922775', cost: 3}]],  // Montgomery -> Grand
+  ['node/6739935094', [{id: 'node/6739935092', cost: toCross}, {id: 'node/6712922775', cost: 3}]],  // Montgomery -> Grand
   ['node/6712922775', [{id: 'node/6712927093', cost: toCross}, {id: 'node/6712917182', cost: 2}]],  // Grand -> Bascom
   ['node/6712917182', [{id: 'node/6712917181', cost: toCross}, {id: 'node/6739935096', cost: 4}]],  // Bascom -> Satanta Row
   ['node/6739935096', [{id: 'node/6739935098', cost: toCross}, {id: 'node/6739935100', cost: 3}]],  // Santana Row -> Cypress
@@ -52,32 +53,34 @@ const earlyBus: Map<string, Edge[]> = new Map([
   ['node/6712917178', [{id: 'node/6739935100', cost: toCross}, {id: 'node/6739935098', cost: 3}]],
   ['node/6739935098', [{id: 'node/6739935096', cost: toCross}, {id: 'node/6712917181', cost: 4}]],
   ['node/6712917181', [{id: 'node/6712917182', cost: toCross}, {id: 'node/6712927093', cost: 2}]],
-  ['node/6712927093', [{id: 'node/6712922775', cost: toCross}, {id: 'node/??????????', cost: 3}]],
-  ['node/??????????', [{id: 'node/6739935094', cost: toCross}]],
+  ['node/6712927093', [{id: 'node/6712922775', cost: toCross}, {id: 'node/6739935092', cost: 3}]],
+  ['node/6739935092', [{id: 'node/6739935094', cost: toCross}]],
 ]);
 const peakBus = new Map([
   // WB
-  ['node/6739935094', [{id: 'node/6712922775', cost: 7},]],
-  ['node/6712922775', [{id: 'node/6712917182', cost: 6},]],
-  ['node/6712917182', [{id: 'node/6739935096', cost: 5},]],
-  ['node/6739935096', [{id: 'node/6739935100', cost: 8},]],
-  ['node/6739935100', [{id: 'node/6739935102', cost: 3},]],
-  ['node/6739935102', [{id: 'node/6739935108', cost: 4},]],
-  ['node/6739935108', [{id: 'node/6732665922', cost: 3},]],
-  ['node/6732665922', [{id: 'node/6739935122', cost: 3},]],
-  ['node/6739935122', [{id: 'node/6739935116', cost: 3},]],
-  ['node/6739935116', [{id: 'node/6710495366', cost: 2},]],
+  ['node/6739935094', [{id: 'node/6739935092', cost: toCross}, {id: 'node/6712922775', cost: 7}]],  // Montgomery -> Grand
+  ['node/6712922775', [{id: 'node/6712927093', cost: toCross}, {id: 'node/6712917182', cost: 6}]],  // Grand -> Bascom
+  ['node/6712917182', [{id: 'node/6712917181', cost: toCross}, {id: 'node/6739935096', cost: 5}]],  // Bascom -> Satanta Row
+  ['node/6739935096', [{id: 'node/6739935098', cost: toCross}, {id: 'node/6739935100', cost: 8}]],  // Santana Row -> Cypress
+  ['node/6739935100', [{id: 'node/6712917178', cost: toCross}, {id: 'node/6739935102', cost: 3}]],  // Cypress -> Keily (G)
+  ['node/6739935102', [{id: 'node/6739935104', cost: toCross}, {id: 'node/6739935108', cost: 4}]],  // Keily (G) -> Cabot
+  ['node/6739935108', [{id: 'node/6739935106', cost: toCross}, {id: 'node/6732665922', cost: 3}]],  // Cabot -> Stern
+  ['node/6732665922', [{id: 'node/6732665924', cost: toCross}, {id: 'node/6739935112', cost: 3}]],  // Stern -> Wolf (D)
+  ['node/6739935112', [{id: 'node/6739935110', cost: toCross}, {id: 'node/6739935116', cost: 3}]],  // Wolf (D) -> De Anza
+  ['node/6739935116', [{id: 'node/6739935114', cost: toCross}, {id: 'node/6710495366', cost: 2}]],  // De Anza -> Stelling (E)
+  ['node/6710495366', [{id: 'node/6739935090', cost: toCross}]],
   // EB
-  ['node/6739935090', [{id: 'node/6739935144', cost: 2},]],
-  ['node/6739935144', [{id: 'node/6739935110', cost: 3},]],
-  ['node/6739935110', [{id: 'node/6732665924', cost: 3},]],
-  ['node/6732665924', [{id: 'node/6739935106', cost: 3},]],
-  ['node/6739935106', [{id: 'node/6739935104', cost: 4},]],
-  ['node/6739935104', [{id: 'node/6712917178', cost: 3},]],
-  ['node/6712917178', [{id: 'node/6739935098', cost: 8},]],
-  ['node/6739935098', [{id: 'node/6712917181', cost: 5},]],
-  ['node/6712917181', [{id: 'node/6712927093', cost: 6},]],
-  ['node/6712927093', [{id: 'node/??????????', cost: 7},]],
+  ['node/6739935090', [{id: 'node/6710495366', cost: toCross}, {id: 'node/6739935144', cost: 2}]],
+  ['node/6739935144', [{id: 'node/6739935116', cost: toCross}, {id: 'node/6739935110', cost: 3}]],
+  ['node/6739935110', [{id: 'node/6739935112', cost: toCross}, {id: 'node/6732665924', cost: 3}]],
+  ['node/6732665924', [{id: 'node/6732665922', cost: toCross}, {id: 'node/6739935106', cost: 3}]],
+  ['node/6739935106', [{id: 'node/6739935108', cost: toCross}, {id: 'node/6739935104', cost: 4}]],
+  ['node/6739935104', [{id: 'node/6739935102', cost: toCross}, {id: 'node/6712917178', cost: 3}]],
+  ['node/6712917178', [{id: 'node/6739935100', cost: toCross}, {id: 'node/6739935098', cost: 8}]],
+  ['node/6739935098', [{id: 'node/6739935096', cost: toCross}, {id: 'node/6712917181', cost: 5}]],
+  ['node/6712917181', [{id: 'node/6712917182', cost: toCross}, {id: 'node/6712927093', cost: 6}]],
+  ['node/6712927093', [{id: 'node/6712922775', cost: toCross}, {id: 'node/6739935092', cost: 7}]],
+  ['node/6739935092', [{id: 'node/6739935094', cost: toCross}]],
 ]);
 
 export const alternatives = new Map<string, Map<string, Edge[]>>([

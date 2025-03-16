@@ -3,7 +3,7 @@ import Map from 'ol/Map.js';
 import van from 'vanjs-core';
 import 'assets/style.css';
 import * as layers from 'layers';
-import * as roads from 'roads';
+// import * as roads from 'roads';
 import * as slider from 'slider';
 import * as isochrone from 'isochrone';
 import * as walkShed from 'walkShed';
@@ -15,7 +15,7 @@ const setupSCMap = (mapEl: HTMLElement): Map => {
   const map = new Map({
     layers: [
       layers.osmRaster,
-      roads.scRoadGraph,
+      //roads.getLayer().layer,
       walkShed.walkShedLayer,
       busstops.layer,
     ],

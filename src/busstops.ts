@@ -10,7 +10,6 @@ import busStopSource from 'assets/busstops-geojson.json';
 import { Text } from 'ol/style.js';
 import { StyleFunction } from 'ol/style/Style.js';
 import * as style from 'style';
-import * as roads from 'roads';
 import * as isochrone from 'isochrone';
 import * as walkShed from 'walkShed';
 
@@ -48,26 +47,20 @@ const busSelect = new Select({
   layers: [ layer ],
   style: selected
 });
-const roadSelect = new Select({
-  condition: click,
-  layers: [ roads.scRoadGraph ],
-  style: selected
-});
 
 export const addSelectEvent = (map: OlMap) => {
   map.addInteraction(busSelect);
-  map.addInteraction(roadSelect);
   busSelect.on(["select"], (event) => {
     if (!event.selected || event.selected.length === 0) {
       return;
     }
     const selected = event.selected[0] as Feature<Point>;
+    console.log(selected);
     const geometry = selected.getGeometry();
     if (geometry) {
       const walkshed = isochrone.calcIsochrone(geometry.getFirstCoordinate(), ISOCHRONE_TIME_SECONDS);
       walkShed.setWalkShed(Array.from(walkshed), 'walkshed');
     }
-    console.log(selected[0]);
   });
 }
 
