@@ -1,18 +1,36 @@
 import {Fill, Stroke, Style, Circle} from 'ol/style.js';
 import { METERS_PER_UNIT } from 'ol/proj/epsg4326.js'
 
+const COLORS = {
+  BLACK: 'rgba(0, 0, 0, 1)',
+  RED: 'rgba(255, 0, 0, 1)',
+  GRAY: 'rgba(150, 150, 150, 1)',
+  PURPLE: 'rgba(123, 50, 148, 1)',
+  BLUE: 'rgba(10, 150, 200, 1)',
+  PLUM: 'rgba(123, 50, 148, 0.5)',
+  ORANGE: 'rgba(220, 165, 0, 1)',
+} as const;
 
+const getPixelMeters = (meters: number, resolution: number): number =>
+  Math.max(meters / (resolution * METERS_PER_UNIT), 2);
 
-export const outline = new Stroke({ color: 'rgba(45, 45, 45, 0.1)' });
-export const mainRoad = new Style({
-  stroke: new Stroke({
-    color: 'rgba(123,50,148, 0.5)',
-    width: 3,
-  })
-});
+const createCircleStyle = (
+  meters: number,
+  resolution: number,
+  fillColor: string = COLORS.ORANGE,
+  strokeColor: string = COLORS.BLACK
+): Style => 
+  new Style({
+    image: new Circle({
+      radius: getPixelMeters(meters, resolution),
+      stroke: new Stroke({ color: strokeColor, width: 1 }),
+      fill: new Fill({ color: fillColor }),
+    }),
+  });
+
 export const road = new Style({
     stroke: new Stroke({
-      color: 'rgba(194,165,207, 0.5)',
+      color: COLORS.GRAY,
       width: 2,
   })
 });
@@ -21,49 +39,18 @@ export const gridRoad = (meters: number, resolution: number) => {
   const pixel_meters = meters / meters_per_pixel;
   return new Style({
     stroke: new Stroke({
-      color: 'rgba(166,219,160, 1)',
+      color: COLORS.BLUE,
       width: Math.max(pixel_meters, 2)
     })
   });
 };
 
-export const circle = (meters: number, resolution: number) => {
-  const meters_per_pixel = resolution * METERS_PER_UNIT;
-  const pixel_meters = meters / meters_per_pixel;
-  return new Style({
-    image: new Circle({
-        //radius: Math.min(meters/resolution, 3),
-        radius: Math.max(pixel_meters, 3),
-        fill: new Fill({
-          color: 'rgba(166,219,160, 0.9)'
-        }),
-    }),
-  });
-};
+export const circle = (
+  meters: number, 
+  resolution: number
+) => createCircleStyle(meters, resolution, COLORS.ORANGE, COLORS.BLACK);
 
-export const bldg = new Style({
-    stroke: new Stroke({color: 'rgba(200, 100, 150, 0.5)'}),
-    fill: new Fill({color: 'rgb(100, 200, 150)'
-  })
-});
-
-export const selected = new Style({
-    stroke: new Stroke({color: 'rgba(20, 220, 110, 0.5)', width: 3}),
-    fill: new Fill({color: 'rgba(10, 200, 150, 1)'}),
-    image: new Circle({
-        radius: 5,
-        fill: new Fill({
-            color: 'rgba(0,136,55, 0.5)'
-        }),
-    }),
-});
-
-export const walk = new Style({
-    stroke: new Stroke({color: 'rgba(123,50,148, 1)', width: 3}),
-    fill: new Fill({color: 'rgba(10, 200, 150, 0.2)'})
-});
-
-export const walkEdge = new Style({
-    stroke: new Stroke({color: 'rgba(0,136,55, 1)', width: 2}),
-    fill: new Fill({color: 'rgba(10, 200, 150, 0.2)'})
-});
+export const selected = (
+  meters: number, 
+  resolution: number
+) => createCircleStyle(meters, resolution, COLORS.RED, COLORS.BLACK);
