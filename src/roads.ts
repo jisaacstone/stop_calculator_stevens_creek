@@ -9,8 +9,6 @@ import * as turf from '@turf/turf';
 import scGeojson from 'assets/sc-geojson.ts';
 import * as style from 'style';
 
-// @ts-expect-error unused variable 
-const mainRoads = ['West San Carlos Street', 'Stevens Creek Boulevard'];
 const format = new GeoJSON<Feature<LineString>>();
 
 export const getLayer = (() => {
