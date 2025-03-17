@@ -84,7 +84,7 @@ const peakBus = new Map([
   ['node/6739935092', {cross: {id: 'node/6739935094', cost: toCross}}],
 ]);
 
-export const alternatives = new Map<string, Map<string, EdgeMap>>([
-  ['early', earlyBus],
-  ['peak', peakBus],
-]);
+export const alternatives = {
+  early: earlyBus,
+  peak: peakBus
+} as const;
