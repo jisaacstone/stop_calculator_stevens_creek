@@ -1,14 +1,27 @@
+// OpenLayers Core Imports
+import { default as OlMap } from 'ol/Map.js';
+import { Vector as VectorLayer } from 'ol/layer.js';
 import VectorSource from 'ol/source/Vector.js';
+
+// Geometry Imports
 import { MultiPoint, LineString, Point } from 'ol/geom.js';
+
+// Format Imports
+import { GeoJSON } from 'ol/format.js';
+
+// Interaction Imports
 import { default as Select } from 'ol/interaction/Select.js';
 import { click } from 'ol/events/condition.js';
-import { GeoJSON } from 'ol/format.js';
-import { default as OlMap } from 'ol/Map.js';
+
+// Feature and Style Imports
 import Feature from 'ol/Feature.js';
-import { Vector as VectorLayer} from 'ol/layer.js';
-import busStopSource from 'assets/busstops-geojson.json';
 import { Text } from 'ol/style.js';
 import { StyleFunction } from 'ol/style/Style.js';
+
+// Asset Imports
+import busStopSource from 'assets/busstops-geojson.json';
+
+// Local Module Imports
 import * as style from 'style';
 import * as isochrone from 'isochrone';
 import * as walkShed from 'walkShed';
@@ -17,7 +30,7 @@ type StopLink = { distance: number, id: number };
 type StopInfo = { feature: Feature, next: StopLink, prev: StopLink, opposite: number | undefined };
 
 const SECONDS_PER_MINUTE = 60;
-const ISOCHRONE_TIME_SECONDS = 45 * SECONDS_PER_MINUTE;  // 300 metres was set before
+const ISOCHRONE_TIME_SECONDS = 5 * SECONDS_PER_MINUTE;  // 300 metres was set before
 const rapidBusNum = /\b523\b/;
 const GeoJsonFormat = new GeoJSON<Feature<Point>>();
 
@@ -37,11 +50,12 @@ export const layer = new VectorLayer({
   }
 });
 
-const selected: StyleFunction = ((f: Feature) => {
-  const ss = style.selected.clone();
+const selected: StyleFunction = ((f: Feature, r: number) => {
+  const ss = style.selected(15, r);
   ss.setText(new Text({text: f.get('name'), font: '12px Calibri,sans-serif'}));
   return ss;
 }) as StyleFunction;
+
 const busSelect = new Select({
   condition: click,
   layers: [ layer ],

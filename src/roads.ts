@@ -9,6 +9,7 @@ import * as turf from '@turf/turf';
 import scGeojson from 'assets/sc-geojson.ts';
 import * as style from 'style';
 
+// @ts-expect-error unused variable 
 const mainRoads = ['West San Carlos Street', 'Stevens Creek Boulevard'];
 const format = new GeoJSON<Feature<LineString>>();
 
@@ -24,17 +25,14 @@ export const getLayer = (() => {
 
       const layer = new VectorLayer({
         source,
-        style: (feature) => {
-          if (mainRoads.includes(feature.get('name')) ) {
-            return style.road;
-          }
-          return style.bldg;
-        },
+        style: style.road
       });
+
       Object.assign(cache, { setup: true, source, layer });
+
       return { source, layer };
     } else {
-      return { source: cache['source'], layer: cache['layer'] };
+        return { source: cache['source'], layer: cache['layer'] };
     }
   };
   return setup;
