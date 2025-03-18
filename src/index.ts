@@ -37,7 +37,7 @@ const setupSCMap = (mapEl: HTMLElement): Map => {
 const setupInputs = (inputEl: HTMLElement) => {
   const journeyTimeSlider = ui.makeInput(
     { name: 'time', units: 'min' },
-    { min: 5, max: 60, step: 5 },
+    { min: 5, max: 30, step: 5 },
     state.journeyTime,
   );
   const transitAlternativeSelect = ui.makeSelect(
@@ -49,18 +49,20 @@ const setupInputs = (inputEl: HTMLElement) => {
     journeyTimeSlider,
     transitAlternativeSelect
   );
+  return [journeyTimeSlider, transitAlternativeSelect];
 };
 
 const main = () => {
   const mapEl = document.getElementById('stevenscreek');
+  const inputEl = document.getElementById('input');
+  let inputs: HTMLElement[] = [];
+  if (inputEl !== null) {
+    inputs = setupInputs(inputEl);
+  }
   if (mapEl !== null) {
     const map = setupSCMap(mapEl);
     isochrone.loadNLD();
-    busstops.addSelectEvent(map);
-  }
-  const inputEl = document.getElementById('input');
-  if (inputEl !== null) {
-    setupInputs(inputEl);
+    busstops.addSelectEvent(map, inputs);
   }
 };
 

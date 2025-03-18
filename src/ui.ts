@@ -34,8 +34,8 @@ export const makeSelect = <Typ extends string>(
   stateVar: State<Typ>
 ) => {
   const sel = select(
-    {class: "select", oninput: e => stateVar.val = e.target.val},
-    options.map(o => option({selected: () => stateVar.val === o}, o))
+    {class: "select", oninput: e => stateVar.val = e.target.value},
+    options.map(o => option({value: o, selected: () => stateVar.val === o}, o))
   )
   return sel
 };

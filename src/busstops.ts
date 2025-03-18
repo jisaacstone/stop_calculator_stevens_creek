@@ -66,9 +66,8 @@ const busSelect = new Select({
   style: selected
 });
 
-const getNextStop = (stopId: string, stopType: 'next' | 'cross', busType: keyof typeof stopTimings = "early") => {
-  const timingEntry = stopTimings[busType].get(stopId);
-  console.log("getNextStop ", timingEntry);
+const getNextStop = (stopId: string, stopType: 'next' | 'cross') => {
+  const timingEntry = stopTimings[state.alternatives.val].get(stopId);
   if (timingEntry === undefined || timingEntry[stopType] === undefined) {
     console.warn(`No next stop found for stop ID ${stopId}`);
     return undefined;
@@ -85,8 +84,6 @@ const processSelectedStop = (selected: Feature<Point>) => {
 
   while (queue.length > 0) {
     const { stop, remainingTime } = queue.shift()!;
-    console.log(`Processing stop ${stop} with remaining time ${remainingTime} queue.length: ${queue.length}`);
-
     if (visitedStops.has(stop)) continue;
     visitedStops.add(stop);
 
@@ -120,14 +117,20 @@ const processSelectedStop = (selected: Feature<Point>) => {
   walkShed.setWalkShed(Array.from(wsSegments), 'walkshed');
 };
 
-export const addSelectEvent = (map: OlMap) => {
+const onBusStopSelect = () => {
+  const selectedFeatures = busSelect.getFeatures().getArray();
+  console.log('selected', selectedFeatures);
+  nextBusCollection.clear();
+  if (!selectedFeatures || selectedFeatures.length === 0) {
+    return;
+  }
+  const selected = selectedFeatures[0] as Feature<Point>;
+  processSelectedStop(selected);
+};
+
+export const addSelectEvent = (map: OlMap, toListen: HTMLElement[]) => {
   map.addInteraction(busSelect);
-  busSelect.on(["select"], (event) => {
-    nextBusCollection.clear();
-    if (!event.selected || event.selected.length === 0) {
-      return;
-    }
-    const selected = event.selected[0] as Feature<Point>;
-    processSelectedStop(selected);
-  });
+  busSelect.on(["select"], onBusStopSelect);
+  // When UI (time or transit inputs) change we recaculate the walkshed
+  toListen.forEach(e => e.addEventListener('change', () => onBusStopSelect()), false);
 }
