@@ -27,12 +27,8 @@ import * as style from 'style';
 import * as isochrone from 'isochrone';
 import * as walkShed from 'walkShed';
 
-type StopLink = { distance: number, id: number };
-type StopInfo = { feature: Feature, next: StopLink, prev: StopLink, opposite: number | undefined };
-
 const SECONDS_PER_MINUTE = 60;
 const ISOCHRONE_TIME_SECONDS = 10 * SECONDS_PER_MINUTE;  // 300 metres was set before
-const rapidBusNum = /\b523\b/;
 const GeoJsonFormat = new GeoJSON<Feature<Point>>();
 const nextBusCollection = new Set<string>();
 const source = new VectorSource({
@@ -85,7 +81,7 @@ const processSelectedStop = (selected: Feature<Point>) => {
   const queue: { stop: string; remainingTime: number }[] = [
     { stop: selected.getId(), remainingTime: ISOCHRONE_TIME_SECONDS }
   ];
-  let wsSegments = new Set<[[number, number], [number, number]]>();
+  const wsSegments = new Set<[[number, number], [number, number]]>();
 
   while (queue.length > 0) {
     const { stop, remainingTime } = queue.shift()!;
@@ -108,7 +104,6 @@ const processSelectedStop = (selected: Feature<Point>) => {
     if (crossStop) {
       nextBusCollection.add(crossStop.id);
       const travelTime = crossStop.cost * SECONDS_PER_MINUTE; // Cost in seconds
-      console.log(`rt ${remainingTime} travelTime ${travelTime}`);
       if (remainingTime >= travelTime) {
         queue.push({ stop: crossStop.id, remainingTime: remainingTime - travelTime });
       }
@@ -117,7 +112,6 @@ const processSelectedStop = (selected: Feature<Point>) => {
     if (nextStop) {
       nextBusCollection.add(nextStop.id);
       const travelTime = nextStop.cost * SECONDS_PER_MINUTE; // Cost in seconds
-      console.log(`rt ${remainingTime} travelTime ${travelTime}`);
       if (remainingTime >= travelTime) {
         queue.push({ stop: nextStop?.id, remainingTime: remainingTime - travelTime });
       }
@@ -152,13 +146,3 @@ export const addSelectEvent = (map: OlMap) => {
     */
   });
 }
-
-// calculate distance by drawing a line and measuring it's length
-const dist = (f1: Feature<MultiPoint>, f2: Feature<MultiPoint>): number => {
-  const p1 = f1.getGeometry()?.getFirstCoordinate();
-  const p2 = f2.getGeometry()?.getFirstCoordinate();
-  if (p1 && p2) {
-    return new LineString([p1, p2]).getLength();
-  }
-  throw "no point";
-};
