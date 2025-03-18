@@ -14,7 +14,6 @@ const nld = fetchNLD();
 */
 
 type Link = { id: string, source: number, target: number, length: number };
-
 type Segment = [[number, number], [number, number]];
 type Entry = { nodeId: number, remaining: number };
 

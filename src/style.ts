@@ -45,10 +45,7 @@ export const gridRoad = (meters: number, resolution: number) => {
   });
 };
 
-export const circle = (
-  meters: number, 
-  resolution: number
-) => createCircleStyle(meters, resolution, COLORS.ORANGE, COLORS.BLACK);
+export const circle = createCircleStyle;
 
 export const selected = (
   meters: number, 
