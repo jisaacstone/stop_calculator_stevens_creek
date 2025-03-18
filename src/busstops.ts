@@ -31,7 +31,7 @@ type StopLink = { distance: number, id: number };
 type StopInfo = { feature: Feature, next: StopLink, prev: StopLink, opposite: number | undefined };
 
 const SECONDS_PER_MINUTE = 60;
-const ISOCHRONE_TIME_SECONDS = 5 * SECONDS_PER_MINUTE;  // 300 metres was set before
+const ISOCHRONE_TIME_SECONDS = 10 * SECONDS_PER_MINUTE;  // 300 metres was set before
 const rapidBusNum = /\b523\b/;
 const GeoJsonFormat = new GeoJSON<Feature<Point>>();
 const nextBusCollection = new Set<string>();
@@ -70,16 +70,60 @@ const busSelect = new Select({
   style: selected
 });
 
-const getNextStop = (stopId: string, busType: keyof typeof stopTimings = "early") => {
+const getNextStop = (stopId: string, stopType: 'next' | 'cross', busType: keyof typeof stopTimings = "early") => {
   const timingEntry = stopTimings[busType].get(stopId);
   console.log("getNextStop ", timingEntry);
-  if (timingEntry === undefined) {
+  if (timingEntry === undefined || timingEntry[stopType] === undefined) {  
     console.warn(`No next stop found for stop ID ${stopId}`);
     return undefined;
   }
-  const nextStopId = timingEntry[1].id;
-  console.log(`Next stop for stop ID ${stopId}: ${nextStopId}`);
-  return nextStopId;
+  return timingEntry[stopType];
+};
+
+const processSelectedStop = (selected: Feature<Point>) => {
+  const visitedStops = new Set<string>();
+  const queue: { stop: string; remainingTime: number }[] = [
+    { stop: selected.getId(), remainingTime: ISOCHRONE_TIME_SECONDS }
+  ];
+  let wsSegments = new Set<[[number, number], [number, number]]>();
+
+  while (queue.length > 0) {
+    const { stop, remainingTime } = queue.shift()!;
+    console.log(`Processing stop ${stop} with remaining time ${remainingTime} queue.length: ${queue.length}`);
+
+    if (visitedStops.has(stop)) continue;
+    visitedStops.add(stop);
+
+    const geometry = source.getFeatureById(stop)?.getGeometry();
+    if (geometry) {
+      const walkshed = isochrone.calcIsochrone(
+        geometry.getFirstCoordinate(),
+        remainingTime
+      );
+      walkshed.forEach((segment) => wsSegments.add(segment));
+    }
+
+    // Add accessible stops to the queue if there’s enough remaining time
+    const crossStop = getNextStop(stop, 'cross');
+    if (crossStop) {
+      nextBusCollection.add(crossStop.id);
+      const travelTime = crossStop.cost * SECONDS_PER_MINUTE; // Cost in seconds
+      console.log(`rt ${remainingTime} travelTime ${travelTime}`);
+      if (remainingTime >= travelTime) {
+        queue.push({ stop: crossStop.id, remainingTime: remainingTime - travelTime });
+      }
+    }
+    const nextStop = getNextStop(stop, 'next');
+    if (nextStop) {
+      nextBusCollection.add(nextStop.id);
+      const travelTime = nextStop.cost * SECONDS_PER_MINUTE; // Cost in seconds
+      console.log(`rt ${remainingTime} travelTime ${travelTime}`);
+      if (remainingTime >= travelTime) {
+        queue.push({ stop: nextStop?.id, remainingTime: remainingTime - travelTime });
+      }
+    }
+  }
+  walkShed.setWalkShed(Array.from(wsSegments), 'walkshed');
 };
 
 export const addSelectEvent = (map: OlMap) => {
@@ -90,6 +134,9 @@ export const addSelectEvent = (map: OlMap) => {
       return;
     }
     const selected = event.selected[0] as Feature<Point>;
+    processSelectedStop(selected);
+    /*
+    // TODO delete
     console.log(selected);
     const geometry = selected.getGeometry();
     if (geometry) {
@@ -102,6 +149,7 @@ export const addSelectEvent = (map: OlMap) => {
     if (nextStopId !== undefined) {
       nextBusCollection.add(nextStopId);
     }
+    */
   });
 }
 
@@ -114,58 +162,3 @@ const dist = (f1: Feature<MultiPoint>, f2: Feature<MultiPoint>): number => {
   }
   throw "no point";
 };
-
-// TODO: rewrite after getting relation information from the overpass call
-export const lineInfo = (() => {
-  // cache the result here so we only calculate once
-  const infoMap = new Map<number, StopInfo>();
-  // regex hard-coded for line 23
-  let calculated = false;
-
-  const calculat = (): boolean => {
-    const opposing = new Map<string, number>();
-    const sorted: Feature<MultiPoint>[] = (
-      (busStopSource.getFeatures() as Feature<MultiPoint>[])
-      .filter((feature: Feature) => feature.get('Routes')?.match(rapidBusNum))
-      .sort((f1: Feature, f2: Feature) => f1.get('RTID') - f2.get('RTID'))
-    );
-    let current = sorted[sorted.length - 1];
-    let prev = sorted[sorted.length - 2];
-    for (const next of sorted) {
-      const id = current.get('FID');
-      const stopName = current.get('StopName');
-      const info: StopInfo = {
-        feature: current,
-        next: { id: next.get('FID'), distance: dist(current, next) },
-        prev: { id: prev.get('FID'), distance: dist(prev, current) },
-        opposite: undefined
-      };
-      // check stop opposite by stop name.
-      // this is imperfect as they do not always match.
-      // perhaps checking cloastest by distance is better?
-      if (stopName && opposing.has(stopName)) {
-        info.opposite = opposing.get(stopName);
-        const o = infoMap.get(opposing.get(stopName) || 0)
-        if (o) {
-          o.opposite = id;
-        }
-      } else {
-        opposing.set(stopName, id);
-      }
-      infoMap.set(id, info);
-      prev = current;
-      current = next;
-    }
-    return true;
-  };
-
-  // return cached or calculate
-  return () => {
-    if (!calculated) {
-      if (calculat()) {
-        calculated = true;
-      }
-    }
-    return infoMap;
-  };
-})();
