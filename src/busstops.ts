@@ -26,9 +26,9 @@ import { alternatives as stopTimings } from 'stopTimings.ts';
 import * as style from 'style';
 import * as isochrone from 'isochrone';
 import * as walkShed from 'walkShed';
+import * as state from 'state';
 
 const SECONDS_PER_MINUTE = 60;
-const ISOCHRONE_TIME_SECONDS = 10 * SECONDS_PER_MINUTE;  // 300 metres was set before
 const GeoJsonFormat = new GeoJSON<Feature<Point>>();
 const nextBusCollection = new Set<string>();
 const source = new VectorSource({
@@ -69,7 +69,7 @@ const busSelect = new Select({
 const getNextStop = (stopId: string, stopType: 'next' | 'cross', busType: keyof typeof stopTimings = "early") => {
   const timingEntry = stopTimings[busType].get(stopId);
   console.log("getNextStop ", timingEntry);
-  if (timingEntry === undefined || timingEntry[stopType] === undefined) {  
+  if (timingEntry === undefined || timingEntry[stopType] === undefined) {
     console.warn(`No next stop found for stop ID ${stopId}`);
     return undefined;
   }
@@ -79,7 +79,7 @@ const getNextStop = (stopId: string, stopType: 'next' | 'cross', busType: keyof 
 const processSelectedStop = (selected: Feature<Point>) => {
   const visitedStops = new Set<string>();
   const queue: { stop: string; remainingTime: number }[] = [
-    { stop: selected.getId(), remainingTime: ISOCHRONE_TIME_SECONDS }
+    { stop: selected.getId() as string, remainingTime: state.journeyTime.val * SECONDS_PER_MINUTE }
   ];
   const wsSegments = new Set<[[number, number], [number, number]]>();
 

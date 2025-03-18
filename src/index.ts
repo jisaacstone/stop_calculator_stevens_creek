@@ -4,12 +4,11 @@ import van from 'vanjs-core';
 import 'assets/style.css';
 import * as layers from 'layers';
 import * as roads from 'roads';
-import * as slider from 'slider';
+import * as ui from 'ui';
 import * as isochrone from 'isochrone';
 import * as walkShed from 'walkShed';
 import * as busstops from 'busstops';
-
-const distance = van.state(2);
+import * as state from 'state';
 
 const setupSCMap = (mapEl: HTMLElement): Map => {
   const map = new Map({
@@ -27,18 +26,29 @@ const setupSCMap = (mapEl: HTMLElement): Map => {
     }),
   });
 
-  map.getView().fit(busstops.layer.getSource().getExtent());
+  const src = busstops.layer.getSource();
+  if (src) {
+    map.getView().fit(src.getExtent());
+  }
 
   return map;
 };
 
 const setupInputs = (inputEl: HTMLElement) => {
-  const slide = slider.makeInput(
-    { name: 'distance', units: 'm' },
-    { min: 1, max: 20, step: 2 },
-    distance,
+  const journeyTimeSlider = ui.makeInput(
+    { name: 'time', units: 'min' },
+    { min: 5, max: 60, step: 5 },
+    state.journeyTime,
   );
-  van.add(inputEl, slide);
+  const transitAlternativeSelect = ui.makeSelect(
+    ['early', 'peak'],
+    state.alternatives
+  );
+  van.add(
+    inputEl,
+    journeyTimeSlider,
+    transitAlternativeSelect
+  );
 };
 
 const main = () => {
