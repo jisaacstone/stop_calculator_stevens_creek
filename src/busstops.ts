@@ -129,20 +129,5 @@ export const addSelectEvent = (map: OlMap) => {
     }
     const selected = event.selected[0] as Feature<Point>;
     processSelectedStop(selected);
-    /*
-    // TODO delete
-    console.log(selected);
-    const geometry = selected.getGeometry();
-    if (geometry) {
-      const walkshed = isochrone.calcIsochrone(geometry.getFirstCoordinate(), ISOCHRONE_TIME_SECONDS);
-      walkShed.setWalkShed(Array.from(walkshed), 'walkshed');
-    }
-
-    // Get next bus stop from stopTimings
-    const nextStopId = getNextStop(selected.getId() as string);
-    if (nextStopId !== undefined) {
-      nextBusCollection.add(nextStopId);
-    }
-    */
   });
 }
