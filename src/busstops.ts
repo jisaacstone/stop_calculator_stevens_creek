@@ -4,7 +4,7 @@ import { Vector as VectorLayer } from 'ol/layer.js';
 import VectorSource from 'ol/source/Vector.js';
 
 // Geometry Imports
-import { MultiPoint, LineString, Point } from 'ol/geom.js';
+import { Point } from 'ol/geom.js';
 
 // Format Imports
 import { GeoJSON } from 'ol/format.js';
