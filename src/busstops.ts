@@ -150,5 +150,6 @@ export const addSelectEvent = (map: OlMap, toListen: HTMLElement[]) => {
   map.addInteraction(busSelect);
   busSelect.on(["select"], onBusStopSelect);
   // When UI (time or transit inputs) change we recalculate the walkshed
+>>>>>>> c50ad1d (inputs)
   toListen.forEach(e => e.addEventListener('change', () => onBusStopSelect()), false);
 }
