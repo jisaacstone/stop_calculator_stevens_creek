@@ -1,6 +1,6 @@
 import { State } from 'vanjs-core';
 import van from 'vanjs-core';
-const { div, input } = van.tags;
+const { div, input, select, option } = van.tags;
 
 export const makeInput = (
   display: {name: string, units: string},
@@ -27,4 +27,15 @@ export const makeInput = (
       div(display.units),
     )
   );
+};
+
+export const makeSelect = <Typ extends string>(
+  options: Typ[],
+  stateVar: State<Typ>
+) => {
+  const sel = select(
+    {class: "select", oninput: e => stateVar.val = e.target.value},
+    options.map(o => option({value: o, selected: () => stateVar.val === o}, o))
+  )
+  return sel
 };

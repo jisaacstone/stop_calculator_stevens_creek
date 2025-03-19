@@ -26,9 +26,9 @@ import { alternatives as stopTimings } from 'stopTimings.ts';
 import * as style from 'style';
 import * as isochrone from 'isochrone';
 import * as walkShed from 'walkShed';
+import * as state from 'state';
 
 const SECONDS_PER_MINUTE = 60;
-const ISOCHRONE_TIME_SECONDS = 10 * SECONDS_PER_MINUTE;  // 300 metres was set before
 const GeoJsonFormat = new GeoJSON<Feature<Point>>();
 const nextBusCollection = new Set<string>();
 const source = new VectorSource({
@@ -66,10 +66,9 @@ const busSelect = new Select({
   style: selected
 });
 
-const getNextStop = (stopId: string, stopType: 'next' | 'cross', busType: keyof typeof stopTimings = "early") => {
-  const timingEntry = stopTimings[busType].get(stopId);
-  console.log("getNextStop ", timingEntry);
-  if (timingEntry === undefined || timingEntry[stopType] === undefined) {  
+const getNextStop = (stopId: string, stopType: 'next' | 'cross') => {
+  const timingEntry = stopTimings[state.alternatives.val].get(stopId);
+  if (timingEntry === undefined || timingEntry[stopType] === undefined) {
     console.warn(`No next stop found for stop ID ${stopId}`);
     return undefined;
   }
@@ -79,14 +78,12 @@ const getNextStop = (stopId: string, stopType: 'next' | 'cross', busType: keyof 
 const processSelectedStop = (selected: Feature<Point>) => {
   const visitedStops = new Set<string>();
   const queue: { stop: string; remainingTime: number }[] = [
-    { stop: selected.getId(), remainingTime: ISOCHRONE_TIME_SECONDS }
+    { stop: selected.getId() as string, remainingTime: state.journeyTime.val * SECONDS_PER_MINUTE }
   ];
   const wsSegments = new Set<[[number, number], [number, number]]>();
 
   while (queue.length > 0) {
     const { stop, remainingTime } = queue.shift()!;
-    console.log(`Processing stop ${stop} with remaining time ${remainingTime} queue.length: ${queue.length}`);
-
     if (visitedStops.has(stop)) continue;
     visitedStops.add(stop);
 
@@ -120,14 +117,20 @@ const processSelectedStop = (selected: Feature<Point>) => {
   walkShed.setWalkShed(Array.from(wsSegments), 'walkshed');
 };
 
-export const addSelectEvent = (map: OlMap) => {
+const onBusStopSelect = () => {
+  const selectedFeatures = busSelect.getFeatures().getArray();
+  console.log('selected', selectedFeatures);
+  nextBusCollection.clear();
+  if (!selectedFeatures || selectedFeatures.length === 0) {
+    return;
+  }
+  const selected = selectedFeatures[0] as Feature<Point>;
+  processSelectedStop(selected);
+};
+
+export const addSelectEvent = (map: OlMap, toListen: HTMLElement[]) => {
   map.addInteraction(busSelect);
-  busSelect.on(["select"], (event) => {
-    nextBusCollection.clear();
-    if (!event.selected || event.selected.length === 0) {
-      return;
-    }
-    const selected = event.selected[0] as Feature<Point>;
-    processSelectedStop(selected);
-  });
+  busSelect.on(["select"], onBusStopSelect);
+  // When UI (time or transit inputs) change we recaculate the walkshed
+  toListen.forEach(e => e.addEventListener('change', () => onBusStopSelect()), false);
 }
