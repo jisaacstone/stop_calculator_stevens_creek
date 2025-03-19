@@ -57,7 +57,7 @@ const earlyBus: Map<string, EdgeMap> = new Map([
   ['node/6712927093', {cross: {id: 'node/6712922775', cost: toCross}, next: {id: 'node/6739935092', cost: 3}}],
   ['node/6739935092', {cross: {id: 'node/6739935094', cost: toCross}}],
 ]);
-const peakBus = new Map([
+const peakBus: Map<string, EdgeMap> = new Map([
   // WB
   ['node/6739935094', {cross: {id: 'node/6739935092', cost: toCross}, next: {id: 'node/6712922775', cost: 7}}],  // Montgomery -> Grand
   ['node/6712922775', {cross: {id: 'node/6712927093', cost: toCross}, next: {id: 'node/6712917182', cost: 6}}],  // Grand -> Bascom

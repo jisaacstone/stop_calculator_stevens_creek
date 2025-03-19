@@ -28,13 +28,31 @@ import * as isochrone from 'isochrone';
 import * as walkShed from 'walkShed';
 import * as state from 'state';
 
+// Collect all stop IDs from stopTimings
+const stopTimingIds = new Set([
+  ...Array.from(stopTimings.early.keys()),
+  ...Array.from(stopTimings.peak.keys())
+]);
+
+// Filter bus stops that have any matching ID in stopTimings
+const filteredBusStops = busStopSource.features.filter((feature) => {
+  const featureStopId = feature.id;
+  return stopTimingIds.has(featureStopId);
+});
+
+// Create a new GeoJSON object with the filtered features
+const reducedBusStopSource = {
+  ...busStopSource,
+  features: filteredBusStops
+};
+
 const SECONDS_PER_MINUTE = 60;
 const GeoJsonFormat = new GeoJSON<Feature<Point>>();
 const nextBusCollection = new Set<string>();
 const source = new VectorSource({
     format: GeoJsonFormat,
     features: GeoJsonFormat.readFeatures(
-      busStopSource
+      reducedBusStopSource
     )
   });
 
@@ -131,6 +149,6 @@ const onBusStopSelect = () => {
 export const addSelectEvent = (map: OlMap, toListen: HTMLElement[]) => {
   map.addInteraction(busSelect);
   busSelect.on(["select"], onBusStopSelect);
-  // When UI (time or transit inputs) change we recaculate the walkshed
+  // When UI (time or transit inputs) change we recalculate the walkshed
   toListen.forEach(e => e.addEventListener('change', () => onBusStopSelect()), false);
 }
