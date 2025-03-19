@@ -39,7 +39,6 @@ const filteredBusStops = busStopSource.features.filter((feature) => {
   const featureStopId = feature.id;
   return stopTimingIds.has(featureStopId);
 });
-console.log('fbs', filteredBusStops);
 
 // Create a new GeoJSON object with the filtered features
 const reducedBusStopSource = {
@@ -53,7 +52,7 @@ const nextBusCollection = new Set<string>();
 const source = new VectorSource({
     format: GeoJsonFormat,
     features: GeoJsonFormat.readFeatures(
-      reducedBusStopSource //  busStopSource
+      reducedBusStopSource
     )
   });
 
@@ -150,6 +149,6 @@ const onBusStopSelect = () => {
 export const addSelectEvent = (map: OlMap, toListen: HTMLElement[]) => {
   map.addInteraction(busSelect);
   busSelect.on(["select"], onBusStopSelect);
-  // When UI (time or transit inputs) change we recaculate the walkshed
+  // When UI (time or transit inputs) change we recalculate the walkshed
   toListen.forEach(e => e.addEventListener('change', () => onBusStopSelect()), false);
 }
