@@ -94,11 +94,11 @@ const getNextStop = (stopId: string, stopType: 'next' | 'cross') => {
 };
 
 const processSelectedStop = (selected: Feature<Point>) => {
+  walkShed.clear();
   const visitedStops = new Set<string>();
   const queue: { stop: string; remainingTime: number }[] = [
     { stop: selected.getId() as string, remainingTime: state.journeyTime.val * SECONDS_PER_MINUTE }
   ];
-  const wsSegments = new Set<[[number, number], [number, number]]>();
 
   while (queue.length > 0) {
     const { stop, remainingTime } = queue.shift()!;
@@ -111,7 +111,7 @@ const processSelectedStop = (selected: Feature<Point>) => {
         geometry.getFirstCoordinate(),
         remainingTime
       );
-      walkshed.forEach((segment) => wsSegments.add(segment));
+      walkShed.setWalkShed(walkshed, stop);
     }
 
     // Add accessible stops to the queue if there’s enough remaining time
@@ -132,12 +132,10 @@ const processSelectedStop = (selected: Feature<Point>) => {
       }
     }
   }
-  walkShed.setWalkShed(Array.from(wsSegments), 'walkshed');
 };
 
 const onBusStopSelect = () => {
   const selectedFeatures = busSelect.getFeatures().getArray();
-  console.log('selected', selectedFeatures);
   nextBusCollection.clear();
   if (!selectedFeatures || selectedFeatures.length === 0) {
     return;

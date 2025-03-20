@@ -19,7 +19,7 @@ const createCircleStyle = (
   resolution: number,
   fillColor: string = COLORS.ORANGE,
   strokeColor: string = COLORS.BLACK
-): Style => 
+): Style =>
   new Style({
     image: new Circle({
       radius: getPixelMeters(meters, resolution),
@@ -31,6 +31,12 @@ const createCircleStyle = (
 export const road = new Style({
     stroke: new Stroke({
       color: COLORS.GRAY,
+      width: 2,
+  })
+});
+export const road2 = new Style({
+    stroke: new Stroke({
+      color: COLORS.ORANGE,
       width: 2,
   })
 });
@@ -48,6 +54,6 @@ export const gridRoad = (meters: number, resolution: number) => {
 export const circle = createCircleStyle;
 
 export const selected = (
-  meters: number, 
+  meters: number,
   resolution: number
 ) => createCircleStyle(meters, resolution, COLORS.RED, COLORS.BLACK);

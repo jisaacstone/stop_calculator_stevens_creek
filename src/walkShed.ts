@@ -8,8 +8,6 @@ import Feature from 'ol/Feature.js';
 import * as style from 'style';
 
 
-export type LineSegment = [Coordinate, Coordinate];
-
 const collection: Collection<Feature<LineString>> = new Collection();
 const source = new VectorSource<Feature<LineString>>({wrapX: false, features: collection});
 
@@ -20,11 +18,12 @@ export const walkShedLayer = new VectorLayer({
   },
 });
 
-export const setWalkShed = (lines: LineSegment[], category: string = "walk") => {
-  collection.clear();
+export const clear = () => collection.clear();
+
+export const setWalkShed = (lines: Coordinate[][], category: string = "walk") => {
   const features = lines.map(l => new Feature<LineString>(
     {
-      geometry: new LineString([l[0], l[1]]),
+      geometry: new LineString(l),
       category,
       projection: 'EPSG:4326',
     }

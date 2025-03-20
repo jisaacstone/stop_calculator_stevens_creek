@@ -2,8 +2,8 @@ import View from 'ol/View.js';
 import Map from 'ol/Map.js';
 import van from 'vanjs-core';
 import 'assets/style.css';
-import * as layers from 'layers';
-import * as roads from 'roads';
+// import * as layers from 'layers';
+// import * as roads from 'roads';
 import * as ui from 'ui';
 import * as isochrone from 'isochrone';
 import * as walkShed from 'walkShed';
@@ -13,8 +13,8 @@ import * as state from 'state';
 const setupSCMap = (mapEl: HTMLElement): Map => {
   const map = new Map({
     layers: [
-      layers.osmRaster,
-      roads.getLayer().layer,
+      // layers.osmRaster,
+      // roads.getLayer().layer,
       walkShed.walkShedLayer,
       busstops.layer,
     ],
@@ -63,6 +63,7 @@ const main = () => {
     const map = setupSCMap(mapEl);
     isochrone.loadNLD();
     busstops.addSelectEvent(map, inputs);
+    // roads.addSelectEvent(map);
   }
 };
 
