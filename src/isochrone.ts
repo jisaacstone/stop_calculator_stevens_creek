@@ -73,14 +73,16 @@ const traverse = (start: number, time: number) => {
 };
 
 const closeTo = (p1: [number, number], p2: [number, number]):boolean => {
-  return (Math.abs(p1[0] - p2[0])) < 0.0001 && (Math.abs(p1[0] - p2[0])) < 0.0001;
+  return (Math.abs(p1[0] - p2[0])) < 0.000001 && (Math.abs(p1[0] - p2[0])) < 0.000001;
 }
 
 const pointAlong = (coords: Segment, start: [number, number], distance: number) => {
-  const reverse = !closeTo(coords[0], start);
+  if(!closeTo(coords[0], start)) {
+    coords.reverse();
+  }
   const line = turf.lineString(coords);
-  const chunks = turf.lineChunk(line, distance, { units: 'meters', reverse });
-  return turf.getCoords(chunks.features[0]);
+  const segment = turf.lineSliceAlong(line, 0, distance, { units: 'meters' });
+  return turf.getCoords(segment);
 }
 
 export const addPseudoNode = (coords: Coordinate) => {
