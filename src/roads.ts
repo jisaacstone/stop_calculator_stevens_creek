@@ -1,13 +1,19 @@
+import { default as OlMap } from 'ol/Map.js';
 import {Vector as VectorSource} from 'ol/source.js';
 import {Vector as VectorLayer} from 'ol/layer.js';
 import {Coordinate} from 'ol/coordinate.js';
-import {toLonLat} from 'ol/proj';
 import Feature from 'ol/Feature.js';
 import {LineString} from 'ol/geom.js';
 import {GeoJSON} from 'ol/format.js';
+import { default as Select } from 'ol/interaction/Select.js';
+import { click } from 'ol/events/condition.js';
+
 import * as turf from '@turf/turf';
-import scGeojson from 'assets/sc-geojson.ts';
+
+import scGeojson from 'assets/sc-geojson';
 import * as style from 'style';
+import nld from 'assets/nld';
+import * as isochrone from 'isochrone';
 
 const format = new GeoJSON<Feature<LineString>>();
 
@@ -36,6 +42,26 @@ export const getLayer = (() => {
   return setup;
 })();
 
+export const addSelectEvent = (map: OlMap) => {
+  const roadSelect = new Select({
+    condition: click,
+    layers: [ getLayer().layer ],
+  });
+  map.addInteraction(roadSelect);
+  roadSelect.on(["select"], () => {
+    const selectedFeatures = roadSelect.getFeatures().getArray();
+    if (!selectedFeatures || selectedFeatures.length === 0) {
+      return;
+    }
+    const selected = selectedFeatures[0] as Feature<LineString>;
+    console.log(selected);
+    const link = nld.links.find((l) => l.id === selected.get('id'));
+    console.log(link);
+    console.log('src', isochrone.linkMap.get(link.source));
+    console.log('tgt', isochrone.linkMap.get(link.target));
+  });
+};
+
 export const closestPoint = (coord: Coordinate): { feature: Feature, point: Coordinate } => {
   const { source } = getLayer();
   const found: Feature<LineString> = source.getClosestFeatureToCoordinate(coord);
@@ -50,7 +76,7 @@ export const closestPoint = (coord: Coordinate): { feature: Feature, point: Coor
   };
   const point = turf.nearestPointOnLine(
     turfFound,
-    toLonLat(coord)
+    coord
   );
   return { feature: found, point: point.geometry.coordinates };
 }

@@ -63,6 +63,7 @@ const main = () => {
     const map = setupSCMap(mapEl);
     isochrone.loadNLD();
     busstops.addSelectEvent(map, inputs);
+    // roads.addSelectEvent(map);
   }
 };
 

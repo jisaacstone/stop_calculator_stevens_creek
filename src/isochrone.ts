@@ -1,32 +1,31 @@
 import { PriorityQueue } from '@datastructures-js/priority-queue';
+import { GeoJSON } from 'ol/format.js';
 
 import nld from './assets/nld.ts';
 import { Coordinate } from 'ol/coordinate';
 import { closestPoint } from 'roads';
 import * as turf from '@turf/turf';
-/* TODO
-// Lazy loading in case the file is too big
-async function fetchNLD() {
-  const response = await import('./assets/nld.ts');
-  return response.nld;
-}
-const nld = fetchNLD();
-*/
+import { WALKING_SPEED_MS } from 'constants.ts';
 
-type Link = { id: string, source: number, target: number, length: number };
-type Segment = [[number, number], [number, number]];
+
+type Segment = [number, number][];
+type Link = { id: string, source: number, target: number, length_m: number, coords: Segment };
 type Entry = { nodeId: number, remaining: number };
 
-export const WALKING_SPEED_MS = 1.33; // (m/s) = 5.8 km/h 
+const geoJsonFormat = new GeoJSON();
 
 // Precomputed adjacency list for fast lookups
-const linkMap = new Map<number, Link[]>();
+export const linkMap = new Map<number, Link[]>();
 export function loadNLD() {
   nld.links.forEach((link: Link) => {
     if (!linkMap.has(link.source)) {
       linkMap.set(link.source, []);
     }
     linkMap.get(link.source)!.push(link);
+    if (!linkMap.has(link.target)) {
+      linkMap.set(link.target, []);
+    }
+    linkMap.get(link.target)!.push(link);
   });
 };
 
@@ -35,29 +34,37 @@ const traverse = (start: number, time: number) => {
   const queue: PriorityQueue<Entry> = new PriorityQueue(
     (ea, eb) => eb.remaining - ea.remaining
   );
-  const found: Set<Segment> = new Set();
+  const found: Segment[] = [];
 
   queue.enqueue({ nodeId: start, remaining: time });
   let nextEntry: Entry | null;
 
   while ((nextEntry = queue.dequeue()) !== null ) {
-    const edges = linkMap.get(nextEntry.nodeId) || [];
-    for (const {id, source, target, length} of edges) {
+    const edges = linkMap.get(nextEntry.nodeId);
+    if (nextEntry.remaining <= 0) {
+      continue;
+    }
+    if (!edges) {
+      console.log(nextEntry.nodeId, 'not in linkMap');
+      continue;
+    }
+    for (const {id, source, target, length_m, coords} of edges) {
       if (seen.has(id)) {
         continue;
       }
-
-      if (length / WALKING_SPEED_MS <= nextEntry.remaining) {
+      const line = turf.lineString(coords);
+      if (!turf.booleanValid(line)) {
+        console.log('invalid!', id, line);
+      }
+      if (length_m / WALKING_SPEED_MS <= nextEntry.remaining) {
         //full segment
-        found.add([getCoords(source), getCoords(target)]);
-        queue.enqueue({ nodeId: target, remaining: nextEntry.remaining - length / WALKING_SPEED_MS });
+        found.push(coords);
+        const endNode = (source == nextEntry.nodeId) ? target : source;
+        queue.enqueue({ nodeId: endNode, remaining: nextEntry.remaining - length_m / WALKING_SPEED_MS });
       }
       else {
-        //incomplete segment
-        const frac = nextEntry.remaining * WALKING_SPEED_MS / length;
-        const segment_start: [number, number] = getCoords(source);
-        const segment_end: [number, number] = getCoords(target, frac, segment_start[0], segment_start[1]);
-        found.add([segment_start, segment_end])
+        const partial = pointAlong(coords, getCoords(nextEntry.nodeId), nextEntry.remaining);
+        found.push(partial);
       }
       seen.add(id);
     }
@@ -65,44 +72,62 @@ const traverse = (start: number, time: number) => {
   return found;
 };
 
+const closeTo = (p1: [number, number], p2: [number, number]):boolean => {
+  return (Math.abs(p1[0] - p2[0])) < 0.0001 && (Math.abs(p1[0] - p2[0])) < 0.0001;
+}
+
+const pointAlong = (coords: Segment, start: [number, number], distance: number) => {
+  const reverse = !closeTo(coords[0], start);
+  const line = turf.lineString(coords);
+  const chunks = turf.lineChunk(line, distance, { units: 'meters', reverse });
+  return turf.getCoords(chunks.features[0]);
+}
+
 export const addPseudoNode = (coords: Coordinate) => {
   // add an pseudo node if the start is of type Coordinate
-  const pseudoNode = nld.nodes.length;
+  const pseudoNodeId = -nld.nodes.length;
   // @ts-expect-error type error
-  nld.nodes.push({ id: pseudoNode, x: coords[0], y: coords[1] });
+  nld.nodes.push({ id: pseudoNodeId, x: coords[0], y: coords[1] });
 
   const { feature, point } = closestPoint(coords);
+  const turfPoint = turf.point(point);
 
   const link = nld.links.find((l: Link) => l.id === feature.get('id'));
   if (!link) {
     throw 'Link not found';
   }
-  const lengths = turf.distance(turf.point(point), turf.point(getCoords(link.source)));
-  const lengtht = turf.distance(turf.point(getCoords(link.target)), turf.point(point));
-  const pseudoLinks = [
-    {
-      id: `pseudo_${pseudoNode}_${link.source}`,
-      source: pseudoNode,
-      target: link.source,
-      length: lengths
-    },
-    {
-      id: `pseudo_${pseudoNode}_${link.target}`,
-      source: pseudoNode,
-      target: link.target,
-      length: lengtht
-    },
-  ];
+  const coordmap = new Map<string, number>([
+    ['' + getCoords(link.source), link.source],
+    ['' + getCoords(link.target), link.target]
+  ]);
 
-  linkMap.set(pseudoNode, pseudoLinks);
-  return pseudoNode;
+  const turfLine = geoJsonFormat.writeFeatureObject(feature);
+
+  const split = turf.lineSplit(turfLine, turfPoint);
+  const pseudoLinks = split.features.map(turfFeature => {
+    const length = turf.length(turfFeature, {units: 'meters'});
+    const coords = turf.getCoords(turfFeature);
+    let nodeId: number;
+    if (coordmap.has('' + coords[0])) {
+      nodeId = coordmap.get('' + coords[0])!;
+    } else {
+      nodeId = coordmap.get('' + coords[coords.length - 1])!;
+    }
+    return {
+      id: `pn_${pseudoNodeId}_${nodeId}`,
+      source: pseudoNodeId,
+      target: nodeId,
+      length_m: length,
+      coords
+    };
+  });
+  linkMap.set(pseudoNodeId, pseudoLinks);
+  return pseudoNodeId;
 };
 
-export const calcIsochrone = (start: number | Coordinate, time: number) => {
-  if (Array.isArray(start)) {
-    start = addPseudoNode(start);
-  }
-  return traverse(start, time);
+export const calcIsochrone = (start: Coordinate, time: number) => {
+  const startId = addPseudoNode(start);
+  return traverse(startId, time);
 };
 
 const getCoords = (nodeId: number, fraction: number = 1, x: number = 0, y: number = 0): [number, number] => {
@@ -111,18 +136,4 @@ const getCoords = (nodeId: number, fraction: number = 1, x: number = 0, y: numbe
   if (!n) throw new Error(`Node with ID ${nodeId} not found`);
 
   return [x + fraction * (n.x - x), y + fraction * (n.y - y)]
-};
-
-export const neighbors = (edgeId: string): Segment[] => {
-  const selected: Link | undefined = nld.links.find((l: Link) => l.id === edgeId);
-
-  if (!selected) {
-    return [];
-  }
-
-  return (
-    nld.links
-    .filter((l: Link) => l.source === selected.target || l.target === selected.source)
-    .map((l: Link) => [getCoords(l.source), getCoords(l.target)])
-  );
 };

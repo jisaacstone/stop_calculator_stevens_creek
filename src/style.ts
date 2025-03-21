@@ -1,15 +1,6 @@
 import {Fill, Stroke, Style, Circle} from 'ol/style.js';
 import { METERS_PER_UNIT } from 'ol/proj/epsg4326.js'
-
-const COLORS = {
-  BLACK: 'rgba(0, 0, 0, 1)',
-  RED: 'rgba(255, 0, 0, 1)',
-  GRAY: 'rgba(150, 150, 150, 1)',
-  PURPLE: 'rgba(123, 50, 148, 1)',
-  BLUE: 'rgba(10, 150, 200, 1)',
-  PLUM: 'rgba(123, 50, 148, 0.5)',
-  ORANGE: 'rgba(220, 165, 0, 1)',
-} as const;
+import { COLORS } from './constants';
 
 const getPixelMeters = (meters: number, resolution: number): number =>
   Math.max(meters / (resolution * METERS_PER_UNIT), 2);
@@ -19,7 +10,7 @@ const createCircleStyle = (
   resolution: number,
   fillColor: string = COLORS.ORANGE,
   strokeColor: string = COLORS.BLACK
-): Style => 
+): Style =>
   new Style({
     image: new Circle({
       radius: getPixelMeters(meters, resolution),
@@ -31,6 +22,12 @@ const createCircleStyle = (
 export const road = new Style({
     stroke: new Stroke({
       color: COLORS.GRAY,
+      width: 2,
+  })
+});
+export const road2 = new Style({
+    stroke: new Stroke({
+      color: COLORS.ORANGE,
       width: 2,
   })
 });
@@ -48,6 +45,6 @@ export const gridRoad = (meters: number, resolution: number) => {
 export const circle = createCircleStyle;
 
 export const selected = (
-  meters: number, 
+  meters: number,
   resolution: number
 ) => createCircleStyle(meters, resolution, COLORS.RED, COLORS.BLACK);
