@@ -17,21 +17,19 @@ export const fetchOSMData = async (query: string) => {
 
     const xmlText = await response.text();
 
-    const parser = new JSDOM();
-    //const xmlDoc = parser.parseFromString(xmlText, "text/xml");
     const dom = new JSDOM(xmlText, { contentType: "text/xml" });
     const xmlDoc = dom.window.document;
 
     const geojson = osmtogeojson(xmlDoc);
 
-  // Parse relationships (bus routes & stop associations)
-  const relations = parseRelations(xmlDoc);
-  console.log("Parsed Route Relationships:", relations);
+    // Parse relationships (bus routes & stop associations)
+    const relations = parseRelations(xmlDoc);
+    console.log("Parsed Route Relationships:", relations);
 
-  linkStopsToRoutes(geojson, relations);
+    linkStopsToRoutes(geojson, relations);
 
-  // Write GeoJSON to file
-  writeFileSync("./src/assets/busstops-geojson.json", JSON.stringify(geojson, null, 2));
+    // Write GeoJSON to file
+    writeFileSync("./src/assets/busstops-geojson.json", JSON.stringify(geojson, null, 2));
 
   } catch (error) {
     console.error("Failed to fetch OSM data:", error);
@@ -65,7 +63,7 @@ export const parseRelations = (xmlDoc: Document): Map<string, Set<string>> => {
   return nodeToRoutes;
 };
 
-// ✅ Step 2: Link Stops to Routes Using Parsed Relationships
+// Step 2: Link Stops to Routes Using Parsed Relationships
 const linkStopsToRoutes = (geojson: FeatureCollection<Geometry, GeoJsonProperties>, relations: Map<string, Set<string>>) => {
   geojson.features.forEach((feature) => {
     if (feature.properties) {
@@ -75,6 +73,6 @@ const linkStopsToRoutes = (geojson: FeatureCollection<Geometry, GeoJsonPropertie
   });
 };
 
-const bb = '(37.31,-122.06,37.335,-121.85)';
+const bb = '(37.32,-122.06,37.34,-121.85)';
 const query = `(rel[route=bus][network=VTA]${bb};node(r)${bb}[public_transport=stop_position];);out body;`;
 fetchOSMData(query);

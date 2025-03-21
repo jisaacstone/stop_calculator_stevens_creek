@@ -15,6 +15,7 @@ const setupSCMap = (mapEl: HTMLElement): Map => {
     layers: [
       layers.osmRaster,
       roads.getLayer().layer,
+      walkShed.polyLayer,
       walkShed.walkShedLayer,
       busstops.layer,
     ],

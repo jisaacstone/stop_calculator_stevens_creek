@@ -6,9 +6,9 @@ import json
 import osmnx as ox
 
 
-def id(link, n):
+def make_id(link):
     inorder = sorted((link['source'], link['target']))
-    return f"{inorder[0]:x}-{inorder[1]:x}-{n}"
+    return f"{inorder[0]:x}-{inorder[1]:x}"
 
 
 test = False  # Set to True to generate tests
@@ -37,8 +37,8 @@ links = []
 nodemap = {n['id']: [n['x'], n['y']] for n in nld['nodes']}
 
 # Json Serializeable geometry, calcuated length
-for n, link in enumerate(nld['links']):
-    id_ = id(link, n)
+for link in nld['links']:
+    id_ = make_id(link)
     if id_ not in ids:
         ids.add(id_)
         if link.get('geometry'):
