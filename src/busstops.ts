@@ -27,6 +27,7 @@ import * as style from 'style';
 import * as isochrone from 'isochrone';
 import * as walkShed from 'walkShed';
 import * as state from 'state';
+import { SECONDS_PER_MINUTE } from 'constants';
 
 // Collect all stop IDs from stopTimings
 const stopTimingIds = new Set([
@@ -46,7 +47,6 @@ const reducedBusStopSource = {
   features: filteredBusStops
 };
 
-const SECONDS_PER_MINUTE = 60;
 const GeoJsonFormat = new GeoJSON<Feature<Point>>();
 const nextBusCollection = new Set<string>();
 const source = new VectorSource({
@@ -148,6 +148,5 @@ export const addSelectEvent = (map: OlMap, toListen: HTMLElement[]) => {
   map.addInteraction(busSelect);
   busSelect.on(["select"], onBusStopSelect);
   // When UI (time or transit inputs) change we recalculate the walkshed
->>>>>>> c50ad1d (inputs)
   toListen.forEach(e => e.addEventListener('change', () => onBusStopSelect()), false);
 }

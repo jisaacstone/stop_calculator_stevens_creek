@@ -1,15 +1,6 @@
 import {Fill, Stroke, Style, Circle} from 'ol/style.js';
 import { METERS_PER_UNIT } from 'ol/proj/epsg4326.js'
-
-const COLORS = {
-  BLACK: 'rgba(0, 0, 0, 1)',
-  RED: 'rgba(255, 0, 0, 1)',
-  GRAY: 'rgba(150, 150, 150, 1)',
-  PURPLE: 'rgba(123, 50, 148, 1)',
-  BLUE: 'rgba(10, 150, 200, 1)',
-  PLUM: 'rgba(123, 50, 148, 0.5)',
-  ORANGE: 'rgba(220, 165, 0, 1)',
-} as const;
+import { COLORS } from './constants';
 
 const getPixelMeters = (meters: number, resolution: number): number =>
   Math.max(meters / (resolution * METERS_PER_UNIT), 2);

@@ -1,15 +1,18 @@
 import { PriorityQueue } from '@datastructures-js/priority-queue';
+import { GeoJSON } from 'ol/format.js';
 
 import nld from './assets/nld.ts';
 import { Coordinate } from 'ol/coordinate';
 import { closestPoint } from 'roads';
 import * as turf from '@turf/turf';
+import { WALKING_SPEED_MS } from 'constants.ts';
+
 
 type Segment = [number, number][];
 type Link = { id: string, source: number, target: number, length_m: number, coords: Segment };
 type Entry = { nodeId: number, remaining: number };
 
-export const WALKING_SPEED_MS = 1.33; // (m/s) = 5.8 km/h
+const geoJsonFormat = new GeoJSON();
 
 // Precomputed adjacency list for fast lookups
 export const linkMap = new Map<number, Link[]>();
@@ -76,13 +79,13 @@ const closeTo = (p1: [number, number], p2: [number, number]):boolean => {
 const pointAlong = (coords: Segment, start: [number, number], distance: number) => {
   const reverse = !closeTo(coords[0], start);
   const line = turf.lineString(coords);
-  const chunks = turf.lineChunk(line, distance, { units: 'miles', reverse });
+  const chunks = turf.lineChunk(line, distance, { units: 'meters', reverse });
   return turf.getCoords(chunks.features[0]);
 }
 
 export const addPseudoNode = (coords: Coordinate) => {
   // add an pseudo node if the start is of type Coordinate
-  const pseudoNodeId = `pseudo-${nld.nodes.length}`;
+  const pseudoNodeId = -nld.nodes.length;
   // @ts-expect-error type error
   nld.nodes.push({ id: pseudoNodeId, x: coords[0], y: coords[1] });
 
@@ -93,18 +96,31 @@ export const addPseudoNode = (coords: Coordinate) => {
   if (!link) {
     throw 'Link not found';
   }
-  const pseudoLinks = [link.source, link.target].map(nodeId => {
-    const targetCoords = getCoords(nodeId);
-    const length = turf.distance(turfPoint, turf.point(targetCoords));
+  const coordmap = new Map<string, number>([
+    ['' + getCoords(link.source), link.source],
+    ['' + getCoords(link.target), link.target]
+  ]);
+
+  const turfLine = geoJsonFormat.writeFeatureObject(feature);
+
+  const split = turf.lineSplit(turfLine, turfPoint);
+  const pseudoLinks = split.features.map(turfFeature => {
+    const length = turf.length(turfFeature, {units: 'meters'});
+    const coords = turf.getCoords(turfFeature);
+    let nodeId: number;
+    if (coordmap.has('' + coords[0])) {
+      nodeId = coordmap.get('' + coords[0])!;
+    } else {
+      nodeId = coordmap.get('' + coords[coords.length - 1])!;
+    }
     return {
-      id: `${pseudoNodeId}_${nodeId}`,
+      id: `pn_${pseudoNodeId}_${nodeId}`,
       source: pseudoNodeId,
       target: nodeId,
       length_m: length,
-      coords: [point, targetCoords]
+      coords
     };
   });
-
   linkMap.set(pseudoNodeId, pseudoLinks);
   return pseudoNodeId;
 };

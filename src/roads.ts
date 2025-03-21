@@ -2,7 +2,6 @@ import { default as OlMap } from 'ol/Map.js';
 import {Vector as VectorSource} from 'ol/source.js';
 import {Vector as VectorLayer} from 'ol/layer.js';
 import {Coordinate} from 'ol/coordinate.js';
-import {toLonLat} from 'ol/proj';
 import Feature from 'ol/Feature.js';
 import {LineString} from 'ol/geom.js';
 import {GeoJSON} from 'ol/format.js';
@@ -77,7 +76,7 @@ export const closestPoint = (coord: Coordinate): { feature: Feature, point: Coor
   };
   const point = turf.nearestPointOnLine(
     turfFound,
-    toLonLat(coord)
+    coord
   );
   return { feature: found, point: point.geometry.coordinates };
 }
