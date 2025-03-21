@@ -42,6 +42,8 @@ export const setWalkShed = (lines: Coordinate[][], category: string = "walk") =>
   ));
   lineCollection.extend(features);
   const poly = turf.convex(turf.featureCollection(lines.map(l => turf.lineString(l))));
-  const olPoly = GeoJsonFormat.readFeature(poly) as Feature<Polygon>;
-  polyCollection.push(olPoly);
+  if (poly) {
+    const olPoly = GeoJsonFormat.readFeature(poly) as Feature<Polygon>;
+    polyCollection.push(olPoly);
+  }
 };
