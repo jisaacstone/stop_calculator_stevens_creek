@@ -1,6 +1,5 @@
 import View from 'ol/View.js';
 import Map from 'ol/Map.js';
-import van from 'vanjs-core';
 import 'assets/style.css';
 import * as layers from 'layers';
 import * as roads from 'roads';
@@ -8,7 +7,6 @@ import * as ui from 'ui';
 import * as isochrone from 'isochrone';
 import * as walkShed from 'walkShed';
 import * as busstops from 'busstops';
-import * as state from 'state';
 
 const setupSCMap = (mapEl: HTMLElement): Map => {
   const map = new Map({
@@ -35,36 +33,20 @@ const setupSCMap = (mapEl: HTMLElement): Map => {
   return map;
 };
 
-const setupInputs = (inputEl: HTMLElement) => {
-  const journeyTimeSlider = ui.makeInput(
-    { name: 'time', units: 'min' },
-    { min: 5, max: 30, step: 5 },
-    state.journeyTime,
-  );
-  const transitAlternativeSelect = ui.makeSelect(
-    ['early', 'peak'],
-    state.alternatives
-  );
-  van.add(
-    inputEl,
-    journeyTimeSlider,
-    transitAlternativeSelect
-  );
-  return [journeyTimeSlider, transitAlternativeSelect];
-};
-
 const main = () => {
   const mapEl = document.getElementById('stevenscreek');
   const inputEl = document.getElementById('input');
-  let inputs: HTMLElement[] = [];
   if (inputEl !== null) {
-    inputs = setupInputs(inputEl);
-  }
-  if (mapEl !== null) {
-    const map = setupSCMap(mapEl);
-    isochrone.loadNLD();
-    busstops.addSelectEvent(map, inputs);
-    // roads.addSelectEvent(map);
+    const inputMap = ui.setupUi(inputEl);
+    if (mapEl !== null) {
+      const map = setupSCMap(mapEl);
+      isochrone.loadNLD();
+      busstops.addSelectEvent(
+        map,
+        inputMap.busStop,
+        [inputMap.journeyTime, inputMap.transitAlternative]
+      );
+    }
   }
 };
 
