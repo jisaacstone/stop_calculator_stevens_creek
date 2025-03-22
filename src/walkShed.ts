@@ -30,6 +30,7 @@ export const walkShedLayer = new VectorLayer({
 
 export const clear = () => {
   lineCollection.clear();
+  polyCollection.clear();
 };
 
 export const setWalkShed = (lines: Coordinate[][], category: string = "walk") => {
@@ -41,9 +42,19 @@ export const setWalkShed = (lines: Coordinate[][], category: string = "walk") =>
     }
   ));
   lineCollection.extend(features);
-  const poly = turf.convex(turf.featureCollection(lines.map(l => turf.lineString(l))));
+  const poly = turf.concave(
+    turf.featureCollection(
+      lines.flat().map(l => turf.point(l))
+    ),
+    {maxEdge: 200, units: 'meters'}
+  );
   if (poly) {
+    const area = turf.area(poly);
     const olPoly = GeoJsonFormat.readFeature(poly) as Feature<Polygon>;
+    olPoly.set('area', area);
     polyCollection.push(olPoly);
+    return area;
+  } else {
+    return 0;
   }
 };

@@ -95,6 +95,7 @@ const getNextStop = (stopId: string, stopType: 'next' | 'cross') => {
 
 const processSelectedStop = (selected: Feature<Point>) => {
   walkShed.clear();
+  let totalArea = 0;
   const visitedStops = new Set<string>();
   const queue: { stop: string; remainingTime: number }[] = [
     { stop: selected.getId() as string, remainingTime: state.journeyTime.val * SECONDS_PER_MINUTE }
@@ -111,7 +112,8 @@ const processSelectedStop = (selected: Feature<Point>) => {
         geometry.getFirstCoordinate(),
         remainingTime
       );
-      walkShed.setWalkShed(walkshed, stop);
+      const wsArea = walkShed.setWalkShed(walkshed, stop);
+      totalArea += wsArea;
     }
 
     // Add accessible stops to the queue if there’s enough remaining time
@@ -132,6 +134,7 @@ const processSelectedStop = (selected: Feature<Point>) => {
       }
     }
   }
+  state.area.val = Math.round(totalArea/10000) / 100;
 };
 
 const onBusStopSelect = (stateSelect: HTMLSelectElement) => {
