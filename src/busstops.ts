@@ -134,19 +134,30 @@ const processSelectedStop = (selected: Feature<Point>) => {
   }
 };
 
-const onBusStopSelect = () => {
+const onBusStopSelect = (stateSelect: HTMLSelectElement) => {
   const selectedFeatures = busSelect.getFeatures().getArray();
   nextBusCollection.clear();
   if (!selectedFeatures || selectedFeatures.length === 0) {
     return;
   }
   const selected = selectedFeatures[0] as Feature<Point>;
+  stateSelect.value = selected.get('id');
   processSelectedStop(selected);
 };
 
-export const addSelectEvent = (map: OlMap, toListen: HTMLElement[]) => {
+export const addSelectEvent = (map: OlMap, stateSelect: HTMLSelectElement, toListen: HTMLElement[]) => {
   map.addInteraction(busSelect);
-  busSelect.on(["select"], onBusStopSelect);
+  busSelect.on(["select"], () => onBusStopSelect(stateSelect));
   // When UI (time or transit inputs) change we recalculate the walkshed
-  toListen.forEach(e => e.addEventListener('change', () => onBusStopSelect()), false);
+  toListen.forEach(e => e.addEventListener('change', () => onBusStopSelect(stateSelect)), false);
+  stateSelect.addEventListener('change', () => {
+    const stopId = stateSelect.value;
+    const feature = source.getFeatureById(stopId);
+    if (feature) {
+      // manipulate the array directly so we don't fire a change event
+      const selectedArray = busSelect.getFeatures().getArray();
+      selectedArray[0] = feature;
+    }
+    onBusStopSelect(stateSelect);
+  }, false)
 }
