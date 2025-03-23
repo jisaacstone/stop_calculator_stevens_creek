@@ -27,7 +27,7 @@ import * as style from 'style';
 import * as isochrone from 'isochrone';
 import * as walkShed from 'walkShed';
 import * as state from 'state';
-import { SECONDS_PER_MINUTE } from 'constants';
+import { SECONDS_PER_MINUTE, SQ_METER_IN_SQ_KM } from 'constants';
 
 // Collect all stop IDs from stopTimings
 const stopTimingIds = new Set([
@@ -95,6 +95,7 @@ const getNextStop = (stopId: string, stopType: 'next' | 'cross') => {
 
 const processSelectedStop = (selected: Feature<Point>) => {
   walkShed.clear();
+  let areaM2 = 0;
   const visitedStops = new Set<string>();
   const queue: { stop: string; remainingTime: number }[] = [
     { stop: selected.getId() as string, remainingTime: state.journeyTime.val * SECONDS_PER_MINUTE }
@@ -111,7 +112,7 @@ const processSelectedStop = (selected: Feature<Point>) => {
         geometry.getFirstCoordinate(),
         remainingTime
       );
-      walkShed.setWalkShed(walkshed, stop);
+      areaM2 += walkShed.setWalkShed(walkshed, stop);
     }
 
     // Add accessible stops to the queue if there’s enough remaining time
@@ -132,6 +133,7 @@ const processSelectedStop = (selected: Feature<Point>) => {
       }
     }
   }
+  state.areaKm2.val = (areaM2 / SQ_METER_IN_SQ_KM).toFixed(2);
 };
 
 const onBusStopSelect = (stateSelect: HTMLSelectElement) => {

@@ -33,6 +33,7 @@ const setupSCMap = (mapEl: HTMLElement): Map => {
   return map;
 };
 
+
 const main = () => {
   const mapEl = document.getElementById('stevenscreek');
   const inputEl = document.getElementById('input');
