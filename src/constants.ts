@@ -10,3 +10,4 @@ export const COLORS = {
 
 export const WALKING_SPEED_MS = 1.33; // (m/s) = 5.8 km/h
 export const SECONDS_PER_MINUTE = 60;
+export const SQ_METER_IN_SQ_KM = 1_000_000;
