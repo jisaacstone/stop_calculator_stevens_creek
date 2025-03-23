@@ -3,7 +3,7 @@ import { METERS_PER_UNIT } from 'ol/proj/epsg4326.js'
 import { COLORS } from './constants';
 
 const getPixelMeters = (meters: number, resolution: number): number =>
-  Math.max(meters / (resolution * METERS_PER_UNIT), 2);
+  Math.max(meters / (resolution * METERS_PER_UNIT), 5);
 
 const createCircleStyle = (
   meters: number,
@@ -25,6 +25,7 @@ export const road = new Style({
     width: 2,
   })
 });
+
 export const walkArea = new Style({
   stroke: new Stroke({
     color: COLORS.BLACK,
@@ -32,6 +33,14 @@ export const walkArea = new Style({
   }),
   fill: new Fill({ color: COLORS.PLUM }),
 });
+export const BRTArea = new Style({
+  stroke: new Stroke({
+    color: COLORS.BLACK,
+    width: 1,
+  }),
+  fill: new Fill({ color: COLORS.LUMP }),
+});
+
 export const gridRoad = (meters: number, resolution: number) => {
   const meters_per_pixel = resolution * METERS_PER_UNIT;
   const pixel_meters = meters / meters_per_pixel;

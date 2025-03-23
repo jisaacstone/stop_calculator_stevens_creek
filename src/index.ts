@@ -13,8 +13,8 @@ const setupSCMap = (mapEl: HTMLElement): Map => {
     layers: [
       layers.osmRaster,
       roads.getLayer().layer,
-      walkShed.polyLayer,
       walkShed.walkShedLayer,
+      walkShed.polyLayer,
       busstops.layer,
     ],
     target: mapEl,
@@ -45,7 +45,7 @@ const main = () => {
       busstops.addSelectEvent(
         map,
         inputMap.busStop,
-        [inputMap.journeyTime, inputMap.transitAlternative]
+        [inputMap.journeyTime]
       );
     }
   }

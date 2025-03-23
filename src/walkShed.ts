@@ -15,7 +15,12 @@ const polySource = new VectorSource<Feature<Polygon>>({wrapX: false, features: p
 
 export const polyLayer = new VectorLayer({
   source: polySource,
-  style: style.walkArea,
+  style: (feature) => {
+    if (feature.get('category') === 'brt') {
+      return style.BRTArea;
+    }
+    return style.walkArea;
+  }
 });
 
 const lineCollection: Collection<Feature<LineString>> = new Collection();
@@ -46,12 +51,13 @@ export const setWalkShed = (lines: Coordinate[][], category: string = "walk") =>
     turf.featureCollection(
       lines.flat().map(l => turf.point(l))
     ),
-    {maxEdge: 200, units: 'meters'}
+    {maxEdge: 333, units: 'meters'}
   );
   if (poly) {
     const area = turf.area(poly);
     const olPoly = GeoJsonFormat.readFeature(poly) as Feature<Polygon>;
     olPoly.set('area', area);
+    olPoly.set('category', category);
     polyCollection.push(olPoly);
     return area;
   } else {
