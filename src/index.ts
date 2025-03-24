@@ -2,7 +2,6 @@ import View from 'ol/View.js';
 import Map from 'ol/Map.js';
 import 'assets/style.css';
 import * as layers from 'layers';
-import * as roads from 'roads';
 import * as ui from 'ui';
 import * as isochrone from 'isochrone';
 import * as walkShed from 'walkShed';
@@ -12,7 +11,6 @@ const setupSCMap = (mapEl: HTMLElement): Map => {
   const map = new Map({
     layers: [
       layers.osmRaster,
-      roads.getLayer().layer,
       walkShed.walkShedLayer,
       walkShed.polyLayer,
       busstops.layer,
@@ -34,7 +32,7 @@ const setupSCMap = (mapEl: HTMLElement): Map => {
 };
 
 
-const main = () => {
+const main = async () => {
   const mapEl = document.getElementById('stevenscreek');
   const inputEl = document.getElementById('input');
   if (inputEl !== null) {

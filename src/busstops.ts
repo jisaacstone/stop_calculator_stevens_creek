@@ -2,6 +2,7 @@
 import { default as OlMap } from 'ol/Map.js';
 import { Vector as VectorLayer } from 'ol/layer.js';
 import VectorSource from 'ol/source/Vector.js';
+import { Polygon } from '@turf/turf';
 
 // Geometry Imports
 import { Point } from 'ol/geom.js';
@@ -106,14 +107,15 @@ const getNextStop = (stopId: string, stopType: 'next' | 'cross') => {
   };
 };
 
-const processSelectedStop = (selected: Feature<Point>) => {
+const processSelectedStop = async (selected: Feature<Point>) => {
   walkShed.clear();
-  const areaM2: BusOrBrt = { bus: 0, brt: 0 };
+  const polys: { bus: Polygon[], brt: Polygon[] } = { bus: [], brt: [] }
   const visitedStops = new Set<string>();
   const journeyTimeSec = state.journeyTime.val * SECONDS_PER_MINUTE;
   const queue: { stop: string; remainingTimes: BusOrBrt }[] = [
     { stop: selected.getId() as string, remainingTimes: { bus: journeyTimeSec, brt: journeyTimeSec } }
   ];
+  const polyPromises: Promise<void>[] = [];
 
   while (queue.length > 0) {
     const { stop, remainingTimes } = queue.shift()!;
@@ -122,13 +124,19 @@ const processSelectedStop = (selected: Feature<Point>) => {
 
     const geometry = source.getFeatureById(stop)?.getGeometry();
     if (geometry) {
-      for (const key of ['bus', 'brt']) {
+      for (const key of Object.keys(remainingTimes) as Array<keyof BusOrBrt>) {
         if (remainingTimes[key] > 5) {
-          const walkshed = isochrone.calcIsochrone(
-            geometry.getFirstCoordinate(),
+          const coord = geometry.getFirstCoordinate();
+          const prom = isochrone.calcIsochrone(
+            coord,
             remainingTimes[key]
-          );
-          areaM2[key] += walkShed.setWalkShed(walkshed, key);
+          ).then(walkshed => {
+            if (walkshed) {
+              const polygon = walkShed.setWalkShed(walkshed, key)
+              polys[key].push(polygon);
+            }
+          });
+          polyPromises.push(prom);
         }
       };
     }
@@ -151,8 +159,13 @@ const processSelectedStop = (selected: Feature<Point>) => {
       }
     }
   }
-  state.busAreaKm2.val = (areaM2.bus / SQ_METER_IN_SQ_KM).toFixed(2);
-  state.brtAreaKm2.val = (areaM2.brt / SQ_METER_IN_SQ_KM).toFixed(2);
+  // polys array is being populated async
+  await Promise.all(polyPromises);
+  const areaM2 = walkShed.setCachement(polys);
+  if (areaM2) {
+    state.busAreaKm2.val = (areaM2.bus / SQ_METER_IN_SQ_KM).toFixed(2);
+    state.brtAreaKm2.val = (areaM2.brt / SQ_METER_IN_SQ_KM).toFixed(2);
+  }
 };
 
 const onBusStopSelect = (stateSelect: HTMLSelectElement) => {

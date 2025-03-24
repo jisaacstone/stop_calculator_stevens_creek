@@ -17,10 +17,7 @@
   "dependencies": {
     "@datastructures-js/priority-queue": "^6.3.2",
     "@turf/turf": "^7.2.0",
-    "install": "^0.13.0",
-    "npm": "^11.1.0",
     "ol": "^10.2.1",
-    "ol-ext": "^4.0.24",
     "vanjs-core": "^1.5.2"
   },
   "devDependencies": {
@@ -41,7 +38,7 @@
     "tsx": "^4.19.2",
     "typescript": "^5.7.3",
     "typescript-eslint": "^8.24.1",
-    "vite": "^5.4.10",
+    "vite": "^5.4.14",
     "vite-tsconfig-paths": "^5.0.1"
   }
 }

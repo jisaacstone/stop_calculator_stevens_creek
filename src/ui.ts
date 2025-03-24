@@ -52,7 +52,7 @@ const makeSelect = <Typ extends string>(
 
 export const setupUi = (containerEl: HTMLElement) => {
   const journeyTimeSlider = makeInput(
-    { name: 'time', units: 'min' },
+    { name: 'travel time', units: 'min' },
     { min: 5, max: 30, step: 5 },
     state.journeyTime,
   );

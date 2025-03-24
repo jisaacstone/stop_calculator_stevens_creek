@@ -1,7 +1,6 @@
 import { PriorityQueue } from '@datastructures-js/priority-queue';
 import { GeoJSON } from 'ol/format.js';
 
-import nld from './assets/nld.ts';
 import { Coordinate } from 'ol/coordinate';
 import { closestPoint } from 'roads';
 import * as turf from '@turf/turf';
@@ -16,7 +15,10 @@ const geoJsonFormat = new GeoJSON();
 
 // Precomputed adjacency list for fast lookups
 export const linkMap = new Map<number, Link[]>();
-export function loadNLD() {
+export const featureLinkMap = new Map<string, Link>();
+export const nodeMap = new Map<number, [number, number]>();
+export async function loadNLD() {
+  const nld = (await import('./assets/nld.ts')).default;
   nld.links.forEach((link: Link) => {
     if (!linkMap.has(link.source)) {
       linkMap.set(link.source, []);
@@ -26,6 +28,10 @@ export function loadNLD() {
       linkMap.set(link.target, []);
     }
     linkMap.get(link.target)!.push(link);
+    featureLinkMap.set(link.id, link);
+  });
+  nld.nodes.forEach(node => {
+    nodeMap.set(node.id, [node.x, node.y]);
   });
 };
 
@@ -45,7 +51,7 @@ const traverse = (start: number, time: number) => {
       continue;
     }
     if (!edges) {
-      console.log(nextEntry.nodeId, 'not in linkMap');
+      console.log(nextEntry, 'not in linkMap!');
       continue;
     }
     for (const {id, source, target, length_m, coords} of edges) {
@@ -85,22 +91,23 @@ const pointAlong = (coords: Segment, start: [number, number], distance: number) 
   return turf.getCoords(segment);
 }
 
-export const addPseudoNode = (coords: Coordinate) => {
+export const addPseudoNode = async (coords: Coordinate) => {
   // add an pseudo node if the start is of type Coordinate
-  const pseudoNodeId = -nld.nodes.length;
-  // @ts-expect-error type error
-  nld.nodes.push({ id: pseudoNodeId, x: coords[0], y: coords[1] });
+  const pseudoNodeId = coords[0] + coords[1];
+  nodeMap.set(pseudoNodeId, coords as [number, number]);
 
-  const { feature, point } = closestPoint(coords);
+  const { feature, point } = await closestPoint(coords);
   const turfPoint = turf.point(point);
-
-  const link = nld.links.find((l: Link) => l.id === feature.get('id'));
+  const link = featureLinkMap.get(feature.get('id'));
   if (!link) {
-    throw 'Link not found';
+    console.log('link not found!', feature);
+    return;
   }
+  const src = link.source;
+  const tgt = link.target;
   const coordmap = new Map<string, number>([
-    ['' + getCoords(link.source), link.source],
-    ['' + getCoords(link.target), link.target]
+    ['' + getCoords(src), src],
+    ['' + getCoords(tgt), tgt]
   ]);
 
   const turfLine = geoJsonFormat.writeFeatureObject(feature);
@@ -127,15 +134,13 @@ export const addPseudoNode = (coords: Coordinate) => {
   return pseudoNodeId;
 };
 
-export const calcIsochrone = (start: Coordinate, time: number) => {
-  const startId = addPseudoNode(start);
-  return traverse(startId, time);
+export const calcIsochrone = async (start: Coordinate, time: number) => {
+  const startId = await addPseudoNode(start);
+  if (startId) {
+    return traverse(startId, time);
+  }
 };
 
-const getCoords = (nodeId: number, fraction: number = 1, x: number = 0, y: number = 0): [number, number] => {
-  const n = nld.nodes.find(node => node.id === nodeId);
-
-  if (!n) throw new Error(`Node with ID ${nodeId} not found`);
-
-  return [x + fraction * (n.x - x), y + fraction * (n.y - y)]
+const getCoords = (nodeId: number): [number, number] => {
+  return nodeMap.get(nodeId) || [NaN, NaN];
 };

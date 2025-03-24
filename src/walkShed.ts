@@ -1,17 +1,18 @@
-import {LineString, Polygon} from 'ol/geom.js';
+import {LineString, MultiPolygon} from 'ol/geom.js';
 import {Vector as VectorSource} from 'ol/source.js';
 import {Vector as VectorLayer} from 'ol/layer.js';
 import {Coordinate} from 'ol/coordinate.js';
 import {GeoJSON} from 'ol/format.js';
 import Collection from 'ol/Collection.js';
 import Feature from 'ol/Feature.js';
+import {Polygon} from 'geojson';
 import * as turf from '@turf/turf';
 
 import * as style from 'style';
 
 const GeoJsonFormat = new GeoJSON();
-const polyCollection: Collection<Feature<Polygon>> = new Collection();
-const polySource = new VectorSource<Feature<Polygon>>({wrapX: false, features: polyCollection});
+const polyCollection: Collection<Feature<MultiPolygon>> = new Collection();
+const polySource = new VectorSource<Feature<MultiPolygon>>({wrapX: false, features: polyCollection});
 
 export const polyLayer = new VectorLayer({
   source: polySource,
@@ -53,14 +54,22 @@ export const setWalkShed = (lines: Coordinate[][], category: string = "walk") =>
     ),
     {maxEdge: 333, units: 'meters'}
   );
-  if (poly) {
-    const area = turf.area(poly);
-    const olPoly = GeoJsonFormat.readFeature(poly) as Feature<Polygon>;
-    olPoly.set('area', area);
-    olPoly.set('category', category);
-    polyCollection.push(olPoly);
-    return area;
-  } else {
-    return 0;
-  }
+  return poly;
+}
+
+export const setCachement = (polys: { bus: Polygon[], brt: Polygon[]}) => {
+  const areas: {[key: string]: number} = {bus: 0, brt: 0};
+  for (const [key, polygons] of Object.entries(polys)) {
+    const combined = turf.dissolve(turf.featureCollection(polygons));
+
+    combined.features.forEach((turfPoly) => {
+      const area = turf.area(turfPoly);
+      const olPoly = GeoJsonFormat.readFeature(turfPoly) as Feature<MultiPolygon>;
+      olPoly.set('area', area);
+      olPoly.set('category', key);
+      polyCollection.push(olPoly);
+      areas[key] += area;
+    });
+  };
+  return areas;
 };
