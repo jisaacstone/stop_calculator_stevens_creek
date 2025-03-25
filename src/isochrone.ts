@@ -7,9 +7,11 @@ import * as turf from '@turf/turf';
 import { WALKING_SPEED_MS } from 'constants.ts';
 
 
-type Segment = [number, number][];
+type Segment = Coordinate[];
 type Link = { id: string, source: number, target: number, length_m: number, coords: Segment };
 type Entry = { nodeId: number, remaining: number };
+type Node = { id: number, x: number, y: number};
+type NLD = { links: Link[], nodes: Node[] }
 
 const geoJsonFormat = new GeoJSON();
 
@@ -17,8 +19,10 @@ const geoJsonFormat = new GeoJSON();
 export const linkMap = new Map<number, Link[]>();
 export const featureLinkMap = new Map<string, Link>();
 export const nodeMap = new Map<number, [number, number]>();
-export async function loadNLD() {
-  const nld = (await import('./assets/nld.ts')).default;
+export async function loadNLD(nld: NLD | null = null) {
+  if (nld === null) {
+    nld = (await import('./assets/nld.ts')).default;
+  }
   nld.links.forEach((link: Link) => {
     if (!linkMap.has(link.source)) {
       linkMap.set(link.source, []);
