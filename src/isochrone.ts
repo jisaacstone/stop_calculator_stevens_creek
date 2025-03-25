@@ -1,9 +1,15 @@
-import { PriorityQueue } from '@datastructures-js/priority-queue';
+// OpenLayers
 import { GeoJSON } from 'ol/format.js';
-
+import Feature from 'ol/Feature.js';
+import {LineString} from 'ol/geom.js';
 import { Coordinate } from 'ol/coordinate';
-import { closestPoint } from 'roads';
+
+// Other Libraries
+import { PriorityQueue } from '@datastructures-js/priority-queue';
 import * as turf from '@turf/turf';
+
+// Local imports
+import { closestPoint } from 'roads';
 import { WALKING_SPEED_MS } from 'constants.ts';
 
 
@@ -13,7 +19,7 @@ type Entry = { nodeId: number, remaining: number };
 type Node = { id: number, x: number, y: number};
 type NLD = { links: Link[], nodes: Node[] }
 
-const geoJsonFormat = new GeoJSON();
+const geoJsonFormat = new GeoJSON<Feature<LineString>>();
 
 // Precomputed adjacency list for fast lookups
 export const linkMap = new Map<number, Link[]>();
@@ -82,11 +88,11 @@ const traverse = (start: number, time: number) => {
   return found;
 };
 
-const closeTo = (p1: [number, number], p2: [number, number]):boolean => {
+const closeTo = (p1: Coordinate, p2: Coordinate):boolean => {
   return (Math.abs(p1[0] - p2[0])) < 0.000001 && (Math.abs(p1[0] - p2[0])) < 0.000001;
 }
 
-const pointAlong = (coords: Segment, start: [number, number], distance: number) => {
+const pointAlong = (coords: Segment, start: Coordinate, distance: number) => {
   if(!closeTo(coords[0], start)) {
     coords.reverse();
   }
@@ -95,7 +101,7 @@ const pointAlong = (coords: Segment, start: [number, number], distance: number) 
   return turf.getCoords(segment);
 }
 
-export const addPseudoNode = async (coords: Coordinate) => {
+const addPseudoNode = async (coords: Coordinate) => {
   // add an pseudo node if the start is of type Coordinate
   const pseudoNodeId = coords[0] + coords[1];
   nodeMap.set(pseudoNodeId, coords as [number, number]);
@@ -145,6 +151,6 @@ export const calcIsochrone = async (start: Coordinate, time: number) => {
   }
 };
 
-const getCoords = (nodeId: number): [number, number] => {
+const getCoords = (nodeId: number): Coordinate => {
   return nodeMap.get(nodeId) || [NaN, NaN];
 };

@@ -38,7 +38,7 @@ export const loadLayer = (() => {
   return setup;
 })();
 
-export const closestPoint = async (coord: Coordinate): Promise<{ feature: Feature, point: Coordinate }> => {
+export const closestPoint = async (coord: Coordinate): Promise<{ feature: Feature<LineString>, point: Coordinate }> => {
   const { source } = await loadLayer();
   const found: Feature<LineString> = source.getClosestFeatureToCoordinate(coord);
   // geojson.writefeatureobject is not working so I do it manually
