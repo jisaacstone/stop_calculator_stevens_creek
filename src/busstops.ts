@@ -2,10 +2,10 @@
 import { default as OlMap } from 'ol/Map.js';
 import { Vector as VectorLayer } from 'ol/layer.js';
 import VectorSource from 'ol/source/Vector.js';
-import { Polygon } from '@turf/turf';
 
 // Geometry Imports
 import { Point } from 'ol/geom.js';
+import { Polygon as GJPoly } from 'geojson';
 
 // Format Imports
 import { GeoJSON } from 'ol/format.js';
@@ -109,7 +109,7 @@ const getNextStop = (stopId: string, stopType: 'next' | 'cross') => {
 
 const processSelectedStop = async (selected: Feature<Point>) => {
   walkShed.clear();
-  const polys: { bus: Polygon[], brt: Polygon[] } = { bus: [], brt: [] }
+  const polys: { bus: GJPoly[], brt: GJPoly[] } = { bus: [], brt: [] }
   const visitedStops = new Set<string>();
   const journeyTimeSec = state.journeyTime.val * SECONDS_PER_MINUTE;
   const queue: { stop: string; remainingTimes: BusOrBrt }[] = [
@@ -125,6 +125,7 @@ const processSelectedStop = async (selected: Feature<Point>) => {
     const geometry = source.getFeatureById(stop)?.getGeometry();
     if (geometry) {
       for (const key of Object.keys(remainingTimes) as Array<keyof BusOrBrt>) {
+        // cannot really walk anywhere in 5 seconds or less (this could be negative here)
         if (remainingTimes[key] > 5) {
           const coord = geometry.getFirstCoordinate();
           const prom = isochrone.calcIsochrone(
@@ -161,7 +162,7 @@ const processSelectedStop = async (selected: Feature<Point>) => {
   }
   // polys array is being populated async
   await Promise.all(polyPromises);
-  const areaM2 = walkShed.setCachement(polys);
+  const areaM2 = walkShed.setCatchement(polys);
   if (areaM2) {
     state.busAreaKm2.val = (areaM2.bus / SQ_METER_IN_SQ_KM).toFixed(2);
     state.brtAreaKm2.val = (areaM2.brt / SQ_METER_IN_SQ_KM).toFixed(2);

@@ -11,7 +11,7 @@ import * as style from 'style';
 
 const format = new GeoJSON<Feature<LineString>>();
 
-export const getLayer = (() => {
+export const loadLayer = (() => {
   let cache: null | Promise<{ source: VectorSource<Feature<LineString>>, layer: VectorLayer}> = null;
   const loadLayerData = async (modulePath: string) => {
     console.log('importing');
@@ -29,7 +29,7 @@ export const getLayer = (() => {
     });
     return { source, layer };
   };
-  const setup = async (modulePath: string = 'assets/sc-geojson') => {
+  const setup = async (modulePath: string = './assets/sc-geojson') => {
     if (!cache) {
       cache = loadLayerData(modulePath);
     }
@@ -39,7 +39,7 @@ export const getLayer = (() => {
 })();
 
 export const closestPoint = async (coord: Coordinate): Promise<{ feature: Feature, point: Coordinate }> => {
-  const { source } = await getLayer();
+  const { source } = await loadLayer();
   const found: Feature<LineString> = source.getClosestFeatureToCoordinate(coord);
   // geojson.writefeatureobject is not working so I do it manually
   const turfFound = {

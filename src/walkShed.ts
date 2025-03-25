@@ -1,18 +1,18 @@
-import {LineString, MultiPolygon} from 'ol/geom.js';
+import {LineString, Polygon} from 'ol/geom.js';
 import {Vector as VectorSource} from 'ol/source.js';
 import {Vector as VectorLayer} from 'ol/layer.js';
 import {Coordinate} from 'ol/coordinate.js';
 import {GeoJSON} from 'ol/format.js';
 import Collection from 'ol/Collection.js';
 import Feature from 'ol/Feature.js';
-import {Polygon} from 'geojson';
+import {Polygon as GJPoly} from 'geojson';
 import * as turf from '@turf/turf';
 
 import * as style from 'style';
 
 const GeoJsonFormat = new GeoJSON();
-const polyCollection: Collection<Feature<MultiPolygon>> = new Collection();
-const polySource = new VectorSource<Feature<MultiPolygon>>({wrapX: false, features: polyCollection});
+const polyCollection: Collection<Feature<Polygon>> = new Collection();
+const polySource = new VectorSource<Feature<Polygon>>({wrapX: false, features: polyCollection});
 
 export const polyLayer = new VectorLayer({
   source: polySource,
@@ -54,17 +54,23 @@ export const setWalkShed = (lines: Coordinate[][], category: string = "walk") =>
     ),
     {maxEdge: 333, units: 'meters'}
   );
-  return poly;
+  // remove holes, if any
+  if (poly) {
+    return turf.polygon([poly.geometry.coordinates[0] as Coordinate[]]);
+  }
+  return null;
 }
 
-export const setCachement = (polys: { bus: Polygon[], brt: Polygon[]}) => {
+export const setCatchement = (polys: { bus: GJPoly[], brt: GJPoly[]}) => {
   const areas: {[key: string]: number} = {bus: 0, brt: 0};
   for (const [key, polygons] of Object.entries(polys)) {
-    const combined = turf.dissolve(turf.featureCollection(polygons));
+    const combined = turf.dissolve(
+      turf.featureCollection(polygons)
+    );
 
     combined.features.forEach((turfPoly) => {
       const area = turf.area(turfPoly);
-      const olPoly = GeoJsonFormat.readFeature(turfPoly) as Feature<MultiPolygon>;
+      const olPoly = GeoJsonFormat.readFeature(turfPoly) as Feature<Polygon>;
       olPoly.set('area', area);
       olPoly.set('category', key);
       polyCollection.push(olPoly);

@@ -2,13 +2,13 @@ import {describe, expect, test} from '@jest/globals';
 
 import { default as testData } from './data/nld_test';
 import { calcIsochrone, loadNLD } from '../src/isochrone';
-import { getLayer } from '../src/roads';
+import { loadLayer } from '../src/roads';
 import { WALKING_SPEED_MS } from '../src/constants';
 
 describe("calcIsochrone function", () => {
   test("should return full and partial line segments list", async() => {
     await loadNLD(testData);
-    await getLayer('../__tests__/data/sc-geojson_test');
+    await loadLayer('../__tests__/data/sc-geojson_test');
     const result = await calcIsochrone(
       [-122.0874014, 37.3861189],
       12 / (WALKING_SPEED_MS)
