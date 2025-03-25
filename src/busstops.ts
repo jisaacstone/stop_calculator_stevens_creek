@@ -5,6 +5,7 @@ import VectorSource from 'ol/source/Vector.js';
 
 // Geometry Imports
 import { Point } from 'ol/geom.js';
+import { Polygon as GJPoly } from 'geojson';
 
 // Format Imports
 import { GeoJSON } from 'ol/format.js';
@@ -29,10 +30,14 @@ import * as walkShed from 'walkShed';
 import * as state from 'state';
 import { SECONDS_PER_MINUTE, SQ_METER_IN_SQ_KM } from 'constants';
 
+type BusOrBrt = { bus: number, brt: number };
+// Look at stop across the street
+const considerCrossStop = false;
+
 // Collect all stop IDs from stopTimings
 const stopTimingIds = new Set([
-  ...Array.from(stopTimings.early.keys()),
-  ...Array.from(stopTimings.peak.keys())
+  ...Array.from(stopTimings.bus.keys()),
+  ...Array.from(stopTimings.brt.keys())
 ]);
 
 // Filter bus stops that have any matching ID in stopTimings
@@ -85,55 +90,83 @@ const busSelect = new Select({
 });
 
 const getNextStop = (stopId: string, stopType: 'next' | 'cross') => {
-  const timingEntry = stopTimings[state.alternatives.val].get(stopId);
-  if (timingEntry === undefined || timingEntry[stopType] === undefined) {
+  const timingEntryBus = stopTimings.bus.get(stopId);
+  if (timingEntryBus === undefined || timingEntryBus[stopType] === undefined) {
     console.warn(`No next stop found for stop ID ${stopId}`);
     return undefined;
   }
-  return timingEntry[stopType];
+  const timingEntryBrt = stopTimings.brt.get(stopId);
+  if (timingEntryBrt === undefined || timingEntryBrt[stopType] === undefined) {
+    console.warn(`No next stop found for stop ID ${stopId}`);
+    return undefined;
+  }
+  return {
+    id: timingEntryBus[stopType].id,
+    bus: timingEntryBus[stopType].cost * SECONDS_PER_MINUTE,
+    brt: timingEntryBrt[stopType].cost * SECONDS_PER_MINUTE
+  };
 };
 
-const processSelectedStop = (selected: Feature<Point>) => {
+const processSelectedStop = async (selected: Feature<Point>) => {
   walkShed.clear();
-  let areaM2 = 0;
+  const polys: { bus: GJPoly[], brt: GJPoly[] } = { bus: [], brt: [] }
   const visitedStops = new Set<string>();
-  const queue: { stop: string; remainingTime: number }[] = [
-    { stop: selected.getId() as string, remainingTime: state.journeyTime.val * SECONDS_PER_MINUTE }
+  const journeyTimeSec = state.journeyTime.val * SECONDS_PER_MINUTE;
+  const queue: { stop: string; remainingTimes: BusOrBrt }[] = [
+    { stop: selected.getId() as string, remainingTimes: { bus: journeyTimeSec, brt: journeyTimeSec } }
   ];
+  const polyPromises: Promise<void>[] = [];
 
   while (queue.length > 0) {
-    const { stop, remainingTime } = queue.shift()!;
+    const { stop, remainingTimes } = queue.shift()!;
     if (visitedStops.has(stop)) continue;
     visitedStops.add(stop);
 
     const geometry = source.getFeatureById(stop)?.getGeometry();
     if (geometry) {
-      const walkshed = isochrone.calcIsochrone(
-        geometry.getFirstCoordinate(),
-        remainingTime
-      );
-      areaM2 += walkShed.setWalkShed(walkshed, stop);
+      for (const key of Object.keys(remainingTimes) as Array<keyof BusOrBrt>) {
+        // cannot really walk anywhere in 5 seconds or less (this could be negative here)
+        if (remainingTimes[key] > 5) {
+          const coord = geometry.getFirstCoordinate();
+          const prom = isochrone.calcIsochrone(
+            coord,
+            remainingTimes[key]
+          ).then(walkshed => {
+            if (walkshed) {
+              const polygon = walkShed.setWalkShed(walkshed, key)
+              polys[key].push(polygon);
+            }
+          });
+          polyPromises.push(prom);
+        }
+      };
     }
 
     // Add accessible stops to the queue if there’s enough remaining time
-    const crossStop = getNextStop(stop, 'cross');
-    if (crossStop) {
-      nextBusCollection.add(crossStop.id);
-      const travelTime = crossStop.cost * SECONDS_PER_MINUTE; // Cost in seconds
-      if (remainingTime >= travelTime) {
-        queue.push({ stop: crossStop.id, remainingTime: remainingTime - travelTime });
-      }
-    }
     const nextStop = getNextStop(stop, 'next');
     if (nextStop) {
       nextBusCollection.add(nextStop.id);
-      const travelTime = nextStop.cost * SECONDS_PER_MINUTE; // Cost in seconds
-      if (remainingTime >= travelTime) {
-        queue.push({ stop: nextStop?.id, remainingTime: remainingTime - travelTime });
+      if (remainingTimes.brt >= nextStop.brt) {
+        queue.push({ stop: nextStop.id, remainingTimes: { brt: remainingTimes.brt - nextStop.brt, bus: remainingTimes.bus - nextStop.bus }});
+      }
+    }
+    if (considerCrossStop) {
+      const crossStop = getNextStop(stop, 'cross');
+      if (crossStop) {
+        nextBusCollection.add(crossStop.id);
+        if (remainingTimes.brt >= crossStop.brt) {
+          queue.push({ stop: crossStop.id, remainingTimes: { brt: remainingTimes.brt - crossStop.brt, bus: remainingTimes.bus - crossStop.bus }});
+        }
       }
     }
   }
-  state.areaKm2.val = (areaM2 / SQ_METER_IN_SQ_KM).toFixed(2);
+  // polys array is being populated async
+  await Promise.all(polyPromises);
+  const areaM2 = walkShed.setCatchement(polys);
+  if (areaM2) {
+    state.busAreaKm2.val = (areaM2.bus / SQ_METER_IN_SQ_KM).toFixed(2);
+    state.brtAreaKm2.val = (areaM2.brt / SQ_METER_IN_SQ_KM).toFixed(2);
+  }
 };
 
 const onBusStopSelect = (stateSelect: HTMLSelectElement) => {

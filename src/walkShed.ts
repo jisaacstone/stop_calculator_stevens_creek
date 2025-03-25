@@ -5,6 +5,7 @@ import {Coordinate} from 'ol/coordinate.js';
 import {GeoJSON} from 'ol/format.js';
 import Collection from 'ol/Collection.js';
 import Feature from 'ol/Feature.js';
+import {Polygon as GJPoly} from 'geojson';
 import * as turf from '@turf/turf';
 
 import * as style from 'style';
@@ -15,7 +16,12 @@ const polySource = new VectorSource<Feature<Polygon>>({wrapX: false, features: p
 
 export const polyLayer = new VectorLayer({
   source: polySource,
-  style: style.walkArea,
+  style: (feature) => {
+    if (feature.get('category') === 'brt') {
+      return style.BRTArea;
+    }
+    return style.walkArea;
+  }
 });
 
 const lineCollection: Collection<Feature<LineString>> = new Collection();
@@ -46,15 +52,30 @@ export const setWalkShed = (lines: Coordinate[][], category: string = "walk") =>
     turf.featureCollection(
       lines.flat().map(l => turf.point(l))
     ),
-    {maxEdge: 200, units: 'meters'}
+    {maxEdge: 333, units: 'meters'}
   );
+  // remove holes, if any
   if (poly) {
-    const area = turf.area(poly);
-    const olPoly = GeoJsonFormat.readFeature(poly) as Feature<Polygon>;
-    olPoly.set('area', area);
-    polyCollection.push(olPoly);
-    return area;
-  } else {
-    return 0;
+    return turf.polygon([poly.geometry.coordinates[0] as Coordinate[]]);
   }
+  return null;
+}
+
+export const setCatchement = (polys: { bus: GJPoly[], brt: GJPoly[]}) => {
+  const areas: {[key: string]: number} = {bus: 0, brt: 0};
+  for (const [key, polygons] of Object.entries(polys)) {
+    const combined = turf.dissolve(
+      turf.featureCollection(polygons)
+    );
+
+    combined.features.forEach((turfPoly) => {
+      const area = turf.area(turfPoly);
+      const olPoly = GeoJsonFormat.readFeature(turfPoly) as Feature<Polygon>;
+      olPoly.set('area', area);
+      olPoly.set('category', key);
+      polyCollection.push(olPoly);
+      areas[key] += area;
+    });
+  };
+  return areas;
 };

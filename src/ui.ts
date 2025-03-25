@@ -39,7 +39,7 @@ const makeSelect = <Typ extends string>(
   names?: string[],
 ) => {
   const optionCollection: HTMLOptionElement[] = [];
-  for (let i=0; i<options.length; i++) {
+  for (let i = 0; i < options.length; i++) {
     const name = names ? names[i] : options[i];
     optionCollection.push(option({value: options[i], selected: () => stateVar.val === options[i]}, name));
   }
@@ -52,21 +52,17 @@ const makeSelect = <Typ extends string>(
 
 export const setupUi = (containerEl: HTMLElement) => {
   const journeyTimeSlider = makeInput(
-    { name: 'time', units: 'min' },
+    { name: 'travel time', units: 'min' },
     { min: 5, max: 30, step: 5 },
     state.journeyTime,
   );
-  const transitAlternativeSelect = makeSelect(
-    state.alternatives,
-    ['early', 'peak'],
-  );
   const stopNames: string[] = [];
   const stopIds: string[] = [];
-  stopTimings.alternatives.early.forEach((_, k) => {
+  stopTimings.alternatives.bus.forEach((v, k) => {
     const feature = busStopSource.features.find(f => f['id'] === k);
     if (feature && feature.properties.name) {
       stopIds.push(k);
-      stopNames.push(feature.properties.name);
+      stopNames.push(`${v.direction} ${feature.properties.name}`);
     }
   });
   const busStopSelect = makeSelect(
@@ -74,15 +70,20 @@ export const setupUi = (containerEl: HTMLElement) => {
     stopIds,
     stopNames
   );
+  const areaEl = van.tags.div(
+    {'className': 'area'},
+    van.tags.div('during peak travel time you can access', van.tags.div(state.busAreaKm2, 'km²')),
+    van.tags.div('with dedicated bus lanes it would increase to', van.tags.div(state.brtAreaKm2, 'km²')),
+  );
+
   van.add(
     containerEl,
     journeyTimeSlider,
-    transitAlternativeSelect,
-    busStopSelect
+    busStopSelect,
+    areaEl,
   );
   return {
     journeyTime: journeyTimeSlider,
-    transitAlternative: transitAlternativeSelect,
     busStop: busStopSelect
   };
 };

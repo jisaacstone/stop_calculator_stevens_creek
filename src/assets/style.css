@@ -1,6 +1,6 @@
 #stevenscreek {
-  width: 80vw;
-  height: 85vh;
+  width: 90vw;
+  height: 50vh;
   margin: auto;
   background-color: rgba(50, 50, 51, 0.1);
 }
@@ -14,10 +14,37 @@ h1 {
 
 .slider {
   display: flex;
-  margin: auto;
   justify-content: center;
   gap: 1rem;
 }
 .unitDisplay {
   display: flex;
+}
+
+#input {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: stretch;
+  gap: 1rem;
+  max-width: 80%;
+  margin: auto;
+}
+
+#input > div {
+  flex: 1 1 0;
+}
+
+.area {
+  display: flex;
+  flex-direction: column;
+  padding: 0.3rem;
+}
+
+.area > div {
+  flex: 1 1 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: flex-end;
 }
