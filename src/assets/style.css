@@ -48,3 +48,35 @@ h1 {
   gap: 1rem;
   justify-content: flex-end;
 }
+
+/* css spinner */
+#loader {
+  position: fixed;
+  background-color: rgba(2,12,21,0.3);
+  left: 0;
+  top: 0;
+}
+#loader::after,
+#loader::before {
+  content: '';
+  box-sizing: border-box;
+  width: 20vw;
+  height: 20vw;
+  border-radius: 48%;
+  border-width: 0.5rem;
+  border-style: groove none;
+  border-color: rgba(90, 210, 255, 0.3) transparent rgba(50, 159, 221, 0.9);
+  position: absolute;
+  left: 40vw;
+  top: 35vh;
+  animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

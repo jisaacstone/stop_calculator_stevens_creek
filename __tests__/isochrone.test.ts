@@ -4,11 +4,12 @@ import { default as testData } from './data/nld_test';
 import { calcIsochrone, loadNLD } from '../src/isochrone';
 import { loadLayer } from '../src/roads';
 import { WALKING_SPEED_MS } from '../src/constants';
+import testGeoJson from './data/sc-geojson_test';
 
 describe("calcIsochrone function", () => {
   test("should return full and partial line segments list", async() => {
     await loadNLD(testData);
-    await loadLayer('../__tests__/data/sc-geojson_test');
+    await loadLayer(async() => testGeoJson);
     const result = await calcIsochrone(
       [-122.0874014, 37.3861189],
       12 / (WALKING_SPEED_MS)

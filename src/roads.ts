@@ -4,19 +4,25 @@ import {Coordinate} from 'ol/coordinate.js';
 import Feature from 'ol/Feature.js';
 import {LineString} from 'ol/geom.js';
 import {GeoJSON} from 'ol/format.js';
+import * as GJ from 'geojson';
 
 import * as turf from '@turf/turf';
 
 import * as style from 'style';
+import { withLoader } from 'loader';
 
 const format = new GeoJSON<Feature<LineString>>();
 
 export const loadLayer = (() => {
   let cache: null | Promise<{ source: VectorSource<Feature<LineString>>, layer: VectorLayer}> = null;
-  const loadLayerData = async (modulePath: string) => {
+  const importModule = async() => {
     console.log('importing');
-    const scGeojson = (await import(modulePath)).default;
+    const scGeojson = (await withLoader(() => import('./assets/sc-geojson'))).default;
     console.log('imported');
+    return scGeojson;
+  }
+  const loadLayerData = async (moduleloader: () => Promise<GJ.GeoJSON>) => {
+    const scGeojson = await moduleloader();
     const features: Feature<LineString>[] = format.readFeatures(
       scGeojson,
       {featureProjection: 'EPSG:4326'}
@@ -29,9 +35,9 @@ export const loadLayer = (() => {
     });
     return { source, layer };
   };
-  const setup = async (modulePath: string = './assets/sc-geojson') => {
+  const setup = async (moduleloader: Promise<GJ.GeoJSON> = importModule) => {
     if (!cache) {
-      cache = loadLayerData(modulePath);
+      cache = loadLayerData(moduleloader);
     }
     return cache;
   };

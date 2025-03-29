@@ -1,9 +1,10 @@
 import {describe, expect, test} from '@jest/globals';
 import { closestPoint, loadLayer } from '../src/roads';
+import testGeoJson from './data/sc-geojson_test';
 
 describe("closest point", () => {
   test("it works", async () => {
-    await loadLayer('../__tests__/data/sc-geojson_test');
+    await loadLayer(async () => testGeoJson);
     const testPoint = [
       (-122.0874014 + -122.0872979)/2,
       (37.3861189 + 37.3861776)/2

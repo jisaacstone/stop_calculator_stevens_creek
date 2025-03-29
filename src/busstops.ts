@@ -28,6 +28,7 @@ import * as style from 'style';
 import * as isochrone from 'isochrone';
 import * as walkShed from 'walkShed';
 import * as state from 'state';
+import { withLoader } from 'loader';
 import { SECONDS_PER_MINUTE, SQ_METER_IN_SQ_KM } from 'constants';
 
 type BusOrBrt = { bus: number, brt: number };
@@ -170,14 +171,17 @@ const processSelectedStop = async (selected: Feature<Point>) => {
 };
 
 const onBusStopSelect = (stateSelect: HTMLSelectElement) => {
-  const selectedFeatures = busSelect.getFeatures().getArray();
-  nextBusCollection.clear();
-  if (!selectedFeatures || selectedFeatures.length === 0) {
-    return;
-  }
-  const selected = selectedFeatures[0] as Feature<Point>;
-  stateSelect.value = selected.get('id');
-  processSelectedStop(selected);
+  return withLoader(() => {
+    console.log('bss');
+    const selectedFeatures = busSelect.getFeatures().getArray();
+    nextBusCollection.clear();
+    if (!selectedFeatures || selectedFeatures.length === 0) {
+      return Promise.resolve();
+    }
+    const selected = selectedFeatures[0] as Feature<Point>;
+    stateSelect.value = selected.get('id');
+    return processSelectedStop(selected);
+  });
 };
 
 export const addSelectEvent = (map: OlMap, stateSelect: HTMLSelectElement, toListen: HTMLElement[]) => {
