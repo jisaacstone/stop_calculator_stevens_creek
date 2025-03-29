@@ -56,20 +56,30 @@ h1 {
   left: 0;
   top: 0;
 }
-#loader::after,
 #loader::before {
   content: '';
   box-sizing: border-box;
-  width: 20vw;
-  height: 20vw;
+  width: 10vw;
+  height: 10vw;
   border-radius: 48%;
-  border-width: 0.5rem;
-  border-style: groove none;
+  border-width: 0.5rem 0.1rem;
+  border-style: groove;
   border-color: rgba(90, 210, 255, 0.3) transparent rgba(50, 159, 221, 0.9);
   position: absolute;
-  left: 40vw;
+  left: 45vw;
   top: 35vh;
   animation: rotation 1s linear infinite;
+}
+#loader::after {
+  content: 'loading';
+  position: absolute;
+  top: 52vh;
+  left: 40vw;
+  text-align: center;
+  width: 20vw;
+  color: rgba(50, 159, 221, 0.9);
+  font-weight: bold;
+  text-shadow: 2px 2px 1px rgba(90, 210, 255, 0.3);
 }
 
 @keyframes rotation {
