@@ -22,34 +22,18 @@ h1 {
 }
 
 #input {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: stretch;
-  gap: 1rem;
-  max-width: 80%;
+  max-width: 90%;
   margin: auto;
-}
-
-#input > div {
-  flex: 1 1 0;
-}
-
-.area {
-  display: flex;
-  flex-direction: column;
-  padding: 0.3rem;
-}
-
-.area > div {
-  flex: 1 1 0;
   display: flex;
   flex-wrap: wrap;
-  gap: 1rem;
-  justify-content: flex-end;
+}
+
+#input > div, #input > input {
+  padding: 0.5rem;
 }
 
 /* css spinner */
+
 #loader {
   position: fixed;
   background-color: rgba(2,12,21,0.3);
@@ -89,4 +73,21 @@ h1 {
   100% {
     transform: rotate(360deg);
   }
+}
+
+/* map */
+
+.ol-attribution {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  font-size: small;
+}
+
+.ol-collapsed ul {
+  visibility: hidden;
+}
+
+.ol-attribution ul {
+  list-style: none;
 }

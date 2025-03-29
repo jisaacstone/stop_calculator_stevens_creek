@@ -80,7 +80,7 @@ export const layer = new VectorLayer({
 
 const selected: StyleFunction = ((f: Feature, r: number) => {
   const ss = style.selected(15, r);
-  ss.setText(new Text({text: f.get('name'), font: '12px Calibri,sans-serif'}));
+  //  ss.setText(new Text({text: f.get('name'), font: '12px Calibri,sans-serif'}));
   return ss;
 }) as StyleFunction;
 
