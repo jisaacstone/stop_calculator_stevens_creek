@@ -22,29 +22,72 @@ h1 {
 }
 
 #input {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: stretch;
-  gap: 1rem;
-  max-width: 80%;
+  max-width: 90%;
   margin: auto;
-}
-
-#input > div {
-  flex: 1 1 0;
-}
-
-.area {
-  display: flex;
-  flex-direction: column;
-  padding: 0.3rem;
-}
-
-.area > div {
-  flex: 1 1 0;
   display: flex;
   flex-wrap: wrap;
-  gap: 1rem;
-  justify-content: flex-end;
+}
+
+#input > div, #input > input {
+  padding: 0.5rem;
+}
+
+/* css spinner */
+
+#loader {
+  position: fixed;
+  background-color: rgba(2,12,21,0.3);
+  left: 0;
+  top: 0;
+}
+#loader::before {
+  content: '';
+  box-sizing: border-box;
+  width: 10vw;
+  height: 10vw;
+  border-radius: 48%;
+  border-width: 0.5rem 0.1rem;
+  border-style: groove;
+  border-color: rgba(90, 210, 255, 0.3) transparent rgba(50, 159, 221, 0.9);
+  position: absolute;
+  left: 45vw;
+  top: 35vh;
+  animation: rotation 1s linear infinite;
+}
+#loader::after {
+  content: 'loading';
+  position: absolute;
+  top: 52vh;
+  left: 40vw;
+  text-align: center;
+  width: 20vw;
+  color: rgba(50, 159, 221, 0.9);
+  font-weight: bold;
+  text-shadow: 2px 2px 1px rgba(90, 210, 255, 0.3);
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* map */
+
+.ol-attribution {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  font-size: small;
+}
+
+.ol-collapsed ul {
+  visibility: hidden;
+}
+
+.ol-attribution ul {
+  list-style: none;
 }

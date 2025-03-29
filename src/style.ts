@@ -28,14 +28,14 @@ export const road = new Style({
 
 export const walkArea = new Style({
   stroke: new Stroke({
-    color: COLORS.BLACK,
+    color: COLORS.GRAY,
     width: 1,
   }),
   fill: new Fill({ color: COLORS.PLUM }),
 });
 export const BRTArea = new Style({
   stroke: new Stroke({
-    color: COLORS.BLACK,
+    color: COLORS.GRAY,
     width: 1,
   }),
   fill: new Fill({ color: COLORS.LUMP }),
@@ -46,7 +46,7 @@ export const gridRoad = (meters: number, resolution: number) => {
   const pixel_meters = meters / meters_per_pixel;
   return new Style({
     stroke: new Stroke({
-      color: COLORS.BLUE,
+      color: COLORS.GRAY,
       width: Math.max(pixel_meters, 2)
     })
   });

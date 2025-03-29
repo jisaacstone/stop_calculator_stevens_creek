@@ -10,27 +10,26 @@ const makeInput = (
   display: {name: string, units: string},
   range: {min: number, max: number, step: number},
   stateVar: State<number>,
-  classArgs: object = {}
 ) => {
-  return div(
-    {class: "slider", ...classArgs},
-    div({class: "label"}, display.name),
-    input({
-      type: "range",
-      min: range.min,
-      max: range.max,
-      step: range.step,
-      value: stateVar.val,
-      oninput: e => {
-        stateVar.val = e.target.value;
-      },
-    }),
-    div(
-      {class: "unitDisplay"},
+  const slider = input({
+    type: "range",
+    min: range.min,
+    max: range.max,
+    step: range.step,
+    value: stateVar.val,
+    oninput: e => {
+      stateVar.val = e.target.value;
+    },
+  });
+  return {
+    input: slider,
+    divs: [
+      div({class: "label"}, display.name),
+      slider,
       div(stateVar),
       div(display.units),
-    )
-  );
+    ]
+  };
 };
 
 const makeSelect = <Typ extends string>(
@@ -44,15 +43,15 @@ const makeSelect = <Typ extends string>(
     optionCollection.push(option({value: options[i], selected: () => stateVar.val === options[i]}, name));
   }
   const sel = select(
-    {class: "select", oninput: e => stateVar.val = e.target.value},
+    {oninput: e => stateVar.val = e.target.value},
     optionCollection
   )
-  return sel
+  return {input: sel, divs: [div('From the 523 stop at'), sel]};
 };
 
 export const setupUi = (containerEl: HTMLElement) => {
   const journeyTimeSlider = makeInput(
-    { name: 'travel time', units: 'min' },
+    { name: 'in', units: 'minutes' },
     { min: 5, max: 30, step: 5 },
     state.journeyTime,
   );
@@ -70,20 +69,22 @@ export const setupUi = (containerEl: HTMLElement) => {
     stopIds,
     stopNames
   );
-  const areaEl = van.tags.div(
-    {'className': 'area'},
-    van.tags.div('during peak travel time you can access', van.tags.div(state.busAreaKm2, 'km²')),
-    van.tags.div('with dedicated bus lanes it would increase to', van.tags.div(state.brtAreaKm2, 'km²')),
-  );
+  const areaEls = [
+    div('you can access'),
+    div(state.busAreaKm2, 'km².'),
+    div({class: 'dedicated'}, 'With dedicated bus lanes'),
+    div({class: 'dedicated'}, 'it would increase to'),
+    div({class: 'dedicated'}, state.brtAreaKm2, 'km².'),
+  ];
 
   van.add(
     containerEl,
-    journeyTimeSlider,
-    busStopSelect,
-    areaEl,
+    ...busStopSelect.divs,
+    ...journeyTimeSlider.divs,
+    ...areaEls,
   );
   return {
-    journeyTime: journeyTimeSlider,
-    busStop: busStopSelect
+    journeyTime: journeyTimeSlider.input,
+    busStop: busStopSelect.input
   };
 };
