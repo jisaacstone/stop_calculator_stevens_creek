@@ -66,15 +66,16 @@ export const setupUi = (containerEl: HTMLElement) => {
   });
   const busStopSelect = makeSelect(
     state.selectedStopId,
-    stopIds,
-    stopNames
+    ["", ...stopIds],
+    ["CHOOSE", ...stopNames]
   );
+
   const areaEls = [
     div('you can access'),
     div(state.busAreaKm2, 'km².'),
-    div({class: 'dedicated'}, 'With dedicated bus lanes'),
-    div({class: 'dedicated'}, 'it would increase to'),
+    div({class: 'dedicated'}, 'With dedicated bus lanes it would increase to'),
     div({class: 'dedicated'}, state.brtAreaKm2, 'km².'),
+    div({class: 'dedicated'}, 'The area covered with the dedicated lane is ', state.brtToBusRatio, ' times the peak bus.')
   ];
 
   van.add(
