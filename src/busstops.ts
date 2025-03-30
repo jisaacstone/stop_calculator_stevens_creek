@@ -128,6 +128,7 @@ const processSelectedStop = async (selected: Feature<Point>) => {
       for (const key of Object.keys(remainingTimes) as Array<keyof BusOrBrt>) {
         // cannot really walk anywhere in 5 seconds or less (this could be negative here)
         if (remainingTimes[key] > 5) {
+          console.log(`calculation ${remainingTimes[key]} second walkshed`);
           const coord = geometry.getFirstCoordinate();
           const prom = isochrone.calcIsochrone(
             coord,
@@ -171,33 +172,33 @@ const processSelectedStop = async (selected: Feature<Point>) => {
   }
 };
 
-const onBusStopSelect = (stateSelect: HTMLSelectElement) => {
+const onBusStopSelect = (stopSelect: HTMLSelectElement) => {
   return withLoader(() => {
-    console.log('bss');
     const selectedFeatures = busSelect.getFeatures().getArray();
     nextBusCollection.clear();
     if (!selectedFeatures || selectedFeatures.length === 0) {
+      console.log('no selected features');
       return Promise.resolve();
     }
     const selected = selectedFeatures[0] as Feature<Point>;
-    stateSelect.value = selected.get('id');
+    stopSelect.value = selected.get('id');
     return processSelectedStop(selected);
   });
 };
 
-export const addSelectEvent = (map: OlMap, stateSelect: HTMLSelectElement, toListen: HTMLElement[]) => {
+export const addSelectEvent = (map: OlMap, stopSelect: HTMLSelectElement, toListen: HTMLElement[]) => {
   map.addInteraction(busSelect);
-  busSelect.on(["select"], () => onBusStopSelect(stateSelect));
+  busSelect.on(["select"], () => onBusStopSelect(stopSelect));
   // When UI (time or transit inputs) change we recalculate the walkshed
-  toListen.forEach(e => e.addEventListener('change', () => onBusStopSelect(stateSelect)), false);
-  stateSelect.addEventListener('change', () => {
-    const stopId = stateSelect.value;
+  toListen.forEach(e => e.addEventListener('change', () => onBusStopSelect(stopSelect)), false);
+  stopSelect.addEventListener('change', () => {
+    const stopId = stopSelect.value;
     const feature = source.getFeatureById(stopId);
     if (feature) {
       // manipulate the array directly so we don't fire a change event
       const selectedArray = busSelect.getFeatures().getArray();
       selectedArray[0] = feature;
     }
-    onBusStopSelect(stateSelect);
+    onBusStopSelect(stopSelect);
   }, false)
 }

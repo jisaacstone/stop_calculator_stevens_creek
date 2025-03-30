@@ -9,6 +9,7 @@ import * as layers from 'layers';
 import * as roads from 'roads';
 import * as ui from 'ui';
 import * as walkShed from 'walkShed';
+import * as state from 'state';
 
 const setupSCMap = (mapEl: HTMLElement): Map => {
   const map = new Map({
@@ -48,8 +49,16 @@ const main = () => {
         [inputMap.journeyTime]
       );
       // start loading of road data & graph in background
-      isochrone.loadNLD();
-      roads.loadLayer();
+      Promise.all([
+        isochrone.loadNLD(),
+        roads.loadLayer(),
+      ]).then(() => {
+        // check if user selected anything while we were loading
+        if (state.selectedStopId.val === '') {
+          inputMap.busStop.value = 'node/6739935094';
+          inputMap.busStop.dispatchEvent(new Event('change'));
+        }
+      })
     }
   }
 };
