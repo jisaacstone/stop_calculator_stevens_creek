@@ -1,8 +1,30 @@
+
+html {
+  background:
+    linear-gradient(27deg, #151515 5px, transparent 5px) 0 5px,
+    linear-gradient(207deg, #151515 5px, transparent 5px) 10px 0px,
+    linear-gradient(27deg, #222 5px, transparent 5px) 0px 10px,
+    linear-gradient(207deg, #222 5px, transparent 5px) 10px 5px,
+    linear-gradient(90deg, #1b1b1b 10px, transparent 10px),
+    linear-gradient(#1d1d1d 25%, #1a1a1a 25%, #1a1a1a 50%, transparent 50%, transparent 75%, #242424 75%, #242424);
+  background-color: #131313;
+  background-size: 20px 20px;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  --teal: #48b9c7;
+  --dk-teal: #329ca9;
+}
+
 #stevenscreek {
-  width: 90vw;
+  width: 96vw;
   height: 50vh;
-  margin: auto;
-  background-color: rgba(50, 50, 51, 0.1);
+  margin: 1vw auto 0;
+  background-color: rgba(255, 255, 255, 0.9);
+  box-sizing: border-box;
+  border: 1vw solid var(--teal);
 }
 
 h1 {
@@ -22,14 +44,23 @@ h1 {
 }
 
 #input {
-  max-width: 90%;
-  margin: auto;
+  width: 96vw;
+  border: 1vw solid var(--dk-teal);
+  margin: 2vw auto 0;
   display: flex;
   flex-wrap: wrap;
+  box-sizing: border-box;
+  background-color: rgba(249, 255, 254, 0.8);
+
 }
 
 #input > div, #input > input {
   padding: 0.5rem;
+}
+
+.bsselect {
+  max-width: 100%;
+  overflow: clip;
 }
 
 /* css spinner */
@@ -48,7 +79,7 @@ h1 {
   border-radius: 48%;
   border-width: 0.5rem 0.1rem;
   border-style: groove;
-  border-color: rgba(90, 210, 255, 0.3) transparent rgba(50, 159, 221, 0.9);
+  border-color: var(--teal) transparent var(--dk-teal);
   position: absolute;
   left: 45vw;
   top: 35vh;
