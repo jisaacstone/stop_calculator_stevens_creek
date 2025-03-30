@@ -43,7 +43,7 @@ const makeSelect = <Typ extends string>(
     optionCollection.push(option({value: options[i], selected: () => stateVar.val === options[i]}, name));
   }
   const sel = select(
-    {oninput: e => stateVar.val = e.target.value},
+    {class: 'bsselect', oninput: e => stateVar.val = e.target.value},
     optionCollection
   )
   return {input: sel, divs: [div('From the 523 stop at'), sel]};
