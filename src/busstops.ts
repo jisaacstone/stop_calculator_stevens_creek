@@ -167,6 +167,7 @@ const processSelectedStop = async (selected: Feature<Point>) => {
   if (areaM2) {
     state.busAreaKm2.val = (areaM2.bus / SQ_METER_IN_SQ_KM).toFixed(2);
     state.brtAreaKm2.val = (areaM2.brt / SQ_METER_IN_SQ_KM).toFixed(2);
+    state.brtToBusRatio.val = (areaM2.brt / areaM2.bus).toFixed(2);
   }
 };
 
