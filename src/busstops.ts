@@ -1,11 +1,13 @@
 // OpenLayers Core Imports
 import { default as OlMap } from 'ol/Map.js';
 import { Vector as VectorLayer } from 'ol/layer.js';
+import { buffer } from 'ol/extent.js';
 import VectorSource from 'ol/source/Vector.js';
+import * as turf from '@turf/turf';
 
 // Geometry Imports
 import { Point } from 'ol/geom.js';
-import { Polygon as GJPoly } from 'geojson';
+import * as GJ from 'geojson';
 
 // Format Imports
 import { GeoJSON } from 'ol/format.js';
@@ -110,7 +112,7 @@ const getNextStop = (stopId: string, stopType: 'next' | 'cross') => {
 
 const processSelectedStop = async (selected: Feature<Point>) => {
   walkShed.clear();
-  const polys: { bus: GJPoly[], brt: GJPoly[] } = { bus: [], brt: [] }
+  const polys: { bus: GJ.Feature<GJ.Polygon, GJ.GeoJsonProperties>[], brt: GJ.Feature<GJ.Polygon, GJ.GeoJsonProperties>[] } = { bus: [], brt: [] };
   const visitedStops = new Set<string>();
   const journeyTimeSec = state.journeyTime.val * SECONDS_PER_MINUTE;
   const queue: { stop: string; remainingTimes: BusOrBrt }[] = [
@@ -135,8 +137,10 @@ const processSelectedStop = async (selected: Feature<Point>) => {
             remainingTimes[key]
           ).then(walkshed => {
             if (walkshed) {
-              const polygon = walkShed.setWalkShed(walkshed, key)
-              polys[key].push(polygon);
+              const polygon = walkShed.setWalkShed(walkshed, key);
+              if (polygon) {
+                polys[key].push(polygon);
+              }
             }
           });
           polyPromises.push(prom);
@@ -170,9 +174,18 @@ const processSelectedStop = async (selected: Feature<Point>) => {
     state.brtAreaKm2.val = (areaM2.brt / SQ_METER_IN_SQ_KM).toFixed(2);
     state.brtToBusRatio.val = (areaM2.brt / areaM2.bus).toFixed(2);
   }
+  return polys;
 };
 
-const onBusStopSelect = (stopSelect: HTMLSelectElement) => {
+const setExtent = (polys: GJ.Feature<GJ.Polygon, GJ.GeoJsonProperties>[], map: OlMap) => {
+  console.log('setting extent');
+  const bbox = turf.bbox(turf.featureCollection(polys));
+  console.log(bbox);
+  // buffer around 100 meters - no need to be exact
+  map.getView().fit(buffer(bbox, 0.001));
+};
+
+const onBusStopSelect = (stopSelect: HTMLSelectElement, map: OlMap) => {
   return withLoader(() => {
     const selectedFeatures = busSelect.getFeatures().getArray();
     nextBusCollection.clear();
@@ -182,15 +195,15 @@ const onBusStopSelect = (stopSelect: HTMLSelectElement) => {
     }
     const selected = selectedFeatures[0] as Feature<Point>;
     stopSelect.value = selected.get('id');
-    return processSelectedStop(selected);
+    return processSelectedStop(selected).then(polys => setExtent(polys.brt, map));
   });
 };
 
 export const addSelectEvent = (map: OlMap, stopSelect: HTMLSelectElement, toListen: HTMLElement[]) => {
   map.addInteraction(busSelect);
-  busSelect.on(["select"], () => onBusStopSelect(stopSelect));
+  busSelect.on(["select"], () => onBusStopSelect(stopSelect, map));
   // When UI (time or transit inputs) change we recalculate the walkshed
-  toListen.forEach(e => e.addEventListener('change', () => onBusStopSelect(stopSelect)), false);
+  toListen.forEach(e => e.addEventListener('change', () => onBusStopSelect(stopSelect, map)), false);
   stopSelect.addEventListener('change', () => {
     const stopId = stopSelect.value;
     const feature = source.getFeatureById(stopId);
@@ -199,6 +212,6 @@ export const addSelectEvent = (map: OlMap, stopSelect: HTMLSelectElement, toList
       const selectedArray = busSelect.getFeatures().getArray();
       selectedArray[0] = feature;
     }
-    onBusStopSelect(stopSelect);
+    onBusStopSelect(stopSelect, map);
   }, false)
 }

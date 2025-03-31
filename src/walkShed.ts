@@ -5,7 +5,7 @@ import {Coordinate} from 'ol/coordinate.js';
 import {GeoJSON} from 'ol/format.js';
 import Collection from 'ol/Collection.js';
 import Feature from 'ol/Feature.js';
-import {Polygon as GJPoly} from 'geojson';
+import * as GJ from 'geojson';
 import * as turf from '@turf/turf';
 
 import * as style from 'style';
@@ -29,8 +29,11 @@ const lineSource = new VectorSource<Feature<LineString>>({wrapX: false, features
 
 export const walkShedLayer = new VectorLayer({
   source: lineSource,
-  style: (_, resolution) => {
-    return style.gridRoad(5, resolution);
+  style: (feature, resolution) => {
+    if (feature.get('category') === 'brt') {
+      return style.brtPath(3, resolution);
+    }
+    return style.walkPath(5, resolution);
   },
 });
 
@@ -61,7 +64,7 @@ export const setWalkShed = (lines: Coordinate[][], category: string = "walk") =>
   return null;
 }
 
-export const setCatchement = (polys: { bus: GJPoly[], brt: GJPoly[]}) => {
+export const setCatchement = (polys: { bus: GJ.Feature<GJ.Polygon, GJ.GeoJsonProperties>[], brt: GJ.Feature<GJ.Polygon, GJ.GeoJsonProperties>[]}) => {
   const areas: {[key: string]: number} = {bus: 0, brt: 0};
   for (const [key, polygons] of Object.entries(polys)) {
     const combined = turf.dissolve(

@@ -41,13 +41,23 @@ export const BRTArea = new Style({
   fill: new Fill({ color: COLORS.LUMP }),
 });
 
-export const gridRoad = (meters: number, resolution: number) => {
+export const walkPath = (meters: number, resolution: number) => {
   const meters_per_pixel = resolution * METERS_PER_UNIT;
   const pixel_meters = meters / meters_per_pixel;
   return new Style({
     stroke: new Stroke({
       color: COLORS.GRAY,
       width: Math.max(pixel_meters, 2)
+    })
+  });
+};
+export const brtPath = (meters: number, resolution: number) => {
+  const meters_per_pixel = resolution * METERS_PER_UNIT;
+  const pixel_meters = meters / meters_per_pixel;
+  return new Style({
+    stroke: new Stroke({
+      color: COLORS.GARY,
+      width: Math.max(pixel_meters, 1)
     })
   });
 };
