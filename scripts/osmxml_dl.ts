@@ -29,7 +29,7 @@ export const fetchOSMData = async (query: string) => {
     linkStopsToRoutes(geojson, relations);
 
     // Write GeoJSON to file
-    writeFileSync("./src/assets/busstops-geojson.json", JSON.stringify(geojson, null, 2));
+    writeFileSync("./public/busstops-geojson.json", JSON.stringify(geojson, null, 2));
 
   } catch (error) {
     console.error("Failed to fetch OSM data:", error);

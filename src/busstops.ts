@@ -44,6 +44,7 @@ const stopTimingIds = new Set([
 ]);
 
 // Filter bus stops that have any matching ID in stopTimings
+console.log(busStopSource);
 const filteredBusStops = busStopSource.features.filter((feature) => {
   const featureStopId = feature.id;
   return stopTimingIds.has(featureStopId);
