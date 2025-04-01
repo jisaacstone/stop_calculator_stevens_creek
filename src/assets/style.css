@@ -9,22 +9,23 @@ html {
     linear-gradient(#1d1d1d 25%, #1a1a1a 25%, #1a1a1a 50%, transparent 50%, transparent 75%, #242424 75%, #242424);
   background-color: #131313;
   background-size: 20px 20px;
-  box-sizing: border-box;
 }
 
 body {
   margin: 0;
+  font-family: 'Didact Gothic', 'Advent Pro', sans-serif;
   --teal: #48b9c7;
   --dk-teal: #329ca9;
+  --offwhite: rgba(255, 255, 255, 0.8);
 }
 
 #stevenscreek {
   width: 96vw;
   height: 50vh;
   margin: 1vw auto 0;
-  background-color: rgba(255, 255, 255, 0.9);
+  background-color: var(--offwhite);
   box-sizing: border-box;
-  border: 1vw solid var(--teal);
+  border: 0.5rem solid var(--teal);
 }
 
 h1 {
@@ -45,17 +46,31 @@ h1 {
 
 #input {
   width: 96vw;
-  border: 1vw solid var(--dk-teal);
-  margin: 2vw auto 0;
-  display: flex;
-  flex-wrap: wrap;
   box-sizing: border-box;
-  background-color: rgba(249, 255, 254, 0.8);
-
+  border: 0.5rem solid var(--teal);
+  margin: 2vw auto 0;
+  padding: 0.5rem;
+  background-color: var(--offwhite);
+  line-height: 1.75;
+  font-size: 1.3rem;
+  text-shadow: 1px 1px 1px var(--offwhite), -1px -1px 1px rgba(0,0,0,0.3);
+  background:
+    linear-gradient(27deg, #F5F8E8 5px, transparent 5px) 0 5px,
+    linear-gradient(207deg, #F5F8E8 5px, transparent 5px) 10px 0px,
+    linear-gradient(27deg, #EFE 5px, transparent 5px) 0px 10px,
+    linear-gradient(207deg, #EFE 5px, transparent 5px) 10px 5px,
+    linear-gradient(90deg, #C1DbCb D0px, transparent D0px),
+    linear-gradient(#D1CdD1 25%, #CaDaDa 25%, #DaDaCa 50%, transparent 50%, transparent 75%, #F8F8F8 75%, #F8E4E8);
 }
 
-#input > div, #input > input {
-  padding: 0.5rem;
+#input > input {
+  display: inline;
+  padding: 0.2rem 0.6rem;
+  vertical-align: bottom;
+}
+#input > div {
+  display: inline;
+  padding: 0.2rem;
 }
 
 .bsselect {
@@ -112,7 +127,7 @@ h1 {
   position: absolute;
   left: 0;
   bottom: 0;
-  font-size: small;
+  font-size: 0.6rem;
 }
 
 .ol-collapsed ul {
