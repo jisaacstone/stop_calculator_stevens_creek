@@ -26,9 +26,13 @@ export const linkMap = new Map<number, Link[]>();
 export const featureLinkMap = new Map<string, Link>();
 export const nodeMap = new Map<number, [number, number]>();
 export async function loadNLD(nld: NLD | null = null) {
+  const now = Date.now();
+  console.log('importing', now);
   if (nld === null) {
-    nld = (await import('./assets/nld.ts')).default;
+    const resp = await fetch('nld.json');
+    nld = await resp.json() as NLD;
   }
+  console.log('imported', Date.now() - now);
   nld.links.forEach((link: Link) => {
     if (!linkMap.has(link.source)) {
       linkMap.set(link.source, []);
@@ -40,9 +44,11 @@ export async function loadNLD(nld: NLD | null = null) {
     linkMap.get(link.target)!.push(link);
     featureLinkMap.set(link.id, link);
   });
+  console.log('linkMap created', Date.now() - now);
   nld.nodes.forEach(node => {
     nodeMap.set(node.id, [node.x, node.y]);
   });
+  console.log('nodeMap created', Date.now() - now);
 };
 
 const traverse = (start: number, time: number) => {

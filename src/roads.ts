@@ -17,8 +17,8 @@ export const loadLayer = (() => {
   let cache: null | Promise<{ source: VectorSource<Feature<LineString>>, layer: VectorLayer}> = null;
   const importModule = async() => {
     console.log('importing');
-    const scGeojson = (await withLoader(() => import('./assets/sc-geojson'))).default;
-    console.log('imported');
+    const scGeojson = await withLoader(() => fetch('sc-geojson.json').then(r => r.json()));
+    console.log('imported', scGeojson);
     return scGeojson;
   }
   const loadLayerData = async (moduleloader: () => Promise<GJ.GeoJSON>) => {

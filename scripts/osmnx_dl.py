@@ -16,12 +16,12 @@ geod = Geod(ellps="WGS84")
 
 if test:
     bb = [-122.08741, 37.39, -122.08715, 37.385]
-    nld_file = '__tests__/data/nld_test.ts' 
-    gj_file = '__tests__/data/sc-geojson_test.ts'
+    nld_file = '__tests__/data/nld_test.json' 
+    gj_file = '__tests__/data/sc-geojson_test.json'
 else:
     bb = [-122.06, 37.29, -121.86, 37.35] # Manually identified from OpenStreetMaps
-    nld_file = 'src/assets/nld.ts' 
-    gj_file = 'src/assets/sc-geojson.ts'
+    nld_file = 'public/nld.json' 
+    gj_file = 'public/sc-geojson.json'
 
 poly = ox.utils_geo.bbox_to_poly(bb)
 
@@ -72,7 +72,7 @@ for link in nld['links']:
 #Every json file is a subset of ts
 with open(nld_file, 'w') as fob:
     nld_json = json.dumps({'nodes': nld['nodes'], 'links': links}, indent=2) 
-    fob.write(f"const nld = {nld_json};\nexport default nld;")
+    fob.write(nld_json)
 
 gj = {
     "type": "FeatureCollection",
@@ -80,4 +80,4 @@ gj = {
 }
 with open(gj_file, 'w') as fob:
     gj_json = json.dumps(gj, indent=2)
-    fob.write(f"const scGeojson = {gj_json};\nexport default scGeojson;")
+    fob.write(gj_json)
