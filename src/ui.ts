@@ -26,8 +26,8 @@ const makeInput = (
     divs: [
       div({class: "label"}, display.name),
       slider,
-      div(stateVar),
-      div(display.units),
+      div({class: 'stateVar'}, stateVar),
+      div({class: 'units'}, display.units),
     ]
   };
 };
@@ -72,10 +72,12 @@ export const setupUi = (containerEl: HTMLElement) => {
 
   const areaEls = [
     div('you can access'),
-    div(state.busAreaKm2, 'km².'),
+    div({class: 'units'}, state.busAreaMi2, 'mi².'),
     div({class: 'dedicated'}, 'With dedicated bus lanes it would increase to'),
-    div({class: 'dedicated'}, state.brtAreaKm2, 'km².'),
-    div({class: 'dedicated'}, 'The area covered with the dedicated lane is ', state.brtToBusRatio, ' times the peak bus.')
+    div({class: 'units'}, state.brtAreaMi2, 'mi².'),
+    div({class: 'dedicated'}, 'With dedicated lanes you can access'),
+    div({class: 'ratio'}, state.brtToBusRatio),
+    div({class: 'dedicated'}, 'times as many destinations.')
   ];
 
   van.add(

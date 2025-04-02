@@ -31,7 +31,7 @@ import * as isochrone from 'isochrone';
 import * as walkShed from 'walkShed';
 import * as state from 'state';
 import { withLoader } from 'loader';
-import { SECONDS_PER_MINUTE, SQ_METER_IN_SQ_KM } from 'constants';
+import { SECONDS_PER_MINUTE, SQ_METER_IN_SQ_MI } from 'constants';
 
 type BusOrBrt = { bus: number, brt: number };
 // Look at stop across the street
@@ -171,8 +171,8 @@ const processSelectedStop = async (selected: Feature<Point>) => {
   await Promise.all(polyPromises);
   const areaM2 = walkShed.setCatchement(polys);
   if (areaM2) {
-    state.busAreaKm2.val = (areaM2.bus / SQ_METER_IN_SQ_KM).toFixed(2);
-    state.brtAreaKm2.val = (areaM2.brt / SQ_METER_IN_SQ_KM).toFixed(2);
+    state.busAreaMi2.val = (areaM2.bus / SQ_METER_IN_SQ_MI).toFixed(2);
+    state.brtAreaMi2.val = (areaM2.brt / SQ_METER_IN_SQ_MI).toFixed(2);
     state.brtToBusRatio.val = (areaM2.brt / areaM2.bus).toFixed(2);
   }
   return polys;

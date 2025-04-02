@@ -16,6 +16,7 @@ body {
   font-family: 'Didact Gothic', 'Advent Pro', sans-serif;
   --teal: #48b9c7;
   --dk-teal: #165054;
+  --dk-green: #084901;
   --offwhite: rgba(255, 255, 255, 0.8);
 }
 
@@ -75,6 +76,15 @@ h1 {
 .bsselect {
   max-width: 100%;
   overflow: clip;
+}
+
+.ratio {
+  font-weight: bold;
+  color: var(--dk-green);
+}
+
+.stateVar, .units {
+  color: var(--dk-teal);
 }
 
 footer {
