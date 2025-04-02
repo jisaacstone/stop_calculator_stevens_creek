@@ -15,17 +15,27 @@ body {
   margin: 0;
   font-family: 'Didact Gothic', 'Advent Pro', sans-serif;
   --teal: #48b9c7;
-  --dk-teal: #329ca9;
+  --dk-teal: #165054;
   --offwhite: rgba(255, 255, 255, 0.8);
 }
 
-#stevenscreek {
+body > div, footer {
   width: 96vw;
-  height: 50vh;
-  margin: 1vw auto 0;
   background-color: var(--offwhite);
+  background:
+    linear-gradient(27deg, #F5F8E8 5px, transparent 5px) 0 5px,
+    linear-gradient(207deg, #F5F8E8 5px, transparent 5px) 10px 0px,
+    linear-gradient(27deg, #EFE 5px, transparent 5px) 0px 10px,
+    linear-gradient(207deg, #EFE 5px, transparent 5px) 10px 5px,
+    linear-gradient(90deg, #C1DbCb D0px, transparent D0px),
+    linear-gradient(#D1CdD1 25%, #CaDaDa 25%, #DaDaCa 50%, transparent 50%, transparent 75%, #F8F8F8 75%, #F8E4E8);
   box-sizing: border-box;
   border: 0.5rem solid var(--teal);
+  margin: 1vw auto 0;
+}
+
+#stevenscreek {
+  height: 50vh;
 }
 
 h1 {
@@ -45,22 +55,11 @@ h1 {
 }
 
 #input {
-  width: 96vw;
-  box-sizing: border-box;
-  border: 0.5rem solid var(--teal);
-  margin: 2vw auto 0;
   padding: 0.5rem;
-  background-color: var(--offwhite);
   line-height: 1.75;
   font-size: 1.3rem;
   text-shadow: 1px 1px 1px var(--offwhite), -1px -1px 1px rgba(0,0,0,0.3);
-  background:
-    linear-gradient(27deg, #F5F8E8 5px, transparent 5px) 0 5px,
-    linear-gradient(207deg, #F5F8E8 5px, transparent 5px) 10px 0px,
-    linear-gradient(27deg, #EFE 5px, transparent 5px) 0px 10px,
-    linear-gradient(207deg, #EFE 5px, transparent 5px) 10px 5px,
-    linear-gradient(90deg, #C1DbCb D0px, transparent D0px),
-    linear-gradient(#D1CdD1 25%, #CaDaDa 25%, #DaDaCa 50%, transparent 50%, transparent 75%, #F8F8F8 75%, #F8E4E8);
+  max-width: 90rem;
 }
 
 #input > input {
@@ -78,38 +77,51 @@ h1 {
   overflow: clip;
 }
 
+footer {
+  padding: 0.5rem;
+  text-shadow: 1px 1px 1px var(--offwhite), -1px -1px 1px rgba(0,0,0,0.1);
+  color: var(--dk-teal);
+  max-width: 90rem;
+}
+footer img {
+  height: 1.2rem;
+  width: 1.2rem;
+  vertical-align: bottom;
+  margin: -0.1rem;
+  border-radius: 20%;
+}
+footer a {
+  text-decoration: none;
+}
+
 /* css spinner */
 
 #loader {
-  position: fixed;
-  background-color: rgba(2,12,21,0.3);
-  left: 0;
-  top: 0;
 }
 #loader::before {
   content: '';
+  position: absolute;
+  top: calc(50vh - min(11vw, 11vh));
+  left: calc(50vw - min(11vw, 11vh));
   box-sizing: border-box;
-  width: 10vw;
-  height: 10vw;
+  width: min(22vw, 22vh);
+  height: min(22vw, 22vh);
   border-radius: 48%;
   border-width: 0.5rem 0.1rem;
   border-style: groove;
   border-color: var(--teal) transparent var(--dk-teal);
-  position: absolute;
-  left: 45vw;
-  top: 35vh;
   animation: rotation 1s linear infinite;
 }
 #loader::after {
   content: 'loading';
   position: absolute;
-  top: 52vh;
-  left: 40vw;
+  top: calc(50vh - 0.5rem);
+  left: calc(50vw - 10rem);
   text-align: center;
-  width: 20vw;
-  color: rgba(50, 159, 221, 0.9);
+  width: 20rem;
+  color: var(--teal);
   font-weight: bold;
-  text-shadow: 2px 2px 1px rgba(90, 210, 255, 0.3);
+  text-shadow: 2px 2px 1px var(--dk-teal);
 }
 
 @keyframes rotation {
