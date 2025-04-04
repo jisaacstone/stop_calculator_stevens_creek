@@ -10,6 +10,7 @@ import * as roads from 'roads';
 import * as ui from 'ui';
 import * as walkShed from 'walkShed';
 import * as state from 'state';
+import * as poi from 'poi';
 
 const setupSCMap = (mapEl: HTMLElement): Map => {
   const map = new Map({
@@ -17,6 +18,7 @@ const setupSCMap = (mapEl: HTMLElement): Map => {
       layers.osmRaster,
       walkShed.walkShedLayer,
       walkShed.polyLayer,
+      poi.layer,
       busstops.layer,
     ],
     target: mapEl,

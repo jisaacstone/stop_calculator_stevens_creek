@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "node_modules/vite/bin/vite.js",
     "build": "NODE_OPTIONS=--max_old_space_size=16384 node_modules/vite/bin/vite.js build",
-    "download": "node_modules/tsx/dist/cli.mjs scripts/osmxml_dl.ts && .venv/bin/python scripts/osmnx_dl.py",
+    "download": "node_modules/tsx/dist/cli.mjs scripts/bus_stop_dl.ts && node_modules/tsx/dist/cli.mjs scripts/bus_stop_dl.ts && .venv/bin/python scripts/osmnx_dl.py",
     "test": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js",
     "lint": "eslint --ext .ts src __tests__ --ignore-pattern src/assets __tests__/data",
     "lintwfix": "eslint --ext .ts src __tests__ --fix"

@@ -5,9 +5,10 @@ export const COLORS = {
   GARY: 'rgba(150, 150, 150, 0.5)',
   PURPLE: 'rgba(123, 50, 148, 1)',
   BLUE: 'rgba(10, 150, 200, 1)',
-  PLUM: 'rgba(183, 20, 148, 0.2)',
-  LUMP: 'rgba(128, 180, 148, 0.2)',
-  ORANGE: 'rgba(220, 165, 0, 1)',
+  PLUM: 'rgba(183, 20, 148, 0.3)',
+  GREEN: 'rgba(118, 199, 72, 0.3)',
+  ORANGE: 'rgba(199, 87, 72, 1)',
+  TEAL: 'rgba(72, 185, 199, 1)',
 } as const;
 
 export const WALKING_SPEED_MS = 1.33; // (m/s) = 5.8 km/h

@@ -3,7 +3,7 @@ import { METERS_PER_UNIT } from 'ol/proj/epsg4326.js'
 import { COLORS } from './constants';
 
 const getPixelMeters = (meters: number, resolution: number): number =>
-  Math.max(meters / (resolution * METERS_PER_UNIT), 5);
+  Math.max(meters / (resolution * METERS_PER_UNIT), meters/5);
 
 const createCircleStyle = (
   meters: number,
@@ -38,7 +38,7 @@ export const BRTArea = new Style({
     color: COLORS.GRAY,
     width: 1,
   }),
-  fill: new Fill({ color: COLORS.LUMP }),
+  fill: new Fill({ color: COLORS.GREEN }),
 });
 
 export const walkPath = (meters: number, resolution: number) => {
@@ -68,3 +68,5 @@ export const selected = (
   meters: number,
   resolution: number
 ) => createCircleStyle(meters, resolution, COLORS.RED, COLORS.BLACK);
+
+export const poi = (meters: number, resolution: number) => createCircleStyle(meters, resolution, COLORS.TEAL, COLORS.GRAY);
