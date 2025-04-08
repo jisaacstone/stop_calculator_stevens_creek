@@ -31,6 +31,7 @@ type Edge = {next: string, bus: number, brt: number, direction: string};
 
 export const busGraph: Map<string, Edge> = new Map([
   // WB
+  ['node/6697914451', {next: 'node/6739935094', brt: 3, bus: 7, direction: 'WB'}],  // Convention Center -> BO
   ['node/6739935094', {next: 'node/6712922775', brt: 3, bus: 7, direction: 'WB'}],  // Montgomery -> Grand
   ['node/6712922775', {next: 'node/6712917182', brt: 2, bus: 6, direction: 'WB'}],  // Grand -> Bascom
   ['node/6712917182', {next: 'node/6739935096', brt: 4, bus: 5, direction: 'WB'}],  // Bascom -> Satanta Row
@@ -52,4 +53,5 @@ export const busGraph: Map<string, Edge> = new Map([
   ['node/6739935098', {next: 'node/6712917181', brt: 4, bus: 5, direction: 'EB'}],
   ['node/6712917181', {next: 'node/6712927093', brt: 2, bus: 6, direction: 'EB'}],
   ['node/6712927093', {next: 'node/6739935092', brt: 3, bus: 7, direction: 'EB'}],
+  ['node/6739935092', {next: 'node/6697914453', brt: 3, bus: 7, direction: 'EB'}],
 ]);
