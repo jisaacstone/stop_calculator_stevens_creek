@@ -3,9 +3,9 @@ dist
 dist-ssr
 cache
 stop_calculator_stevens_creek.code-workspace
+deploy.sh
 
 .venv
 *.bak
 *.sw?
 *.DS_Store
-
