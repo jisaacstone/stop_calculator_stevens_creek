@@ -1,11 +1,9 @@
-import { JSDOM } from 'jsdom';
 import { writeFileSync } from 'fs';
-import osmtogeojson from "osmtogeojson";
-import { FeatureCollection, Geometry, GeoJsonProperties } from "geojson";
+import * as turf from '@turf/turf';
 
 export const fetchOSMData = async (query: string, fileName: string) => {
   try {
-    console.log("Fetching OSM XML data...");
+    console.log("Fetching OSM JSON data...");
     const response = await fetch("https://overpass-api.de/api/interpreter", {
       method: "POST",
       body: query,
@@ -15,12 +13,21 @@ export const fetchOSMData = async (query: string, fileName: string) => {
       throw new Error(`OSM API Error: ${response.statusText}`);
     }
 
-    const xmlText = await response.text();
+    const osmData = await response.json();
+    const features = osmData.elements.map(
+      element => {
+        const { type, id, tags } = element;
+        const { lat, lon } = element.center ? element.center : element;
+        console.log(element);
+        return  turf.point(
+          [lon, lat],
+          tags,
+          {id: `${type}/${id}`}
+        );
+      }
+    );
 
-    const dom = new JSDOM(xmlText, { contentType: "text/xml" });
-    const xmlDoc = dom.window.document;
-
-    const geojson = osmtogeojson(xmlDoc);
+    const geojson = turf.featureCollection(features);
 
     // Write GeoJSON to file
     writeFileSync(fileName, JSON.stringify(geojson, null, 2));
@@ -32,11 +39,15 @@ export const fetchOSMData = async (query: string, fileName: string) => {
 };
 
 
-const bb = '(37.32,-122.06,37.34,-121.85)';
-// simple shorthand is to assume all nodes with a name are points of interest.
-const query = `(node[name][!bus]${bb};);out body;(way[building][name]${bb};);out center;`;
+let bb = '(37.305,-122.06,37.35,-121.87)';
 let filename = 'src/assets/poi-geojson.json';
-if (process.argv.length > 2 && process.argv[3].includes('test')) {
-  filename = '__test__/data/poi-geojson.json';
+if (process.argv.length > 2 && process.argv[2].includes('test')) {
+  console.log('fetching test data');
+  bb = '(37.385,-122.0871,37.39,-122.0874)';
+  filename = '__tests__/data/poi-geojson.json';
 }
+// simple shorthand is to assume all nodes with a name are points of interest.
+const query = `[out:json];
+(node[name][!bus]${bb};way[building][name]${bb};);
+out center;`;
 fetchOSMData(query, filename);

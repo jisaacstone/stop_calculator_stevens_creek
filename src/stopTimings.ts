@@ -27,64 +27,29 @@ WINCHESTER MISSING
 //WB 6739935094->6712922775->6712917182->6739935096->6739935100->6739935102->6739935108->6732665922->6739935122->6739935116->6710495366
 //EB 6739935090->6739935144->6739935110->6732665924->6739935106->6739935104->6712917178->6739935098->6712917181->6712927093
 
-type Edge = {id: string, cost: number};
-type EdgeMap = {cross: Edge, next?: Edge, direction: 'WB' | 'EB'};
-const toCross = 1;  // how long does it take to cross Stevens Creek Blvd?
+type Edge = {next: string, bus: number, brt: number, direction: string};
 
-const earlyBus: Map<string, EdgeMap> = new Map([
+export const busGraph: Map<string, Edge> = new Map([
   // WB
-  ['node/6739935094', {cross: {id: 'node/6739935092', cost: toCross}, next: {id: 'node/6712922775', cost: 3}, direction: 'WB'}],  // Montgomery -> Grand
-  ['node/6712922775', {cross: {id: 'node/6712927093', cost: toCross}, next: {id: 'node/6712917182', cost: 2}, direction: 'WB'}],  // Grand -> Bascom
-  ['node/6712917182', {cross: {id: 'node/6712917181', cost: toCross}, next: {id: 'node/6739935096', cost: 4}, direction: 'WB'}],  // Bascom -> Satanta Row
-  ['node/6739935096', {cross: {id: 'node/6739935098', cost: toCross}, next: {id: 'node/6739935100', cost: 3}, direction: 'WB'}],  // Santana Row -> Cypress
-  ['node/6739935100', {cross: {id: 'node/6712917178', cost: toCross}, next: {id: 'node/6739935102', cost: 2}, direction: 'WB'}],  // Cypress -> Keily (G)
-  ['node/6739935102', {cross: {id: 'node/6739935104', cost: toCross}, next: {id: 'node/6739935108', cost: 3}, direction: 'WB'}],  // Keily (G) -> Cabot
-  ['node/6739935108', {cross: {id: 'node/6739935106', cost: toCross}, next: {id: 'node/6732665922', cost: 2}, direction: 'WB'}],  // Cabot -> Stern
-  ['node/6732665922', {cross: {id: 'node/6732665924', cost: toCross}, next: {id: 'node/6739935112', cost: 1}, direction: 'WB'}],  // Stern -> Wolf (D)
-  ['node/6739935112', {cross: {id: 'node/6739935110', cost: toCross}, next: {id: 'node/6739935116', cost: 2}, direction: 'WB'}],  // Wolf (D) -> De Anza
-  ['node/6739935116', {cross: {id: 'node/6739935114', cost: toCross}, next: {id: 'node/6710495366', cost: 1}, direction: 'WB'}],  // De Anza -> Stelling (E)
-  ['node/6710495366', {cross: {id: 'node/6739935090', cost: toCross}, direction: 'WB'}],
+  ['node/6739935094', {next: 'node/6712922775', brt: 3, bus: 7, direction: 'WB'}],  // Montgomery -> Grand
+  ['node/6712922775', {next: 'node/6712917182', brt: 2, bus: 6, direction: 'WB'}],  // Grand -> Bascom
+  ['node/6712917182', {next: 'node/6739935096', brt: 4, bus: 5, direction: 'WB'}],  // Bascom -> Satanta Row
+  ['node/6739935096', {next: 'node/6739935100', brt: 3, bus: 8, direction: 'WB'}],  // Santana Row -> Cypress
+  ['node/6739935100', {next: 'node/6739935102', brt: 2, bus: 3, direction: 'WB'}],  // Cypress -> Keily (G)
+  ['node/6739935102', {next: 'node/6739935108', brt: 3, bus: 4, direction: 'WB'}],  // Keily (G) -> Cabot
+  ['node/6739935108', {next: 'node/6732665922', brt: 2, bus: 3, direction: 'WB'}],  // Cabot -> Stern
+  ['node/6732665922', {next: 'node/6739935112', brt: 1, bus: 3, direction: 'WB'}],  // Stern -> Wolf (D)
+  ['node/6739935112', {next: 'node/6739935116', brt: 2, bus: 3, direction: 'WB'}],  // Wolf (D) -> De Anza
+  ['node/6739935116', {next: 'node/6710495366', brt: 1, bus: 2, direction: 'WB'}],  // De Anza -> Stelling (E)
   // EB
-  ['node/6739935090', {cross: {id: 'node/6710495366', cost: toCross}, next: {id: 'node/6739935144', cost: 1}, direction: 'EB'}],
-  ['node/6739935144', {cross: {id: 'node/6739935116', cost: toCross}, next: {id: 'node/6739935110', cost: 2}, direction: 'EB'}],
-  ['node/6739935110', {cross: {id: 'node/6739935112', cost: toCross}, next: {id: 'node/6732665924', cost: 1}, direction: 'EB'}],
-  ['node/6732665924', {cross: {id: 'node/6732665922', cost: toCross}, next: {id: 'node/6739935106', cost: 2}, direction: 'EB'}],
-  ['node/6739935106', {cross: {id: 'node/6739935108', cost: toCross}, next: {id: 'node/6739935104', cost: 3}, direction: 'EB'}],
-  ['node/6739935104', {cross: {id: 'node/6739935102', cost: toCross}, next: {id: 'node/6712917178', cost: 2}, direction: 'EB'}],
-  ['node/6712917178', {cross: {id: 'node/6739935100', cost: toCross}, next: {id: 'node/6739935098', cost: 3}, direction: 'EB'}],
-  ['node/6739935098', {cross: {id: 'node/6739935096', cost: toCross}, next: {id: 'node/6712917181', cost: 4}, direction: 'EB'}],
-  ['node/6712917181', {cross: {id: 'node/6712917182', cost: toCross}, next: {id: 'node/6712927093', cost: 2}, direction: 'EB'}],
-  ['node/6712927093', {cross: {id: 'node/6712922775', cost: toCross}, next: {id: 'node/6739935092', cost: 3}, direction: 'EB'}],
-  ['node/6739935092', {cross: {id: 'node/6739935094', cost: toCross}, direction: 'EB'}],
+  ['node/6739935090', {next: 'node/6739935144', brt: 1, bus: 2, direction: 'EB'}],
+  ['node/6739935144', {next: 'node/6739935110', brt: 2, bus: 3, direction: 'EB'}],
+  ['node/6739935110', {next: 'node/6732665924', brt: 1, bus: 3, direction: 'EB'}],
+  ['node/6732665924', {next: 'node/6739935106', brt: 2, bus: 3, direction: 'EB'}],
+  ['node/6739935106', {next: 'node/6739935104', brt: 3, bus: 4, direction: 'EB'}],
+  ['node/6739935104', {next: 'node/6712917178', brt: 2, bus: 3, direction: 'EB'}],
+  ['node/6712917178', {next: 'node/6739935098', brt: 3, bus: 8, direction: 'EB'}],
+  ['node/6739935098', {next: 'node/6712917181', brt: 4, bus: 5, direction: 'EB'}],
+  ['node/6712917181', {next: 'node/6712927093', brt: 2, bus: 6, direction: 'EB'}],
+  ['node/6712927093', {next: 'node/6739935092', brt: 3, bus: 7, direction: 'EB'}],
 ]);
-const peakBus: Map<string, EdgeMap> = new Map([
-  // WB
-  ['node/6739935094', {cross: {id: 'node/6739935092', cost: toCross}, next: {id: 'node/6712922775', cost: 7}, direction: 'WB'}],  // Montgomery -> Grand
-  ['node/6712922775', {cross: {id: 'node/6712927093', cost: toCross}, next: {id: 'node/6712917182', cost: 6}, direction: 'WB'}],  // Grand -> Bascom
-  ['node/6712917182', {cross: {id: 'node/6712917181', cost: toCross}, next: {id: 'node/6739935096', cost: 5}, direction: 'WB'}],  // Bascom -> Satanta Row
-  ['node/6739935096', {cross: {id: 'node/6739935098', cost: toCross}, next: {id: 'node/6739935100', cost: 8}, direction: 'WB'}],  // Santana Row -> Cypress
-  ['node/6739935100', {cross: {id: 'node/6712917178', cost: toCross}, next: {id: 'node/6739935102', cost: 3}, direction: 'WB'}],  // Cypress -> Keily (G)
-  ['node/6739935102', {cross: {id: 'node/6739935104', cost: toCross}, next: {id: 'node/6739935108', cost: 4}, direction: 'WB'}],  // Keily (G) -> Cabot
-  ['node/6739935108', {cross: {id: 'node/6739935106', cost: toCross}, next: {id: 'node/6732665922', cost: 3}, direction: 'WB'}],  // Cabot -> Stern
-  ['node/6732665922', {cross: {id: 'node/6732665924', cost: toCross}, next: {id: 'node/6739935112', cost: 3}, direction: 'WB'}],  // Stern -> Wolf (D)
-  ['node/6739935112', {cross: {id: 'node/6739935110', cost: toCross}, next: {id: 'node/6739935116', cost: 3}, direction: 'WB'}],  // Wolf (D) -> De Anza
-  ['node/6739935116', {cross: {id: 'node/6739935114', cost: toCross}, next: {id: 'node/6710495366', cost: 2}, direction: 'WB'}],  // De Anza -> Stelling (E)
-  ['node/6710495366', {cross: {id: 'node/6739935090', cost: toCross}, direction: 'WB'}],
-  // EB
-  ['node/6739935090', {cross: {id: 'node/6710495366', cost: toCross}, next: {id: 'node/6739935144', cost: 2}, direction: 'EB'}],
-  ['node/6739935144', {cross: {id: 'node/6739935116', cost: toCross}, next: {id: 'node/6739935110', cost: 3}, direction: 'EB'}],
-  ['node/6739935110', {cross: {id: 'node/6739935112', cost: toCross}, next: {id: 'node/6732665924', cost: 3}, direction: 'EB'}],
-  ['node/6732665924', {cross: {id: 'node/6732665922', cost: toCross}, next: {id: 'node/6739935106', cost: 3}, direction: 'EB'}],
-  ['node/6739935106', {cross: {id: 'node/6739935108', cost: toCross}, next: {id: 'node/6739935104', cost: 4}, direction: 'EB'}],
-  ['node/6739935104', {cross: {id: 'node/6739935102', cost: toCross}, next: {id: 'node/6712917178', cost: 3}, direction: 'EB'}],
-  ['node/6712917178', {cross: {id: 'node/6739935100', cost: toCross}, next: {id: 'node/6739935098', cost: 8}, direction: 'EB'}],
-  ['node/6739935098', {cross: {id: 'node/6739935096', cost: toCross}, next: {id: 'node/6712917181', cost: 5}, direction: 'EB'}],
-  ['node/6712917181', {cross: {id: 'node/6712917182', cost: toCross}, next: {id: 'node/6712927093', cost: 6}, direction: 'EB'}],
-  ['node/6712927093', {cross: {id: 'node/6712922775', cost: toCross}, next: {id: 'node/6739935092', cost: 7}, direction: 'EB'}],
-  ['node/6739935092', {cross: {id: 'node/6739935094', cost: toCross}, direction: 'EB'}],
-]);
-
-export const alternatives = {
-  brt: earlyBus,
-  bus: peakBus
-} as const;

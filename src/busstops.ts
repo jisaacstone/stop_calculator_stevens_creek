@@ -23,25 +23,23 @@ import { StyleFunction } from 'ol/style/Style.js';
 
 // Asset Imports
 import busStopSource from 'assets/busstops-geojson.json';
-import { alternatives as stopTimings } from 'stopTimings.ts';
+import { busGraph as stopTimings } from 'stopTimings.ts';
 
 // Local Module Imports
 import * as style from 'style';
 import * as isochrone from 'isochrone';
 import * as walkShed from 'walkShed';
 import * as state from 'state';
+import * as poi from 'poi';
 import { withLoader } from 'loader';
 import { SECONDS_PER_MINUTE, SQ_METER_IN_SQ_MI } from 'constants';
 
 type BusOrBrt = { bus: number, brt: number };
-// Look at stop across the street
-const considerCrossStop = false;
+type Poly = GJ.Feature<GJ.Polygon,GJ.GeoJsonProperties>;
+type Polys = { bus: Poly[], brt: Poly[] };
 
 // Collect all stop IDs from stopTimings
-const stopTimingIds = new Set([
-  ...Array.from(stopTimings.bus.keys()),
-  ...Array.from(stopTimings.brt.keys())
-]);
+const stopTimingIds = new Set(stopTimings.keys());
 
 // Filter bus stops that have any matching ID in stopTimings
 const filteredBusStops = busStopSource.features.filter((feature) => {
@@ -80,9 +78,8 @@ export const layer = new VectorLayer({
   }
 });
 
-const selected: StyleFunction = ((f: Feature, r: number) => {
+const selected: StyleFunction = ((_: Feature, r: number) => {
   const ss = style.selected(15, r);
-  //  ss.setText(new Text({text: f.get('name'), font: '12px Calibri,sans-serif'}));
   return ss;
 }) as StyleFunction;
 
@@ -92,27 +89,22 @@ const busSelect = new Select({
   style: selected
 });
 
-const getNextStop = (stopId: string, stopType: 'next' | 'cross') => {
-  const timingEntryBus = stopTimings.bus.get(stopId);
-  if (timingEntryBus === undefined || timingEntryBus[stopType] === undefined) {
-    console.warn(`No next stop found for stop ID ${stopId}`);
-    return undefined;
-  }
-  const timingEntryBrt = stopTimings.brt.get(stopId);
-  if (timingEntryBrt === undefined || timingEntryBrt[stopType] === undefined) {
+const getNextStop = (stopId: string) => {
+  const timingEntry = stopTimings.get(stopId);
+  if (timingEntry === undefined || timingEntry.next === undefined) {
     console.warn(`No next stop found for stop ID ${stopId}`);
     return undefined;
   }
   return {
-    id: timingEntryBus[stopType].id,
-    bus: timingEntryBus[stopType].cost * SECONDS_PER_MINUTE,
-    brt: timingEntryBrt[stopType].cost * SECONDS_PER_MINUTE
+    id: timingEntry.next,
+    bus: timingEntry.bus * SECONDS_PER_MINUTE,
+    brt: timingEntry.brt * SECONDS_PER_MINUTE
   };
 };
 
 const processSelectedStop = async (selected: Feature<Point>) => {
   walkShed.clear();
-  const polys: { bus: GJ.Feature<GJ.Polygon, GJ.GeoJsonProperties>[], brt: GJ.Feature<GJ.Polygon, GJ.GeoJsonProperties>[] } = { bus: [], brt: [] };
+  const polys: Polys = { bus: [], brt: [] };
   const visitedStops = new Set<string>();
   const journeyTimeSec = state.journeyTime.val * SECONDS_PER_MINUTE;
   const queue: { stop: string; remainingTimes: BusOrBrt }[] = [
@@ -149,20 +141,11 @@ const processSelectedStop = async (selected: Feature<Point>) => {
     }
 
     // Add accessible stops to the queue if there’s enough remaining time
-    const nextStop = getNextStop(stop, 'next');
+    const nextStop = getNextStop(stop);
     if (nextStop) {
       nextBusCollection.add(nextStop.id);
       if (remainingTimes.brt >= nextStop.brt) {
         queue.push({ stop: nextStop.id, remainingTimes: { brt: remainingTimes.brt - nextStop.brt, bus: remainingTimes.bus - nextStop.bus }});
-      }
-    }
-    if (considerCrossStop) {
-      const crossStop = getNextStop(stop, 'cross');
-      if (crossStop) {
-        nextBusCollection.add(crossStop.id);
-        if (remainingTimes.brt >= crossStop.brt) {
-          queue.push({ stop: crossStop.id, remainingTimes: { brt: remainingTimes.brt - crossStop.brt, bus: remainingTimes.bus - crossStop.bus }});
-        }
       }
     }
   }
@@ -172,17 +155,27 @@ const processSelectedStop = async (selected: Feature<Point>) => {
   if (areaM2) {
     state.busAreaMi2.val = (areaM2.bus / SQ_METER_IN_SQ_MI).toFixed(2);
     state.brtAreaMi2.val = (areaM2.brt / SQ_METER_IN_SQ_MI).toFixed(2);
-    state.brtToBusRatio.val = (areaM2.brt / areaM2.bus).toFixed(2);
+    state.brtToBusAreaRatio.val = (areaM2.brt / areaM2.bus).toFixed(1) + 'x';
   }
   return polys;
 };
 
-const setExtent = (polys: GJ.Feature<GJ.Polygon, GJ.GeoJsonProperties>[], map: OlMap) => {
+const setExtent = (polys: Poly[], map: OlMap) => {
   console.log('setting extent');
   const bbox = turf.bbox(turf.featureCollection(polys));
   console.log(bbox);
   // buffer around 100 meters - no need to be exact
   map.getView().fit(buffer(bbox, 0.001));
+};
+
+const setPoiCount = (polys: Polys) => {
+  const busPoi = poi.pointsInPolygons(polys.bus);
+  const brtPoi = poi.pointsInPolygons(polys.brt);
+  const busCount = busPoi.features.length;
+  const brtCount = brtPoi.features.length;
+  state.busPoi.val = busCount;
+  state.brtPoi.val = brtCount;
+  state.brtToBusPoiRatio.val = (brtCount / busCount).toFixed(1) + 'x';
 };
 
 const onBusStopSelect = (stopSelect: HTMLSelectElement, map: OlMap) => {
@@ -195,7 +188,10 @@ const onBusStopSelect = (stopSelect: HTMLSelectElement, map: OlMap) => {
     }
     const selected = selectedFeatures[0] as Feature<Point>;
     stopSelect.value = selected.get('id');
-    return processSelectedStop(selected).then(polys => setExtent(polys.brt, map));
+    return processSelectedStop(selected).then(polys => {
+      setExtent(polys.brt, map);
+      setPoiCount(polys);
+    });
   });
 };
 

@@ -5,8 +5,13 @@ import { Text } from 'ol/style.js';
 import { Vector as VectorLayer } from 'ol/layer.js';
 import VectorSource from 'ol/source/Vector.js';
 
+import * as turf from '@turf/turf';
+import * as GJ from 'geojson';
+
 import * as style from 'style';
-import poiGeojson from 'assets/poi-geojson.json';
+import _poiGeojson from 'assets/poi-geojson.json';
+
+const poiGeojson = _poiGeojson as GJ.FeatureCollection<GJ.Point, GJ.GeoJsonProperties>;
 
 
 const GeoJsonFormat = new GeoJSON<Feature<Point>>();
@@ -27,3 +32,8 @@ export const layer = new VectorLayer({
     return stl;
   }
 });
+
+export const pointsInPolygons = (polygons: GJ.Feature<GJ.Polygon, GJ.GeoJsonProperties>[]) => {
+  const points = turf.pointsWithinPolygon(poiGeojson, turf.featureCollection(polygons));
+  return points;
+};

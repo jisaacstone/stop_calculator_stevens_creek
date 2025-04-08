@@ -57,7 +57,7 @@ export const setupUi = (containerEl: HTMLElement) => {
   );
   const stopNames: string[] = [];
   const stopIds: string[] = [];
-  stopTimings.alternatives.bus.forEach((v, k) => {
+  stopTimings.busGraph.forEach((v, k) => {
     const feature = busStopSource.features.find(f => f['id'] === k);
     if (feature && feature.properties.name) {
       stopIds.push(k);
@@ -72,12 +72,20 @@ export const setupUi = (containerEl: HTMLElement) => {
 
   const areaEls = [
     div('you can access'),
-    div({class: 'units'}, state.busAreaMi2, 'mi².'),
+    div({class: 'units'}, state.busAreaMi2, 'mi²'),
+    div('or around'),
+    div({class: 'units'}, state.busPoi),
+    div('destinations.'),
     div({class: 'dedicated'}, 'With dedicated bus lanes it would increase to'),
-    div({class: 'units'}, state.brtAreaMi2, 'mi².'),
+    div({class: 'units'}, state.brtAreaMi2, 'mi²'),
+    div('or around'),
+    div({class: 'units'}, state.brtPoi),
+    div('destinations.'),
     div({class: 'dedicated'}, 'With dedicated lanes you can access'),
-    div({class: 'ratio'}, state.brtToBusRatio),
-    div({class: 'dedicated'}, 'times as many destinations.')
+    div({class: 'ratio'}, state.brtToBusAreaRatio),
+    div({class: 'dedicated'}, 'more area and'),
+    div({class: 'ratio'}, state.brtToBusPoiRatio),
+    div({class: 'dedicated'}, 'more destinations')
   ];
 
   van.add(

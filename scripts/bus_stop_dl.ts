@@ -72,7 +72,6 @@ const linkStopsToRoutes = (geojson: FeatureCollection<Geometry, GeoJsonPropertie
     }
   });
 };
-
-const bb = '(37.32,-122.06,37.34,-121.85)';
+const bb = '(37.31,-122.06,37.35,-121.86)';
 const query = `(rel[route=bus][network=VTA]${bb};node(r)${bb}[public_transport=stop_position];);out body;`;
 fetchOSMData(query);
