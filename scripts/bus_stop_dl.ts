@@ -24,12 +24,11 @@ export const fetchOSMData = async (query: string) => {
 
     // Parse relationships (bus routes & stop associations)
     const relations = parseRelations(xmlDoc);
-    console.log("Parsed Route Relationships:", relations);
 
     linkStopsToRoutes(geojson, relations);
 
     // Write GeoJSON to file
-    writeFileSync("./public/busstops-geojson.json", JSON.stringify(geojson, null, 2));
+    writeFileSync("./src/assets/busstops-geojson.json", JSON.stringify(geojson, null, 2));
 
   } catch (error) {
     console.error("Failed to fetch OSM data:", error);
@@ -73,5 +72,5 @@ const linkStopsToRoutes = (geojson: FeatureCollection<Geometry, GeoJsonPropertie
   });
 };
 const bb = '(37.31,-122.06,37.35,-121.86)';
-const query = `(rel[route=bus][network=VTA]${bb};node(r)${bb}[public_transport=stop_position];);out body;`;
+const query = `(rel[route=bus][network=VTA][ref=523]${bb};node(r)${bb}[public_transport=stop_position];);out body;`;
 fetchOSMData(query);
